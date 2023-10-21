@@ -1,4 +1,4 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+  "/js/app.js": "public/js/app.js?id=7e8da7485e504ec4fee94e1c8d2767b3",
+  "/css/app.css": "public/css/app.css?id=68b329da9893e34099c7d8ad5cb9c940"
 }

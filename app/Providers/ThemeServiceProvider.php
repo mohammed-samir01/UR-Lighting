@@ -14,10 +14,12 @@ class ThemeServiceProvider extends ServiceProvider
     public function register()
     {
         $theme = env('WEB_THEME') == null ? 'default' : env('WEB_THEME');
+
         $path = base_path('resources/themes/' . $theme);
         if (!defined('VIEW_FILE_NAMES')) {
             define("VIEW_FILE_NAMES", include($path . '/file_names.php'));
         }
+
         view()->addLocation($path);
     }
 

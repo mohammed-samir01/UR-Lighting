@@ -648,6 +648,7 @@ class WebController extends Controller
 
     public function shop_cart(Request $request)
     {
+
         if (
             (auth('customer')->check() && Cart::where(['customer_id' => auth('customer')->id()])->count() > 0)
             || (Helpers::get_business_settings('guest_checkout') && session()->has('guest_id') && session('guest_id'))
@@ -689,6 +690,7 @@ class WebController extends Controller
                 * end Top Rated store and new seller
                 */
             }
+
             return view(VIEW_FILE_NAMES['cart_list'],compact('top_rated_shops','new_sellers','current_date','request'));
         }
         Toastr::info(translate('invalid_access'));

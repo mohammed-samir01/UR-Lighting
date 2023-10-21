@@ -118,6 +118,7 @@
             document.body.setAttribute('theme', localStorage.getItem('theme'));
         }
     }
+
     setThemeMode();
 </script>
 @if($google_tag_manager_id)
@@ -142,10 +143,10 @@
 
 <!-- Settings Sidebar -->
 @include('theme-views.layouts.partials._settings-sidebar')
-
-<!-- Main Content -->
-@yield('content')
-
+<div id="app">
+    <!-- Main Content -->
+    @yield('content')
+</div>
 <!-- Feature -->
 @include('theme-views.layouts.partials._feature')
 
@@ -191,7 +192,8 @@
 <span id="update_quantity_url" data-url="{{route('cart.updateQuantity.guest')}}"></span>
 <span id="order_again_url" data-url="{{ route('cart.order-again') }}"></span>
 <span id="authentication-status" data-auth="{{ auth('customer')->check() ? 'true' : 'false' }}"></span>
-<span id="all-msg-container" data-afterextend="{{translate('see_less')}}" data-seemore="{{translate('see_more')}}"></span>
+<span id="all-msg-container" data-afterextend="{{translate('see_less')}}"
+      data-seemore="{{translate('see_more')}}"></span>
 <span class="please_fill_out_this_field" data-text="{{ translate('please_fill_out_this_field') }}"></span>
 
 @php($whatsapp = \App\CPU\Helpers::get_business_settings('whatsapp'))
@@ -217,7 +219,9 @@
 <script src="{{ theme_asset('assets/js/toastr.js') }}"></script>
 <script src="{{ theme_asset('assets/js/main.js') }}"></script>
 <script src="{{ theme_asset('assets/js/custom.js') }}"></script>
+<script>
 
+</script>
 {!! Toastr::message() !!}
 
 @if ($errors->any())
@@ -298,20 +302,20 @@
 </script>
 
 @if(!auth('customer')->check())
-<script>
-    $(document).ready(function() {
-        const currentUrl = new URL(window.location.href);
-        const referral_code_parameter = new URLSearchParams(currentUrl.search).get("referral_code");
+    <script>
+        $(document).ready(function () {
+            const currentUrl = new URL(window.location.href);
+            const referral_code_parameter = new URLSearchParams(currentUrl.search).get("referral_code");
 
-        if (referral_code_parameter) {
-            $('#registerModal').modal('show');
+            if (referral_code_parameter) {
+                $('#registerModal').modal('show');
 
-            if ($('#referral_code').length) {
-            $('#referral_code').val(referral_code_parameter);
+                if ($('#referral_code').length) {
+                    $('#referral_code').val(referral_code_parameter);
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 @endif
 
 <script>
@@ -336,20 +340,28 @@
     });
 
     $('textarea').each(function () {
-            var $el = $(this);
+        var $el = $(this);
 
-            $el.on('invalid', function (event) {
-                var target = event.target,
-                    validity = target.validity;
-                target.setCustomValidity("");
-                if (!validity.valid) {
-                    if (validity.valueMissing) {
-                        target.setCustomValidity($el.data('errorRequired') || errorMessages.valueMissing);
-                    }
+        $el.on('invalid', function (event) {
+            var target = event.target,
+                validity = target.validity;
+            target.setCustomValidity("");
+            if (!validity.valid) {
+                if (validity.valueMissing) {
+                    target.setCustomValidity($el.data('errorRequired') || errorMessages.valueMissing);
                 }
-            });
+            }
         });
+    });
 </script>
+<script src="https://checkout.tabby.ai/tabby-card.js"></script>
+<script src="https://checkout.tabby.ai/tabby-promo.js"></script>
+<script src="https://secure.paytabs.sa/payment/js/paylib.js"></script>
+@production
+    <script src="{{ asset('js/app.js?56') }}"></script>
+    @else
+        <script src="{{ mix('js/app.js') }}"></script>
+@endproduction
 
 @stack('script')
 
