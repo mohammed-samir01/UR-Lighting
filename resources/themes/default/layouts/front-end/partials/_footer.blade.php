@@ -279,7 +279,7 @@
 
 
         <!-- Grid row -->
-        <div style="background: {{$web_config['secondary_color']}};">
+        <div style="background: {{$web_config['secondary_color']}}10;">
             <div class="container">
                 <div class="d-flex flex-wrap end-footer footer-end last-footer-content-align">
                     <div class="mt-3">
