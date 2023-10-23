@@ -64,7 +64,7 @@
 
     <footer class="page-footer font-small mdb-color rtl">
         <!-- Footer Links -->
-        <div class="pt-4" style="background:{{$web_config['primary_color']}}20;">
+        <div class="pt-4" style="background:{{$web_config['secondary_color']}};">
             <div class="container text-center __pb-13px">
 
                 <!-- Footer links -->
