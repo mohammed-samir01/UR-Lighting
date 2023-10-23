@@ -31,6 +31,7 @@
                             @endphp
 
                             @foreach($group as $cart_key=>$cartItem)
+
                                 @if ($shippingMethod=='inhouse_shipping')
                                         <?php
 
@@ -94,38 +95,38 @@
                                                     $shippings=\App\CPU\Helpers::get_shipping_methods($cartItem['seller_id'],$cartItem['seller_is'])
                                                 @endphp
 
-                                                @if($physical_product && $shippingMethod=='sellerwise_shipping' && $shipping_type == 'order_wise')
-                                                <div class="border bg-white rounded custom-ps-3">
-                                                    <div class="shiiping-method-btn d-flex gap-2 p-2 flex-wrap">
-                                                        <div class="flex-middle flex-nowrap fw-semibold text-dark gap-2">
-                                                            <i class="bi bi-truck"></i>
-                                                            {{ translate('Shipping_Method') }}:
-                                                        </div>
-                                                        <div class="dropdown">
-                                                                <button type="button" class="border-0 bg-transparent d-flex gap-2 align-items-center dropdown-toggle text-dark p-0" data-bs-toggle="dropdown" aria-expanded="false">
+{{--                                                @if($physical_product && $shippingMethod=='sellerwise_shipping' && $shipping_type == 'order_wise')--}}
+{{--                                                <div class="border bg-white rounded custom-ps-3">--}}
+{{--                                                    <div class="shiiping-method-btn d-flex gap-2 p-2 flex-wrap">--}}
+{{--                                                        <div class="flex-middle flex-nowrap fw-semibold text-dark gap-2">--}}
+{{--                                                            <i class="bi bi-truck"></i>--}}
+{{--                                                            {{ translate('Shipping_Method') }}:--}}
+{{--                                                        </div>--}}
+{{--                                                        <div class="dropdown">--}}
+{{--                                                                <button type="button" class="border-0 bg-transparent d-flex gap-2 align-items-center dropdown-toggle text-dark p-0" data-bs-toggle="dropdown" aria-expanded="false">--}}
 
-                                                                <?php
-                                                                    $shippings_title = translate('choose_shipping_method');
-                                                                    foreach ($shippings as $shipping) {
-                                                                        if ($choosen_shipping['shipping_method_id'] == $shipping['id']) {
-                                                                            $shippings_title = ucfirst($shipping['title']).' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost']);
-                                                                        }
-                                                                    }
-                                                                ?>
-                                                                {{ $shippings_title }}
+{{--                                                                <?php--}}
+{{--                                                                    $shippings_title = translate('choose_shipping_method');--}}
+{{--                                                                    foreach ($shippings as $shipping) {--}}
+{{--                                                                        if ($choosen_shipping['shipping_method_id'] == $shipping['id']) {--}}
+{{--                                                                            $shippings_title = ucfirst($shipping['title']).' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost']);--}}
+{{--                                                                        }--}}
+{{--                                                                    }--}}
+{{--                                                                ?>--}}
+{{--                                                                {{ $shippings_title }}--}}
 
-                                                                </button>
-                                                                <ul class="dropdown-menu dropdown-left-auto" style="--bs-dropdown-min-width: 8rem">
-                                                                    @foreach($shippings as $shipping)
-                                                                    <li class="cursor-pointer" onclick="set_shipping_id('{{$shipping['id']}}','{{$cartItem['cart_group_id']}}')">
-                                                                        {{$shipping['title'].' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost'])}}
-                                                                    </li>
-                                                                    @endforeach
-                                                                </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endif
+{{--                                                                </button>--}}
+{{--                                                                <ul class="dropdown-menu dropdown-left-auto" style="--bs-dropdown-min-width: 8rem">--}}
+{{--                                                                    @foreach($shippings as $shipping)--}}
+{{--                                                                    <li class="cursor-pointer" onclick="set_shipping_id('{{$shipping['id']}}','{{$cartItem['cart_group_id']}}')">--}}
+{{--                                                                        {{$shipping['title'].' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost'])}}--}}
+{{--                                                                    </li>--}}
+{{--                                                                    @endforeach--}}
+{{--                                                                </ul>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                                @endif--}}
                                             @endif
                                         </div>
                                     </div>
@@ -320,44 +321,45 @@
 
                         @endforeach
 
-                        @if($shippingMethod=='inhouse_shipping')
-                            <?php
-                                $physical_product = false;
-                                foreach($cart as $group_key=>$group){
-                                    foreach ($group as $row) {
-                                        if ($row->product_type == 'physical') {
-                                            $physical_product = true;
-                                        }
-                                    }
-                                }
-                            ?>
+{{--                        @if($shippingMethod=='inhouse_shipping')--}}
+{{--                            <?php--}}
+{{--                                $physical_product = false;--}}
+{{--                                foreach($cart as $group_key=>$group){--}}
+{{--                                    foreach ($group as $row) {--}}
+{{--                                        if ($row->product_type == 'physical') {--}}
+{{--                                            $physical_product = true;--}}
+{{--                                        }--}}
+{{--                                    }--}}
+{{--                                }--}}
+{{--                            ?>--}}
 
-                            <?php
-                                $admin_shipping = \App\Model\ShippingType::where('seller_id', 0)->first();
-                                $shipping_type = isset($admin_shipping) == true ? $admin_shipping->shipping_type : 'order_wise';
-                            ?>
-                            @if ($shipping_type == 'order_wise' && $physical_product)
-                                @php($shippings=\App\CPU\Helpers::get_shipping_methods(1,'admin'))
-                                @php($choosen_shipping=\App\Model\CartShipping::where(['cart_group_id'=>$cartItem['cart_group_id']])->first())
+{{--                            <?php--}}
+{{--                                $admin_shipping = \App\Model\ShippingType::where('seller_id', 0)->first();--}}
+{{--                                $shipping_type = isset($admin_shipping) == true ? $admin_shipping->shipping_type : 'order_wise';--}}
 
-                                @if(isset($choosen_shipping)==false)
-                                    @php($choosen_shipping['shipping_method_id']=0)
-                                @endif
-                                <div class="row">
-                                    <div class="col-12">
-                                        <select class="form-control text-dark" onchange="set_shipping_id(this.value,'all_cart_group')">
-                                            <option>{{ translate('choose_shipping_method')}}</option>
-                                            @foreach($shippings as $shipping)
-                                                <option
-                                                    value="{{$shipping['id']}}" {{$choosen_shipping['shipping_method_id']==$shipping['id']?'selected':''}}>
-                                                    {{$shipping['title'].' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost'])}}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            @endif
-                        @endif
+{{--                            ?>--}}
+{{--                            @if ($shipping_type == 'order_wise' && $physical_product)--}}
+{{--                                @php($shippings=\App\CPU\Helpers::get_shipping_methods(1,'admin'))--}}
+{{--                                @php($choosen_shipping=\App\Model\CartShipping::where(['cart_group_id'=>$cartItem['cart_group_id']])->first())--}}
+
+{{--                                @if(isset($choosen_shipping)==false)--}}
+{{--                                    @php($choosen_shipping['shipping_method_id']=0)--}}
+{{--                                @endif--}}
+{{--                                <div class="row">--}}
+{{--                                    <div class="col-12">--}}
+{{--                                        <select class="form-control text-dark" onchange="set_shipping_id(this.value,'all_cart_group')">--}}
+{{--                                            <option>{{ translate('choose_shipping_method')}}</option>--}}
+{{--                                            @foreach($shippings as $shipping)--}}
+{{--                                                <option--}}
+{{--                                                    value="{{$shipping['id']}}" {{$choosen_shipping['shipping_method_id']==$shipping['id']?'selected':''}}>--}}
+{{--                                                    {{$shipping['title'].' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost'])}}--}}
+{{--                                                </option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            @endif--}}
+{{--                        @endif--}}
 
                         @if( $cart->count() == 0)
                             <div class="d-flex justify-content-center align-items-center">

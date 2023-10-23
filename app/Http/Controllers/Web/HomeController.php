@@ -7,6 +7,7 @@ use App\CPU\Helpers;
 use App\CPU\OrderManager;
 use App\CPU\ProductManager;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Shipping\Oto;
 use App\Model\Banner;
 use App\Model\Brand;
 use App\Model\BusinessSetting;
@@ -46,8 +47,12 @@ class HomeController extends Controller
 
     public function index()
     {
-        $theme_name = theme_root_path();
+//        $itemDetails = ['weight' => 1 ,'totalDue' => 0 ,'originCity' => 'Riyadh','destinationCity' => 'Jeddah'];
+//        $response = Oto::checkDeliveryFee($itemDetails);
+//        dd($response);
 
+//        dd(Helpers::default_lang());
+        $theme_name = theme_root_path();
         return match ($theme_name) {
             'default' => self::default_theme(),
             'theme_aster' => self::theme_aster(),

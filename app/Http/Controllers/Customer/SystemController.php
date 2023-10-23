@@ -289,6 +289,7 @@ class SystemController extends Controller
     public function choose_shipping_address_other(Request $request){
         $shipping = [];
         $billing = [];
+
         parse_str($request->shipping, $shipping);
         parse_str($request->billing, $billing);
         $physical_product = $request->physical_product;

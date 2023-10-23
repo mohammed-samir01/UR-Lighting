@@ -306,6 +306,7 @@ class WebController extends Controller
         }
 
         $cart_group_ids = CartManager::get_cart_group_ids();
+
         $shippingMethod = Helpers::get_business_settings('shipping_method');
 
         $verify_status = OrderManager::minimum_order_amount_verify($request);
@@ -338,40 +339,40 @@ class WebController extends Controller
             }
         }
 
-        foreach($cart_group_ids as $group_id) {
-            $carts = Cart::where('cart_group_id', $group_id)->get();
-
-            $physical_product = false;
-            foreach ($carts as $cart) {
-                if ($cart->product_type == 'physical') {
-                    $physical_product = true;
-                }
-            }
-            if($physical_product) {
-                foreach ($carts as $cart) {
-                    if ($shippingMethod == 'inhouse_shipping') {
-                        $admin_shipping = ShippingType::where('seller_id', 0)->first();
-                        $shipping_type = isset($admin_shipping) == true ? $admin_shipping->shipping_type : 'order_wise';
-                    } else {
-                        if ($cart->seller_is == 'admin') {
-                            $admin_shipping = ShippingType::where('seller_id', 0)->first();
-                            $shipping_type = isset($admin_shipping) == true ? $admin_shipping->shipping_type : 'order_wise';
-                        } else {
-                            $seller_shipping = ShippingType::where('seller_id', $cart->seller_id)->first();
-                            $shipping_type = isset($seller_shipping) == true ? $seller_shipping->shipping_type : 'order_wise';
-                        }
-                    }
-
-                    if ($physical_product && $shipping_type == 'order_wise') {
-                        $cart_shipping = CartShipping::where('cart_group_id', $cart->cart_group_id)->first();
-                        if (!isset($cart_shipping)) {
-                            Toastr::info(translate('select_shipping_method_first'));
-                            return redirect('shop-cart');
-                        }
-                    }
-                }
-            }
-        }
+//        foreach($cart_group_ids as $group_id) {
+//            $carts = Cart::where('cart_group_id', $group_id)->get();
+//
+//            $physical_product = false;
+//            foreach ($carts as $cart) {
+//                if ($cart->product_type == 'physical') {
+//                    $physical_product = true;
+//                }
+//            }
+//            if($physical_product) {
+//                foreach ($carts as $cart) {
+//                    if ($shippingMethod == 'inhouse_shipping') {
+//                        $admin_shipping = ShippingType::where('seller_id', 0)->first();
+//                        $shipping_type = isset($admin_shipping) == true ? $admin_shipping->shipping_type : 'order_wise';
+//                    } else {
+//                        if ($cart->seller_is == 'admin') {
+//                            $admin_shipping = ShippingType::where('seller_id', 0)->first();
+//                            $shipping_type = isset($admin_shipping) == true ? $admin_shipping->shipping_type : 'order_wise';
+//                        } else {
+//                            $seller_shipping = ShippingType::where('seller_id', $cart->seller_id)->first();
+//                            $shipping_type = isset($seller_shipping) == true ? $seller_shipping->shipping_type : 'order_wise';
+//                        }
+//                    }
+//
+//                    if ($physical_product && $shipping_type == 'order_wise') {
+//                        $cart_shipping = CartShipping::where('cart_group_id', $cart->cart_group_id)->first();
+//                        if (!isset($cart_shipping)) {
+//                            Toastr::info(translate('select_shipping_method_first'));
+//                            return redirect('shop-cart');
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');
         $zip_restrict_status = Helpers::get_business_settings('delivery_zip_code_area_restriction');
@@ -403,7 +404,6 @@ class WebController extends Controller
             'is_guest'=> $user=='offline' ? 1:'0',
             'is_billing'=>1,
         ])->get();
-
         if (count($cart_group_ids) > 0) {
             return view(VIEW_FILE_NAMES['order_shipping'], compact('physical_product_view', 'zip_codes', 'country_restrict_status',
                 'zip_restrict_status', 'countries','billing_input_by_customer','default_location','shipping_addresses','billing_addresses'));
