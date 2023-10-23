@@ -561,10 +561,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'], fu
 
         });
 
-        Route::group(['prefix' => 'system-settings', 'as' => 'system-settings.'], function () {
-            Route::get('software-update','SoftwareUpdateController@index')->name('software-update');
-            Route::post('software-update','SoftwareUpdateController@upload_and_update');
-        });
+//        Route::group(['prefix' => 'system-settings', 'as' => 'system-settings.'], function () {
+//            Route::get('software-update','SoftwareUpdateController@index')->name('software-update');
+//            Route::post('software-update','SoftwareUpdateController@upload_and_update');
+//        });
 
         //order management
         Route::group(['prefix' => 'orders', 'as' => 'orders.','middleware'=>['module:order_management']], function () {
