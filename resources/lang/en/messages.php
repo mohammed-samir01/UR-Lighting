@@ -6376,4 +6376,5 @@
   'bottom_banner_name_is_required' => 'Bottom banner name is required',
   'shop_address_is_required' => 'Shop address is required',
   'shop_apply_successfully' => 'Shop apply successfully',
+  'value_is_greater_or_equal_to' => 'Value is greater or equal to',
 );
