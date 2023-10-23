@@ -3,8 +3,7 @@
 if (!function_exists('theme_asset')) {
     function theme_asset($path = null): string
     {
-//        $theme_name = env('WEB_THEME') == null ? 'default' : env('WEB_THEME');
-        $theme_name = 'theme_aster';
+        $theme_name = env('WEB_THEME') == null ? 'default' : env('WEB_THEME');
         return asset("resources/themes/$theme_name/public/$path");
     }
 }
