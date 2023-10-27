@@ -78,7 +78,7 @@ class Oto
                 "email" => $customeData['email'],
                 "mobile" => $customeData['mobile'],
                 "address" => $addressData['address'],
-                "district" => $addressData['district'],
+//                "district" => $addressData['district'],
                 "city" => $addressData['city'],
                 "country" => $addressData['country'],
                 "lat" => $addressData['lat'],

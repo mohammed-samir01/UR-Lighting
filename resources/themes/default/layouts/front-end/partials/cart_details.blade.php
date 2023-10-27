@@ -159,53 +159,53 @@
                                 </td>
                                 </tr>
 
-                                @if($physical_product && $shippingMethod=='sellerwise_shipping' && $shipping_type == 'order_wise')
-                                    @php($choosen_shipping=\App\Model\CartShipping::where(['cart_group_id'=>$cartItem['cart_group_id']])->first())
+{{--                                @if($physical_product && $shippingMethod=='sellerwise_shipping' && $shipping_type == 'order_wise')--}}
+{{--                                    @php($choosen_shipping=\App\Model\CartShipping::where(['cart_group_id'=>$cartItem['cart_group_id']])->first())--}}
 
-                                    @if(isset($choosen_shipping)==false)
-                                        @php($choosen_shipping['shipping_method_id']=0)
-                                    @endif
+{{--                                    @if(isset($choosen_shipping)==false)--}}
+{{--                                        @php($choosen_shipping['shipping_method_id']=0)--}}
+{{--                                    @endif--}}
 
-                                    @php($shippings=\App\CPU\Helpers::get_shipping_methods($cartItem['seller_id'],$cartItem['seller_is']))
-                                    <tr>
-                                        <td colspan="4">
+{{--                                    @php($shippings=\App\CPU\Helpers::get_shipping_methods($cartItem['seller_id'],$cartItem['seller_is']))--}}
+{{--                                    <tr>--}}
+{{--                                        <td colspan="4">--}}
 
-                                            @if($cart_key==$group->count()-1)
+{{--                                            @if($cart_key==$group->count()-1)--}}
 
-                                                <!-- choosen shipping method-->
+{{--                                                <!-- choosen shipping method-->--}}
 
-                                                <div class="row">
+{{--                                                <div class="row">--}}
 
-                                                    <div class="col-12">
-                                                        <select class="form-control"
-                                                                onchange="set_shipping_id(this.value,'{{$cartItem['cart_group_id']}}')">
-                                                            <option>{{translate('choose_shipping_method')}}</option>
-                                                            @foreach($shippings as $shipping)
-                                                                <option
-                                                                    value="{{$shipping['id']}}" {{$choosen_shipping['shipping_method_id']==$shipping['id']?'selected':''}}>
-                                                                    {{$shipping['title'].' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost'])}}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
+{{--                                                    <div class="col-12">--}}
+{{--                                                        <select class="form-control"--}}
+{{--                                                                onchange="set_shipping_id(this.value,'{{$cartItem['cart_group_id']}}')">--}}
+{{--                                                            <option>{{translate('choose_shipping_method')}}</option>--}}
+{{--                                                            @foreach($shippings as $shipping)--}}
+{{--                                                                <option--}}
+{{--                                                                    value="{{$shipping['id']}}" {{$choosen_shipping['shipping_method_id']==$shipping['id']?'selected':''}}>--}}
+{{--                                                                    {{$shipping['title'].' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost'])}}--}}
+{{--                                                                </option>--}}
+{{--                                                            @endforeach--}}
+{{--                                                        </select>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
 
-                                    @endif
-                                </td>
-                                <td colspan="3">
-                                    @if($cart_key==$group->count()-1)
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span>
-                                                <b>{{translate('shipping_cost')}} : </b>
-                                            </span>
-                                            {{\App\CPU\Helpers::currency_converter($choosen_shipping['shipping_method_id']!= 0?$choosen_shipping->shipping_cost:0)}}
-                                        </div>
-                                    </div>
-                                    @endif
-                                </td>
-                            </tr>
-                            @endif
+{{--                                    @endif--}}
+{{--                                </td>--}}
+{{--                                <td colspan="3">--}}
+{{--                                    @if($cart_key==$group->count()-1)--}}
+{{--                                    <div class="row">--}}
+{{--                                        <div class="col-12">--}}
+{{--                                            <span>--}}
+{{--                                                <b>{{translate('shipping_cost')}} : </b>--}}
+{{--                                            </span>--}}
+{{--                                            {{\App\CPU\Helpers::currency_converter($choosen_shipping['shipping_method_id']!= 0?$choosen_shipping->shipping_cost:0)}}--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    @endif--}}
+{{--                                </td>--}}
+{{--                            </tr>--}}
+{{--                            @endif--}}
                         @endforeach
                         </tbody>
                     </table>
@@ -251,27 +251,27 @@
             $admin_shipping = \App\Model\ShippingType::where('seller_id', 0)->first();
             $shipping_type = isset($admin_shipping) == true ? $admin_shipping->shipping_type : 'order_wise';
         ?>
-    @if ($shipping_type == 'order_wise' && $physical_product)
-        @php($shippings=\App\CPU\Helpers::get_shipping_methods(1,'admin'))
-        @php($choosen_shipping=\App\Model\CartShipping::where(['cart_group_id'=>$cartItem['cart_group_id']])->first())
+{{--    @if ($shipping_type == 'order_wise' && $physical_product)--}}
+{{--        @php($shippings=\App\CPU\Helpers::get_shipping_methods(1,'admin'))--}}
+{{--        @php($choosen_shipping=\App\Model\CartShipping::where(['cart_group_id'=>$cartItem['cart_group_id']])->first())--}}
 
-        @if(isset($choosen_shipping)==false)
-            @php($choosen_shipping['shipping_method_id']=0)
-        @endif
-        <div class="row">
-            <div class="col-12">
-                <select class="form-control" onchange="set_shipping_id(this.value,'all_cart_group')">
-                    <option>{{translate('choose_shipping_method')}}</option>
-                    @foreach($shippings as $shipping)
-                        <option
-                            value="{{$shipping['id']}}" {{$choosen_shipping['shipping_method_id']==$shipping['id']?'selected':''}}>
-                            {{$shipping['title'].' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost'])}}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-    @endif
+{{--        @if(isset($choosen_shipping)==false)--}}
+{{--            @php($choosen_shipping['shipping_method_id']=0)--}}
+{{--        @endif--}}
+{{--        <div class="row">--}}
+{{--            <div class="col-12">--}}
+{{--                <select class="form-control" onchange="set_shipping_id(this.value,'all_cart_group')">--}}
+{{--                    <option>{{translate('choose_shipping_method')}}</option>--}}
+{{--                    @foreach($shippings as $shipping)--}}
+{{--                        <option--}}
+{{--                            value="{{$shipping['id']}}" {{$choosen_shipping['shipping_method_id']==$shipping['id']?'selected':''}}>--}}
+{{--                            {{$shipping['title'].' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost'])}}--}}
+{{--                        </option>--}}
+{{--                    @endforeach--}}
+{{--                </select>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    @endif--}}
 @endif
 
 @if( $cart->count() == 0)
