@@ -1,1 +1,4 @@
 ALTER TABLE `products` ADD `weight` DOUBLE NOT NULL DEFAULT '0' AFTER `code`;
+
+ALTER TABLE `orders` ADD `order_shipping` VARCHAR(191) NULL DEFAULT NULL AFTER `third_party_delivery_tracking_id`;
+

@@ -29,6 +29,7 @@ class RegisterController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'image'         => 'required|mimes: jpg,jpeg,png,gif',
             'logo'          => 'required|mimes: jpg,jpeg,png,gif',

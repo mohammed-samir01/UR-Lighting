@@ -418,6 +418,6 @@ class SellerController extends Controller
     }
     public function add_seller()
     {
-        return view('admin-views.seller.add-new-seller');
+             return view('admin-views.seller.add-new-seller');
     }
 }

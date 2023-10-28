@@ -7,6 +7,7 @@ use App\CPU\Helpers;
 use App\CPU\ImageManager;
 use App\CPU\OrderManager;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Shipping\Oto;
 use App\Model\BusinessSetting;
 use App\Model\DeliveryMan;
 use App\Model\DeliveryManTransaction;
@@ -36,12 +37,14 @@ use Rap2hpoutre\FastExcel\FastExcel;
 class OrderController extends Controller
 {
     use CommonTrait;
+
     public function __construct(
         private DeliveryZipCode $delivery_zip_code,
-        private Order $order,
-        private Seller $seller,
-        private User $user,
-    ){
+        private Order           $order,
+        private Seller          $seller,
+        private User            $user,
+    )
+    {
 
     }
 
@@ -50,7 +53,7 @@ class OrderController extends Controller
 
         $search = $request['search'];
         $filter = $request['filter'];
-        $date_type  = $request['date_type'] ?? 'this_year';
+        $date_type = $request['date_type'] ?? 'this_year';
         $from = $request['from'];
         $to = $request['to'];
         $key = $request['search'] ? explode(' ', $request['search']) : '';
@@ -59,179 +62,182 @@ class OrderController extends Controller
         Order::where(['checked' => 0])->update(['checked' => 1]);
 
         $orders = Order::with(['customer', 'seller.shop'])
-            ->when($status != 'all', function ($q) use($status){
+            ->when($status != 'all', function ($q) use ($status) {
                 $q->where(function ($query) use ($status) {
                     $query->orWhere('order_status', $status);
                 });
             })
-            ->when($filter,function($q) use($filter){
-                $q->when($filter == 'all', function($q){
+            ->when($filter, function ($q) use ($filter) {
+                $q->when($filter == 'all', function ($q) {
                     return $q;
                 })
-                    ->when($filter == 'POS', function ($q){
-                        $q->whereHas('details', function ($q){
+                    ->when($filter == 'POS', function ($q) {
+                        $q->whereHas('details', function ($q) {
                             $q->where('order_type', 'POS');
                         });
                     })
-                    ->when($filter == 'admin' || $filter == 'seller', function($q) use($filter){
-                        $q->whereHas('details', function ($query) use ($filter){
-                            $query->whereHas('product', function ($query) use ($filter){
+                    ->when($filter == 'admin' || $filter == 'seller', function ($q) use ($filter) {
+                        $q->whereHas('details', function ($query) use ($filter) {
+                            $query->whereHas('product', function ($query) use ($filter) {
                                 $query->where('added_by', $filter);
                             });
                         });
                     });
             })
-            ->when($request->has('search') && $search!=null,function ($q) use ($key) {
-                $q->where(function($qq) use ($key){
+            ->when($request->has('search') && $search != null, function ($q) use ($key) {
+                $q->where(function ($qq) use ($key) {
                     foreach ($key as $value) {
                         $qq->where('id', 'like', "%{$value}%")
                             ->orWhere('order_status', 'like', "%{$value}%")
                             ->orWhere('transaction_ref', 'like', "%{$value}%");
-                    }});
+                    }
+                });
             })
-            ->when($request->has('date_type')&& $request->date_type == "this_year", function($dateQuery) {
+            ->when($request->has('date_type') && $request->date_type == "this_year", function ($dateQuery) {
                 $current_start_year = date('Y-01-01');
                 $current_end_year = date('Y-12-31');
-                $dateQuery->whereDate('created_at', '>=',$current_start_year)
-                    ->whereDate('created_at', '<=',$current_end_year);
+                $dateQuery->whereDate('created_at', '>=', $current_start_year)
+                    ->whereDate('created_at', '<=', $current_end_year);
             })
-            ->when($request->has('date_type')&& $request->date_type == "this_month", function($dateQuery) {
+            ->when($request->has('date_type') && $request->date_type == "this_month", function ($dateQuery) {
                 $current_month_start = date('Y-m-01');
                 $current_month_end = date('Y-m-t');
-                $dateQuery->whereDate('created_at', '>=',$current_month_start)
-                    ->whereDate('created_at', '<=',$current_month_end);
+                $dateQuery->whereDate('created_at', '>=', $current_month_start)
+                    ->whereDate('created_at', '<=', $current_month_end);
             })
-            ->when($request->has('date_type')&& $request->date_type == "this_week", function($dateQuery) {
+            ->when($request->has('date_type') && $request->date_type == "this_week", function ($dateQuery) {
                 $start_week = Carbon::now()->subDays(7)->startOfWeek()->format('Y-m-d');
-                $end_week =Carbon::now()->startOfWeek()->format('Y-m-d');
-                $dateQuery->whereDate('created_at', '>=',$start_week)
-                ->whereDate('created_at', '<=',$end_week );
+                $end_week = Carbon::now()->startOfWeek()->format('Y-m-d');
+                $dateQuery->whereDate('created_at', '>=', $start_week)
+                    ->whereDate('created_at', '<=', $end_week);
             })
-            ->when($request->has('date_type')&& $request->date_type == "custom_date" && !empty($from) && !empty($to), function($dateQuery) use($from, $to) {
-                $dateQuery->whereDate('created_at', '>=',$from)
-                    ->whereDate('created_at', '<=',$to);
+            ->when($request->has('date_type') && $request->date_type == "custom_date" && !empty($from) && !empty($to), function ($dateQuery) use ($from, $to) {
+                $dateQuery->whereDate('created_at', '>=', $from)
+                    ->whereDate('created_at', '<=', $to);
             })
-            ->when($delivery_man_id, function ($q) use($delivery_man_id){
-                $q->where(['delivery_man_id'=> $delivery_man_id]);
+            ->when($delivery_man_id, function ($q) use ($delivery_man_id) {
+                $q->where(['delivery_man_id' => $delivery_man_id]);
             })
-            ->when($request->customer_id != 'all' && $request->has('customer_id') ,function($query)use($request){
-                return $query->where('customer_id',$request->customer_id);
+            ->when($request->customer_id != 'all' && $request->has('customer_id'), function ($query) use ($request) {
+                return $query->where('customer_id', $request->customer_id);
             })
-            ->when($request->seller_id != 'all' && $request->has('seller_id') && $request->seller_id != 0 ,function($query)use($request){
-                return $query->where(['seller_is'=>'seller','seller_id'=>$request->seller_id]);
+            ->when($request->seller_id != 'all' && $request->has('seller_id') && $request->seller_id != 0, function ($query) use ($request) {
+                return $query->where(['seller_is' => 'seller', 'seller_id' => $request->seller_id]);
             })
-            ->when($request->seller_id != 'all' && $request->has('seller_id') && $request->seller_id == 0 ,function($query)use($request){
-                return $query->where(['seller_is'=>'admin']);
+            ->when($request->seller_id != 'all' && $request->has('seller_id') && $request->seller_id == 0, function ($query) use ($request) {
+                return $query->where(['seller_is' => 'admin']);
             })
             ->latest('id')
             ->paginate(Helpers::pagination_limit())
             ->appends([
-                'search'=>$request['search'],
-                'filter'=>$request['filter'],'from'=>$request['from'],
-                'to'=>$request['to'],
-                'date_type' =>$request['date_type'],
-                'customer_id'=> $request->customer_id,
+                'search' => $request['search'],
+                'filter' => $request['filter'], 'from' => $request['from'],
+                'to' => $request['to'],
+                'date_type' => $request['date_type'],
+                'customer_id' => $request->customer_id,
                 'seller_id' => $request->seller_id,
-                'delivery_man_id'=>$request['delivery_man_id'],
-                ]);
+                'delivery_man_id' => $request['delivery_man_id'],
+            ]);
 
-            $pending_query = Order::where(['order_status' => 'pending']);
-            $pending_count = $this->common_query_status_count($pending_query, $status, $request);
+        $pending_query = Order::where(['order_status' => 'pending']);
+        $pending_count = $this->common_query_status_count($pending_query, $status, $request);
 
-            $confirmed_query = Order::where(['order_status' => 'confirmed']);
-            $confirmed_count = $this->common_query_status_count($confirmed_query, $status, $request);
+        $confirmed_query = Order::where(['order_status' => 'confirmed']);
+        $confirmed_count = $this->common_query_status_count($confirmed_query, $status, $request);
 
-            $processing_query = Order::where(['order_status' => 'processing']);
-            $processing_count = $this->common_query_status_count($processing_query, $status, $request);
+        $processing_query = Order::where(['order_status' => 'processing']);
+        $processing_count = $this->common_query_status_count($processing_query, $status, $request);
 
-            $out_for_delivery_query = Order::where(['order_status' => 'out_for_delivery']);
-            $out_for_delivery_count = $this->common_query_status_count($out_for_delivery_query, $status, $request);
+        $out_for_delivery_query = Order::where(['order_status' => 'out_for_delivery']);
+        $out_for_delivery_count = $this->common_query_status_count($out_for_delivery_query, $status, $request);
 
-            $delivered_query = Order::where(['order_status' => 'delivered']);
-            $delivered_count = $this->common_query_status_count($delivered_query, $status, $request);
+        $delivered_query = Order::where(['order_status' => 'delivered']);
+        $delivered_count = $this->common_query_status_count($delivered_query, $status, $request);
 
-            $canceled_query = Order::where(['order_status' => 'canceled']);
-            $canceled_count = $this->common_query_status_count($canceled_query, $status, $request);
+        $canceled_query = Order::where(['order_status' => 'canceled']);
+        $canceled_count = $this->common_query_status_count($canceled_query, $status, $request);
 
-            $returned_query = Order::where(['order_status' => 'returned']);
-            $returned_count = $this->common_query_status_count($returned_query, $status, $request);
+        $returned_query = Order::where(['order_status' => 'returned']);
+        $returned_count = $this->common_query_status_count($returned_query, $status, $request);
 
-            $failed_query = Order::where(['order_status' => 'failed']);
-            $failed_count = $this->common_query_status_count($failed_query, $status, $request);
+        $failed_query = Order::where(['order_status' => 'failed']);
+        $failed_count = $this->common_query_status_count($failed_query, $status, $request);
 
-            $sellers = $this->seller->with('shop')->where('status','!=','pending')->get();
+        $sellers = $this->seller->with('shop')->where('status', '!=', 'pending')->get();
 
-            $customer = "all";
-            if($request->customer_id != 'all' && !is_null($request->customer_id) && $request->has('customer_id')){
-                $customer = $this->user->find($request->customer_id);
-            }
+        $customer = "all";
+        if ($request->customer_id != 'all' && !is_null($request->customer_id) && $request->has('customer_id')) {
+            $customer = $this->user->find($request->customer_id);
+        }
 
-            $seller_id = $request->seller_id;
-            $customer_id = $request->customer_id;
+        $seller_id = $request->seller_id;
+        $customer_id = $request->customer_id;
 
         return view(
-                'admin-views.order.list',
-                compact(
-                    'date_type',
-                    'orders',
-                    'search',
-                    'from', 'to', 'status',
-                    'filter',
-                    'pending_count',
-                    'confirmed_count',
-                    'processing_count',
-                    'out_for_delivery_count',
-                    'delivered_count',
-                    'returned_count',
-                    'failed_count',
-                    'canceled_count',
-                    'sellers',
-                    'customer',
-                    'seller_id',
-                    'customer_id',
-                )
-            );
+            'admin-views.order.list',
+            compact(
+                'date_type',
+                'orders',
+                'search',
+                'from', 'to', 'status',
+                'filter',
+                'pending_count',
+                'confirmed_count',
+                'processing_count',
+                'out_for_delivery_count',
+                'delivered_count',
+                'returned_count',
+                'failed_count',
+                'canceled_count',
+                'sellers',
+                'customer',
+                'seller_id',
+                'customer_id',
+            )
+        );
     }
 
-    public function common_query_status_count($query, $status, $request){
+    public function common_query_status_count($query, $status, $request)
+    {
         $search = $request['search'];
         $filter = $request['filter'];
         $from = $request['from'];
         $to = $request['to'];
         $key = $request['search'] ? explode(' ', $request['search']) : '';
 
-            return $query->when($status != 'all', function ($q) use($status){
-                $q->where(function ($query) use ($status) {
-                    $query->orWhere('order_status', $status);
-                });
-            })
-            ->when($filter,function($q) use($filter) {
+        return $query->when($status != 'all', function ($q) use ($status) {
+            $q->where(function ($query) use ($status) {
+                $query->orWhere('order_status', $status);
+            });
+        })
+            ->when($filter, function ($q) use ($filter) {
                 $q->when($filter == 'all', function ($q) {
                     return $q;
                 })
-                ->when($filter == 'POS', function ($q){
-                    $q->whereHas('details', function ($q){
-                        $q->where('order_type', 'POS');
-                    });
-                })
-                ->when($filter == 'admin' || $filter == 'seller', function($q) use($filter){
-                    $q->whereHas('details', function ($query) use ($filter){
-                        $query->whereHas('product', function ($query) use ($filter){
-                            $query->where('added_by', $filter);
+                    ->when($filter == 'POS', function ($q) {
+                        $q->whereHas('details', function ($q) {
+                            $q->where('order_type', 'POS');
+                        });
+                    })
+                    ->when($filter == 'admin' || $filter == 'seller', function ($q) use ($filter) {
+                        $q->whereHas('details', function ($query) use ($filter) {
+                            $query->whereHas('product', function ($query) use ($filter) {
+                                $query->where('added_by', $filter);
+                            });
                         });
                     });
-                });
             })
-            ->when($request->has('search') && $search!=null,function ($q) use ($key) {
-                $q->where(function($qq) use ($key){
+            ->when($request->has('search') && $search != null, function ($q) use ($key) {
+                $q->where(function ($qq) use ($key) {
                     foreach ($key as $value) {
                         $qq->where('id', 'like', "%{$value}%")
                             ->orWhere('order_status', 'like', "%{$value}%")
                             ->orWhere('transaction_ref', 'like', "%{$value}%");
-                    }});
-            })->when(!empty($from) && !empty($to), function($dateQuery) use($from, $to) {
-                $dateQuery->whereDate('created_at', '>=',$from)
-                    ->whereDate('created_at', '<=',$to);
+                    }
+                });
+            })->when(!empty($from) && !empty($to), function ($dateQuery) use ($from, $to) {
+                $dateQuery->whereDate('created_at', '>=', $from)
+                    ->whereDate('created_at', '<=', $to);
             })->count();
     }
 
@@ -243,14 +249,16 @@ class OrderController extends Controller
         $countries = $country_restrict_status ? $this->get_delivery_country_array() : COUNTRIES;
         $zip_codes = $zip_restrict_status ? $this->delivery_zip_code->all() : 0;
 
-        $company_name =BusinessSetting::where('type', 'company_name')->first()->value;
-        $company_web_logo =BusinessSetting::where('type', 'company_web_logo')->first()->value;
+        $company_name = BusinessSetting::where('type', 'company_name')->first()->value;
+        $company_web_logo = BusinessSetting::where('type', 'company_web_logo')->first()->value;
 
-        $order = $this->order->with('details.product_all_status', 'verification_images' ,'shipping', 'seller.shop', 'offline_payments','delivery_man')->where(['id' => $id])->first();
+        $order = $this->order->with('details.product_all_status', 'verification_images', 'shipping', 'seller.shop', 'offline_payments', 'delivery_man')->where(['id' => $id])->first();
+
+        $orderStatus = Oto::orderStatus($order->id);
 
         $physical_product = false;
-        foreach($order->details as $product){
-            if(isset($product->product) && $product->product->product_type == 'physical'){
+        foreach ($order->details as $product) {
+            if (isset($product->product) && $product->product->product_type == 'physical') {
                 $physical_product = true;
             }
         }
@@ -272,12 +280,11 @@ class OrderController extends Controller
         })->get();
 
         $shipping_address = ShippingAddress::find($order->shipping_address);
-        if($order->order_type == 'default_type')
-        {
-            return view('admin-views.order.order-details', compact('shipping_address','order', 'linked_orders',
+        if ($order->order_type == 'default_type') {
+            return view('admin-views.order.order-details', compact('shipping_address', 'order', 'linked_orders',
                 'delivery_men', 'total_delivered', 'company_name', 'company_web_logo', 'physical_product',
-                'country_restrict_status','zip_restrict_status','countries','zip_codes'));
-        }else{
+                'country_restrict_status', 'zip_restrict_status', 'countries', 'zip_codes','orderStatus'));
+        } else {
             return view('admin-views.pos.order.order-details', compact('order', 'company_name', 'company_web_logo'));
         }
 
@@ -297,7 +304,7 @@ class OrderController extends Controller
 
         $fcm_token = isset($order->delivery_man) ? $order->delivery_man->fcm_token : null;
         $value = Helpers::order_status_update_message('del_assign') . " ID: " . $order['id'];
-        if(!empty($fcm_token)) {
+        if (!empty($fcm_token)) {
             try {
                 if ($value != null) {
                     $data = [
@@ -305,7 +312,7 @@ class OrderController extends Controller
                         'description' => $value,
                         'order_id' => $order['id'],
                         'image' => '',
-                        'type'=>'order'
+                        'type' => 'order'
                     ];
 
                     if ($order->delivery_man_id) {
@@ -327,21 +334,20 @@ class OrderController extends Controller
 
         $order = Order::find($request->id);
 
-        if(!$order->is_guest && !isset($order->customer))
-        {
-            return response()->json(['customer_status'=>0],200);
+        if (!$order->is_guest && !isset($order->customer)) {
+            return response()->json(['customer_status' => 0], 200);
         }
 
         $wallet_status = Helpers::get_business_settings('wallet_status');
         $loyalty_point_status = Helpers::get_business_settings('loyalty_point_status');
 
-        if($request->order_status=='delivered' && $order->payment_status !='paid'){
+        if ($request->order_status == 'delivered' && $order->payment_status != 'paid') {
 
-            return response()->json(['payment_status'=>0],200);
+            return response()->json(['payment_status' => 0], 200);
         }
         $fcm_token = isset($order->customer) ? $order->customer->cm_firebase_token : null;
         $value = Helpers::order_status_update_message($request->order_status);
-        if(!empty($fcm_token)) {
+        if (!empty($fcm_token)) {
             try {
                 if ($value) {
                     $data = [
@@ -349,7 +355,7 @@ class OrderController extends Controller
                         'description' => $value,
                         'order_id' => $order['id'],
                         'image' => '',
-                        'type'=>'order'
+                        'type' => 'order'
                     ];
                     Helpers::send_push_notif_to_device($fcm_token, $data);
                 }
@@ -365,9 +371,9 @@ class OrderController extends Controller
                     'description' => $value,
                     'order_id' => $order['id'],
                     'image' => '',
-                    'type'=>'order'
+                    'type' => 'order'
                 ];
-                if($order->delivery_man_id) {
+                if ($order->delivery_man_id) {
                     self::add_deliveryman_push_notification($data, $order->delivery_man_id);
                 }
                 Helpers::send_push_notif_to_device($fcm_token_delivery_man, $data);
@@ -379,23 +385,22 @@ class OrderController extends Controller
         OrderManager::stock_update_on_order_status_change($order, $request->order_status);
         $order->save();
 
-        if($loyalty_point_status == 1 && !$order->is_guest)
-        {
-            if($request->order_status == 'delivered' && $order->payment_status =='paid'){
-                CustomerManager::create_loyalty_point_transaction($order->customer_id, $order->id, Convert::default($order->order_amount-$order->shipping_cost), 'order_place');
+        if ($loyalty_point_status == 1 && !$order->is_guest) {
+            if ($request->order_status == 'delivered' && $order->payment_status == 'paid') {
+                CustomerManager::create_loyalty_point_transaction($order->customer_id, $order->id, Convert::default($order->order_amount - $order->shipping_cost), 'order_place');
             }
         }
 
         $ref_earning_status = BusinessSetting::where('type', 'ref_earning_status')->first()->value ?? 0;
         $ref_earning_exchange_rate = BusinessSetting::where('type', 'ref_earning_exchange_rate')->first()->value ?? 0;
 
-        if(!$order->is_guest && $ref_earning_status == 1 && $request->order_status == 'delivered' && $order->payment_status =='paid'){
+        if (!$order->is_guest && $ref_earning_status == 1 && $request->order_status == 'delivered' && $order->payment_status == 'paid') {
 
             $customer = User::find($order->customer_id);
-            $is_first_order = Order::where(['customer_id'=>$order->customer_id,'order_status'=>'delivered','payment_status'=>'paid'])->count();
+            $is_first_order = Order::where(['customer_id' => $order->customer_id, 'order_status' => 'delivered', 'payment_status' => 'paid'])->count();
             $referred_by_user = User::find($customer->referred_by);
 
-            if ($is_first_order == 1 && isset($customer->referred_by) && isset($referred_by_user)){
+            if ($is_first_order == 1 && isset($customer->referred_by) && isset($referred_by_user)) {
                 CustomerManager::create_wallet_transaction($referred_by_user->id, floatval($ref_earning_exchange_rate), 'add_fund_by_admin', 'earned_by_referral');
             }
         }
@@ -418,7 +423,7 @@ class OrderController extends Controller
                 $dm_wallet->save();
             }
 
-            if($order->deliveryman_charge && $request->order_status == 'delivered'){
+            if ($order->deliveryman_charge && $request->order_status == 'delivered') {
                 DeliveryManTransaction::create([
                     'delivery_man_id' => $order->delivery_man_id,
                     'user_id' => 0,
@@ -440,14 +445,15 @@ class OrderController extends Controller
         if ($request->order_status == 'delivered' && $order['seller_id'] != null) {
             OrderManager::wallet_manage_on_order_status_change($order, 'admin');
             OrderDetail::where('order_id', $order->id)->update(
-                ['delivery_status'=>'delivered']
+                ['delivery_status' => 'delivered']
             );
         }
 
         return response()->json($request->order_status);
     }
 
-    public function amount_date_update(Request $request){
+    public function amount_date_update(Request $request)
+    {
         $field_name = $request->field_name;
         $field_val = $request->field_val;
         $user_id = 0;
@@ -458,21 +464,21 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
-            if($field_name == 'expected_delivery_date'){
+            if ($field_name == 'expected_delivery_date') {
                 self::add_expected_delivery_date_history($request->order_id, $user_id, $field_val, 'admin');
             }
             $order->save();
 
             DB::commit();
-        }catch(\Exception $ex){
+        } catch (\Exception $ex) {
             DB::rollback();
             return response()->json(['status' => false], 403);
         }
 
-        if($field_name == 'expected_delivery_date') {
-            $fcm_token = isset($order->delivery_man) ? $order->delivery_man->fcm_token:null;
+        if ($field_name == 'expected_delivery_date') {
+            $fcm_token = isset($order->delivery_man) ? $order->delivery_man->fcm_token : null;
             $value = Helpers::order_status_update_message($field_name) . " ID: " . $order['id'];
-            if(!empty($fcm_token)) {
+            if (!empty($fcm_token)) {
                 try {
                     if ($value != null) {
                         $data = [
@@ -480,7 +486,7 @@ class OrderController extends Controller
                             'description' => $value,
                             'order_id' => $order['id'],
                             'image' => '',
-                            'type'=>'order'
+                            'type' => 'order'
                         ];
 
                         if ($order->delivery_man_id) {
@@ -502,9 +508,8 @@ class OrderController extends Controller
         if ($request->ajax()) {
             $order = Order::find($request->id);
 
-            if($order->is_guest=='0' && !isset($order->customer))
-            {
-                return response()->json(['customer_status'=>0],200);
+            if ($order->is_guest == '0' && !isset($order->customer)) {
+                return response()->json(['customer_status' => 0], 200);
             }
 
             $order = Order::find($request->id);
@@ -517,15 +522,15 @@ class OrderController extends Controller
 
     public function generate_invoice($id)
     {
-        $company_phone =BusinessSetting::where('type', 'company_phone')->first()->value;
-        $company_email =BusinessSetting::where('type', 'company_email')->first()->value;
-        $company_name =BusinessSetting::where('type', 'company_name')->first()->value;
-        $company_web_logo =BusinessSetting::where('type', 'company_web_logo')->first()->value;
+        $company_phone = BusinessSetting::where('type', 'company_phone')->first()->value;
+        $company_email = BusinessSetting::where('type', 'company_email')->first()->value;
+        $company_name = BusinessSetting::where('type', 'company_name')->first()->value;
+        $company_web_logo = BusinessSetting::where('type', 'company_web_logo')->first()->value;
 
         $order = Order::with('seller')->with('shipping')->with('details')->where('id', $id)->first();
         $seller = Seller::find($order->details->first()->seller_id);
-        $data["email"] = $order->customer !=null?$order->customer["email"]:json_decode($order->billing_address_data)->contact_person_name ?? translate('email_not_found');
-        $data["client_name"] = $order->customer !=null? $order->customer["f_name"] . ' ' . $order->customer["l_name"]:json_decode($order->billing_address_data)->email ?? translate('customer_not_found');
+        $data["email"] = $order->customer != null ? $order->customer["email"] : json_decode($order->billing_address_data)->contact_person_name ?? translate('email_not_found');
+        $data["client_name"] = $order->customer != null ? $order->customer["f_name"] . ' ' . $order->customer["l_name"] : json_decode($order->billing_address_data)->email ?? translate('customer_not_found');
         $data["order"] = $order;
         $mpdf_view = View::make('admin-views.order.invoice',
             compact('order', 'seller', 'company_phone', 'company_name', 'company_email', 'company_web_logo')
@@ -539,7 +544,7 @@ class OrderController extends Controller
     public function digital_file_upload_after_sell(Request $request)
     {
         $request->validate([
-            'digital_file_after_sell'    => 'required|mimes:jpg,jpeg,png,gif,zip,pdf'
+            'digital_file_after_sell' => 'required|mimes:jpg,jpeg,png,gif,zip,pdf'
         ], [
             'digital_file_after_sell.required' => 'Digital file upload after sell is required',
             'digital_file_after_sell.mimes' => 'Digital file upload after sell upload must be a file of type: pdf, zip, jpg, jpeg, png, gif.',
@@ -548,9 +553,9 @@ class OrderController extends Controller
         $order_details = OrderDetail::find($request->order_id);
         $order_details->digital_file_after_sell = ImageManager::update('product/digital-product/', $order_details->digital_file_after_sell, $request->digital_file_after_sell->getClientOriginalExtension(), $request->file('digital_file_after_sell'));
 
-        if($order_details->save()){
+        if ($order_details->save()) {
             Toastr::success(translate('digital_file_upload_successfully'));
-        }else{
+        } else {
             Toastr::error(translate('digital_file_upload_failed'));
         }
         return back();
@@ -565,6 +570,7 @@ class OrderController extends Controller
         }
         return back();
     }
+
     public function update_deliver_info(Request $request)
     {
         $order = Order::find($request->order_id);
@@ -589,41 +595,41 @@ class OrderController extends Controller
         $delivery_man_id = $request['delivery_man_id'];
 
         if ($status != 'all') {
-            $orders = Order::when($filter,function($q) use($filter){
-                $q->when($filter == 'all', function($q){
+            $orders = Order::when($filter, function ($q) use ($filter) {
+                $q->when($filter == 'all', function ($q) {
                     return $q;
                 })
-                    ->when($filter == 'POS', function ($q){
-                        $q->whereHas('details', function ($q){
+                    ->when($filter == 'POS', function ($q) {
+                        $q->whereHas('details', function ($q) {
                             $q->where('order_type', 'POS');
                         });
                     })
-                    ->when($filter == 'admin' || $filter == 'seller', function($q) use($filter){
-                        $q->whereHas('details', function ($query) use ($filter){
-                            $query->whereHas('product', function ($query) use ($filter){
+                    ->when($filter == 'admin' || $filter == 'seller', function ($q) use ($filter) {
+                        $q->whereHas('details', function ($query) use ($filter) {
+                            $query->whereHas('product', function ($query) use ($filter) {
                                 $query->where('added_by', $filter);
                             });
                         });
                     });
             })
-                ->with(['customer'])->where(function($query) use ($status){
-                    $query->orWhere('order_status',$status)
-                        ->orWhere('payment_status',$status);
+                ->with(['customer'])->where(function ($query) use ($status) {
+                    $query->orWhere('order_status', $status)
+                        ->orWhere('payment_status', $status);
                 });
         } else {
             $orders = Order::with(['customer'])
-                ->when($filter,function($q) use($filter){
-                    $q->when($filter == 'all', function($q){
+                ->when($filter, function ($q) use ($filter) {
+                    $q->when($filter == 'all', function ($q) {
                         return $q;
                     })
-                        ->when($filter == 'POS', function ($q){
-                            $q->whereHas('details', function ($q){
+                        ->when($filter == 'POS', function ($q) {
+                            $q->whereHas('details', function ($q) {
                                 $q->where('order_type', 'POS');
                             });
                         })
-                        ->when(($filter == 'admin' || $filter == 'seller'), function($q) use($filter){
-                            $q->whereHas('details', function ($query) use ($filter){
-                                $query->whereHas('product', function ($query) use ($filter){
+                        ->when(($filter == 'admin' || $filter == 'seller'), function ($q) use ($filter) {
+                            $q->whereHas('details', function ($query) use ($filter) {
+                                $query->whereHas('product', function ($query) use ($filter) {
                                     $query->where('added_by', $filter);
                                 });
                             });
@@ -632,55 +638,56 @@ class OrderController extends Controller
         }
 
         $key = $request['search'] ? explode(' ', $request['search']) : '';
-        $orders = $orders->when($request->has('search') && $search!=null,function ($q) use ($key) {
-                $q->where(function($qq) use ($key){
-                    foreach ($key as $value) {
-                        $qq->where('id', 'like', "%{$value}%")
-                            ->orWhere('order_status', 'like', "%{$value}%")
-                            ->orWhere('transaction_ref', 'like', "%{$value}%");
-                    }});
-            })
-            ->when($request->has('delivery_man_id') && $delivery_man_id, function($query) use($delivery_man_id){
+        $orders = $orders->when($request->has('search') && $search != null, function ($q) use ($key) {
+            $q->where(function ($qq) use ($key) {
+                foreach ($key as $value) {
+                    $qq->where('id', 'like', "%{$value}%")
+                        ->orWhere('order_status', 'like', "%{$value}%")
+                        ->orWhere('transaction_ref', 'like', "%{$value}%");
+                }
+            });
+        })
+            ->when($request->has('delivery_man_id') && $delivery_man_id, function ($query) use ($delivery_man_id) {
                 $query->where('delivery_man_id', $delivery_man_id);
             })
-            ->when(!empty($from) && !empty($to), function($dateQuery) use($from, $to) {
-                $dateQuery->whereDate('created_at', '>=',$from)
-                    ->whereDate('created_at', '<=',$to);
+            ->when(!empty($from) && !empty($to), function ($dateQuery) use ($from, $to) {
+                $dateQuery->whereDate('created_at', '>=', $from)
+                    ->whereDate('created_at', '<=', $to);
             })
-            ->when($request->seller_id != 'all' && $request->has('seller_id') && $request->seller_id != 0 ,function($query)use($request){
-                return $query->where(['seller_is'=>'seller','seller_id'=>$request->seller_id]);
+            ->when($request->seller_id != 'all' && $request->has('seller_id') && $request->seller_id != 0, function ($query) use ($request) {
+                return $query->where(['seller_is' => 'seller', 'seller_id' => $request->seller_id]);
             })
-            ->when($request->seller_id != 'all' && $request->has('seller_id') && $request->seller_id == 0 ,function($query)use($request){
-                return $query->where(['seller_is'=>'admin']);
+            ->when($request->seller_id != 'all' && $request->has('seller_id') && $request->seller_id == 0, function ($query) use ($request) {
+                return $query->where(['seller_is' => 'admin']);
             })
-            ->when($request->customer_id != 'all' && $request->has('customer_id') ,function($query)use($request){
-                return $query->where('customer_id',$request->customer_id);
+            ->when($request->customer_id != 'all' && $request->has('customer_id'), function ($query) use ($request) {
+                return $query->where('customer_id', $request->customer_id);
             })
-            ->when($request->has('date_type')&& $request->date_type == "this_year", function($dateQuery) {
+            ->when($request->has('date_type') && $request->date_type == "this_year", function ($dateQuery) {
                 $current_start_year = date('Y-01-01');
                 $current_end_year = date('Y-12-31');
-                $dateQuery->whereDate('created_at', '>=',$current_start_year)
-                    ->whereDate('created_at', '<=',$current_end_year);
+                $dateQuery->whereDate('created_at', '>=', $current_start_year)
+                    ->whereDate('created_at', '<=', $current_end_year);
             })
-            ->when($request->has('date_type')&& $request->date_type == "this_month", function($dateQuery) {
+            ->when($request->has('date_type') && $request->date_type == "this_month", function ($dateQuery) {
                 $current_month_start = date('Y-m-01');
                 $current_month_end = date('Y-m-t');
-                $dateQuery->whereDate('created_at', '>=',$current_month_start)
-                    ->whereDate('created_at', '<=',$current_month_end);
+                $dateQuery->whereDate('created_at', '>=', $current_month_start)
+                    ->whereDate('created_at', '<=', $current_month_end);
             })
-            ->when($request->has('date_type')&& $request->date_type == "this_week", function($dateQuery) {
+            ->when($request->has('date_type') && $request->date_type == "this_week", function ($dateQuery) {
                 $start_week = Carbon::now()->subDays(7)->startOfWeek()->format('Y-m-d');
-                $end_week =Carbon::now()->startOfWeek()->format('Y-m-d');
-                $dateQuery->whereDate('created_at', '>=',$start_week)
-                ->whereDate('created_at', '<=',$end_week );
+                $end_week = Carbon::now()->startOfWeek()->format('Y-m-d');
+                $dateQuery->whereDate('created_at', '>=', $start_week)
+                    ->whereDate('created_at', '<=', $end_week);
             })
-            ->when($request->has('date_type')&& $request->date_type == "custom_date" && !empty($from) && !empty($to), function($dateQuery) use($from, $to) {
-                $dateQuery->whereDate('created_at', '>=',$from)
-                    ->whereDate('created_at', '<=',$to);
+            ->when($request->has('date_type') && $request->date_type == "custom_date" && !empty($from) && !empty($to), function ($dateQuery) use ($from, $to) {
+                $dateQuery->whereDate('created_at', '>=', $from)
+                    ->whereDate('created_at', '<=', $to);
             })
             ->orderBy('id', 'DESC')->get();
 
-        if ($orders->count()==0) {
+        if ($orders->count() == 0) {
             Toastr::warning(translate('data_is_not_available'));
             return back();
         }
@@ -695,9 +702,9 @@ class OrderController extends Controller
             $extra_discount = $item->extra_discount;
 
             $storage[] = [
-                'order_id'=>$item->id,
+                'order_id' => $item->id,
                 'Customer Id' => $item->customer_id,
-                'Customer Name'=> isset($item->customer) ? $item->customer->f_name. ' '.$item->customer->l_name:'not found',
+                'Customer Name' => isset($item->customer) ? $item->customer->f_name . ' ' . $item->customer->l_name : 'not found',
                 'Order Group Id' => $item->order_group_id,
                 'Order Status' => $item->order_status,
                 'Order Amount' => Helpers::currency_converter($order_amount),
@@ -711,17 +718,17 @@ class OrderController extends Controller
                 'Payment Method' => $item->payment_method,
                 'Transaction_ref' => $item->transaction_ref,
                 'Verification Code' => $item->verification_code,
-                'Billing Address' => isset($item->billingAddress)? $item->billingAddress->address:'not found',
+                'Billing Address' => isset($item->billingAddress) ? $item->billingAddress->address : 'not found',
                 'Billing Address Data' => $item->billing_address_data,
                 'Shipping Type' => $item->shipping_type,
-                'Shipping Address' => isset($item->shippingAddress)? $item->shippingAddress->address:'not found',
+                'Shipping Address' => isset($item->shippingAddress) ? $item->shippingAddress->address : 'not found',
                 'Shipping Method Id' => $item->shipping_method_id,
-                'Shipping Method Name' => isset($item->shipping)? $item->shipping->title:'not found',
+                'Shipping Method Name' => isset($item->shipping) ? $item->shipping->title : 'not found',
                 'Shipping Cost' => Helpers::currency_converter($shipping_cost),
                 'Seller Id' => $item->seller_id,
-                'Seller Name' => isset($item->seller)? $item->seller->f_name. ' '.$item->seller->l_name:'not found',
-                'Seller Email'  => isset($item->seller)? $item->seller->email:'not found',
-                'Seller Phone'  => isset($item->seller)? $item->seller->phone:'not found',
+                'Seller Name' => isset($item->seller) ? $item->seller->f_name . ' ' . $item->seller->l_name : 'not found',
+                'Seller Email' => isset($item->seller) ? $item->seller->email : 'not found',
+                'Seller Phone' => isset($item->seller) ? $item->seller->phone : 'not found',
                 'Seller Is' => $item->seller_is,
                 'Shipping Address Data' => $item->shipping_address_data,
                 'Delivery Type' => $item->delivery_type,
@@ -739,7 +746,8 @@ class OrderController extends Controller
     /**
      * Update Address From Order Details (Shipping and Billing)
      */
-    public function address_update(Request $request){
+    public function address_update(Request $request)
+    {
         $order = $this->order->find($request->order_id);
         $shipping_address_data = json_decode($order->shipping_address_data, true);
         $billing_address_data = json_decode($order->billing_address_data, true);
@@ -776,9 +784,10 @@ class OrderController extends Controller
 
     }
 
-    public function get_customers(Request $request){
+    public function get_customers(Request $request)
+    {
         $key = explode(' ', $request['q']);
-        $all_customer = ['id'=>'all','text'=>'All customer'];
+        $all_customer = ['id' => 'all', 'text' => 'All customer'];
         $data = DB::table('users')
             ->where(function ($q) use ($key) {
                 foreach ($key as $value) {
@@ -787,11 +796,11 @@ class OrderController extends Controller
                         ->orWhere('phone', 'like', "%{$value}%");
                 }
             })
-            ->where('id','!=',0)
+            ->where('id', '!=', 0)
             ->whereNotNull(['f_name', 'l_name', 'phone'])
             ->limit(20)
             ->get([DB::raw('id,IF(id <> "0", CONCAT(f_name, " ", l_name, " (", phone ,")"),CONCAT(f_name, " ", l_name)) as text')])->toArray();
-            array_unshift($data, $all_customer);
+        array_unshift($data, $all_customer);
         return response()->json($data);
 
     }

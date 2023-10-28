@@ -94,8 +94,8 @@ class Oto
             'Authorization' => 'Bearer ' . config('oto.access_token')
         ])->post($url, $data);
 
-        $responseResult = json_decode($response->getBody()->getContents(), true);
-        return json_encode($responseResult);
+       return json_decode($response->getBody()->getContents(), true);
+//        return json_encode($responseResult);
 
     }
 
@@ -129,8 +129,8 @@ class Oto
             'Authorization' => 'Bearer ' . config('oto.access_token')
         ])->post($url, $data);
 
-        $responseResult = json_decode($response->getBody()->getContents(), true);
-        return json_encode($responseResult);
+        return json_decode($response->getBody()->getContents(), true);
+//        return json_encode($responseResult);
     }
 
 
@@ -151,6 +151,31 @@ class Oto
 
         $responseResult = json_decode($response->getBody()->getContents(), true);
         return json_encode($responseResult);
+
+    }
+    public static function createPickupLocation(array $data)
+    {
+        Oto::refreshToken();
+        $data = [
+            'name' => $data['name'],
+            'code' => $data['code'],
+            'mobile' => $data['mobile'],
+            'city' => $data['city'],
+            'country' => $data['country'],
+            'address' => $data['address'],
+            'contactName' => $data['contact_name'],
+            'contactEmail' => $data['contact_email'],
+        ];
+
+        $url = config('oto.mode') == 'live' ? config('oto.live_urls')['create_pickup_location'] : config('oto.test_urls')['create_pickup_location'];
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . config('oto.access_token')
+        ])->post($url, $data);
+
+       return json_decode($response->getBody()->getContents(), true);
+//        return json_encode($responseResult);
 
     }
 

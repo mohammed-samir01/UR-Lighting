@@ -722,13 +722,12 @@ class OrderManager
         } catch (\Exception $exception) {
 
         }
-
-
         $orderData = ['orderId' => $order_id, 'payment_method' => 'paid', 'amount' => $order_total, 'amount_due' => 0, 'packageCount' => $totalCount, 'packageWeight' => $totalWeight, 'orderDate' => now()->format('Y-m-d H-i')];
-        $customeData = ['name' => $user->f_name .' '. $user->l_name, 'email' => $user->email, 'mobile' => $user->phone];
-        $addressData = ['address' => $shippingAddress->address,  'city' => $shippingAddress->city, 'country' => 'SA', 'lat' => $shippingAddress->latitude, 'lng' => $shippingAddress->longitude];
+        $customeData = ['name' => $user->f_name . ' ' . $user->l_name, 'email' => $user->email, 'mobile' => $user->phone];
+        $addressData = ['address' => $shippingAddress->address, 'city' => $shippingAddress->city, 'country' => 'SA', 'lat' => $shippingAddress->latitude, 'lng' => $shippingAddress->longitude];
         $response = Oto::createOrder($orderData, $customeData, $addressData, $items);
-        dd($response,'amer');
+        if ($response['success'])
+            Order::where('id', $order_id)->update(['order_shipping' => $response['otoId']]);
         return $order_id;
     }
 

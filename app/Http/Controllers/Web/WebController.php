@@ -454,7 +454,7 @@ class WebController extends Controller
         $dataForOto = [
             'weight' => $totalWeight,
             'totalDue' => 0,
-            'originCity' => 'Riyadh',
+            'originCity' => "Riyadh",
             'destinationCity' => $address->city,
         ];
         $otoCompanies = Oto::checkDeliveryFee($dataForOto);
