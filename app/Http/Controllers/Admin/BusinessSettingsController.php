@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\CPU\Helpers;
 use App\CPU\ImageManager;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Shipping\Oto;
 use App\Model\BusinessSetting;
 use App\Model\Currency;
 use App\Model\SocialMedia;
@@ -264,6 +265,23 @@ class BusinessSettingsController extends Controller
 
     public function updateInfo(Request $request)
     {
+        $location = [
+            'name' => $request['company_name'],
+            'code' => rand(10, 1000),
+            'mobile' => $request['company_phone'],
+            'city' => "Riyadh",
+            'country' => "SA",
+            'address' => $request['shop_address'],
+            'contact_email' => $request['company_email'],
+            'contact_name' => $request['company_name'],
+        ];
+
+        $pickup_location = Oto::updatePickupLocation($location);
+        if ($pickup_location['success'])
+            BusinessSetting::updateOrInsert(['type' => 'pickup_location_code'], [
+                'value' => $pickup_location['pickupLocationCode']
+            ]);
+
         if ($request['email_verification'] == 1) {
             $request['phone_verification'] = 0;
         } elseif ($request['phone_verification'] == 1) {

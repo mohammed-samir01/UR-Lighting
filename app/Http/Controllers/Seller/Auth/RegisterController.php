@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seller\Auth;
 
 use App\CPU\ImageManager;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Shipping\Oto;
 use App\Model\Seller;
 use App\Model\Shop;
 use Brian2694\Toastr\Facades\Toastr;
@@ -17,10 +18,9 @@ class RegisterController extends Controller
 {
     public function create()
     {
-        $business_mode=Helpers::get_business_settings('business_mode');
-        $seller_registration=Helpers::get_business_settings('seller_registration');
-        if((isset($business_mode) && $business_mode=='single') || (isset($seller_registration) && $seller_registration==0))
-        {
+        $business_mode = Helpers::get_business_settings('business_mode');
+        $seller_registration = Helpers::get_business_settings('seller_registration');
+        if ((isset($business_mode) && $business_mode == 'single') || (isset($seller_registration) && $seller_registration == 0)) {
             Toastr::warning(translate('access_denied!!'));
             return redirect('/');
         }
@@ -31,29 +31,29 @@ class RegisterController extends Controller
     {
 
         $request->validate([
-            'image'         => 'required|mimes: jpg,jpeg,png,gif',
-            'logo'          => 'required|mimes: jpg,jpeg,png,gif',
-            'banner'        => 'required|mimes: jpg,jpeg,png,gif',
+            'image' => 'required|mimes: jpg,jpeg,png,gif',
+            'logo' => 'required|mimes: jpg,jpeg,png,gif',
+            'banner' => 'required|mimes: jpg,jpeg,png,gif',
             'bottom_banner' => 'mimes: jpg,jpeg,png,gif',
-            'email'         => 'required|unique:sellers',
-            'shop_address'  => 'required',
-            'f_name'        => 'required',
-            'l_name'        => 'required',
-            'shop_name'     => 'required',
-            'phone'         => 'required',
-            'password'      => 'required|min:8'
+            'email' => 'required|unique:sellers',
+            'shop_address' => 'required',
+            'f_name' => 'required',
+            'l_name' => 'required',
+            'shop_name' => 'required',
+            'phone' => 'required',
+            'password' => 'required|min:8',
         ],
-        [
+            [
 
-            'image.required'  => translate('image_is_required').'!',
-            'logo.required'  => translate('logo_name_is_required').'!',
-            'banner.required'  => translate('banner_name_is_required').'!',
-            'bottom_banner.required'  => translate('bottom_banner_name_is_required').'!',
-            'shop_address.required'  => translate('shop_address_is_required').'!',
-        ]
+                'image.required' => translate('image_is_required') . '!',
+                'logo.required' => translate('logo_name_is_required') . '!',
+                'banner.required' => translate('banner_name_is_required') . '!',
+                'bottom_banner.required' => translate('bottom_banner_name_is_required') . '!',
+                'shop_address.required' => translate('shop_address_is_required') . '!',
+            ]
         );
 
-        if($request['from_submit'] != 'admin') {
+        if ($request['from_submit'] != 'admin') {
             //recaptcha validation
             $recaptcha = Helpers::get_business_settings('recaptcha');
             if (isset($recaptcha) && $recaptcha['status'] == 1) {
@@ -82,45 +82,58 @@ class RegisterController extends Controller
             }
         }
 
-        DB::transaction(function ($r) use ($request) {
-            $seller = new Seller();
-            $seller->f_name = $request->f_name;
-            $seller->l_name = $request->l_name;
-            $seller->phone = $request->phone;
-            $seller->email = $request->email;
-            $seller->image = ImageManager::upload('seller/', 'png', $request->file('image'));
-            $seller->password = bcrypt($request->password);
-            $seller->status =  $request->status == 'approved'?'approved': "pending";
-            $seller->save();
+        DB::beginTransaction();
+        $seller = new Seller();
+        $seller->f_name = $request->f_name;
+        $seller->l_name = $request->l_name;
+        $seller->phone = $request->phone;
+        $seller->email = $request->email;
+        $seller->image = ImageManager::upload('seller/', 'png', $request->file('image'));
+        $seller->password = bcrypt($request->password);
+        $seller->status = $request->status == 'approved' ? 'approved' : "pending";
+        $seller->save();
 
-            $shop = new Shop();
-            $shop->seller_id = $seller->id;
-            $shop->name = $request->shop_name;
-            $shop->address = $request->shop_address;
-            $shop->contact = $request->phone;
-            $shop->image = ImageManager::upload('shop/', 'png', $request->file('logo'));
-            $shop->banner = ImageManager::upload('shop/banner/', 'png', $request->file('banner'));
-            $shop->bottom_banner = ImageManager::upload('shop/banner/', 'png', $request->file('bottom_banner'));
-            $shop->save();
+        $shop = new Shop();
+        $shop->seller_id = $seller->id;
+        $shop->name = $request->shop_name;
+        $shop->address = $request->shop_address;
+        $shop->contact = $request->phone;
+        $shop->image = ImageManager::upload('shop/', 'png', $request->file('logo'));
+        $shop->banner = ImageManager::upload('shop/banner/', 'png', $request->file('banner'));
+        $shop->bottom_banner = ImageManager::upload('shop/banner/', 'png', $request->file('bottom_banner'));
+        $shop->save();
 
-            DB::table('seller_wallets')->insert([
-                'seller_id' => $seller['id'],
-                'withdrawn' => 0,
-                'commission_given' => 0,
-                'total_earning' => 0,
-                'pending_withdraw' => 0,
-                'delivery_charge_earned' => 0,
-                'collected_cash' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+        DB::table('seller_wallets')->insert([
+            'seller_id' => $seller['id'],
+            'withdrawn' => 0,
+            'commission_given' => 0,
+            'total_earning' => 0,
+            'pending_withdraw' => 0,
+            'delivery_charge_earned' => 0,
+            'collected_cash' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
-        });
+        DB::commit();
+        $location = [
+            'name' => $request->shop_name,
+            'code' => rand(10, 1000),
+            'mobile' => $request->phone,
+            'city' => "Riyadh",
+            'country' => "SA",
+            'address' => $request->shop_address,
+            'contact_email' => $request->email,
+            'contact_name' => $request->f_name . ' ' . $request->l_name,
+        ];
+        $pickup_location = Oto::createPickupLocation($location);
+        if ($pickup_location['success'])
+            $shop->update(['pickup_code' => $pickup_location['pickupLocationCode']]);
 
-        if($request->status == 'approved'){
+        if ($request->status == 'approved') {
             Toastr::success(translate('shop_apply_successfully'));
             return back();
-        }else{
+        } else {
             Toastr::success(translate('shop_apply_successfully'));
             return redirect()->route('seller.auth.login');
         }

@@ -2,3 +2,7 @@ ALTER TABLE `products` ADD `weight` DOUBLE NOT NULL DEFAULT '0' AFTER `code`;
 
 ALTER TABLE `orders` ADD `order_shipping` VARCHAR(191) NULL DEFAULT NULL AFTER `third_party_delivery_tracking_id`;
 
+ALTER TABLE `shops` ADD `pickup_code` VARCHAR(191) NULL AFTER `banner`;
+
+INSERT INTO `business_settings` (`id`, `type`, `value`, `created_at`, `updated_at`) VALUES (NULL, 'pickup_location_code', '', NULL, NULL);
+

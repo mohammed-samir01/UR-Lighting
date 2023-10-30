@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shop extends Model
 {
+    protected $guarded = [];
     protected $casts = [
         'seller_id ' => 'integer',
         'created_at'  => 'datetime',

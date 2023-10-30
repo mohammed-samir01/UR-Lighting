@@ -178,6 +178,31 @@ class Oto
 //        return json_encode($responseResult);
 
     }
+    public static function updatePickupLocation(array $data)
+    {
+        Oto::refreshToken();
+        $data = [
+            'name' => $data['name'],
+            'code' => $data['code'],
+            'mobile' => $data['mobile'],
+            'city' => $data['city'],
+            'country' => $data['country'],
+            'address' => $data['address'],
+            'contactName' => $data['contact_name'],
+            'contactEmail' => $data['contact_email'],
+        ];
+
+        $url = config('oto.mode') == 'live' ? config('oto.live_urls')['update_pickup_location'] : config('oto.test_urls')['update_pickup_location'];
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . config('oto.access_token')
+        ])->post($url, $data);
+
+        return json_decode($response->getBody()->getContents(), true);
+//        return json_encode($responseResult);
+
+    }
 
     public static function createReturnShipment($orderId)
     {

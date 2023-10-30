@@ -33,6 +33,7 @@ return [
         "create_shipment"       => "https://api.tryoto.com/rest/v2/createShipment",
         "create_return_shipment"=> "https://api.tryoto.com/rest/v2/createReturnShipment",
         "create_pickup_location"=> "https://api.tryoto.com/rest/v2/createPickupLocation",
+        "update_pickup_location"=> "https://api.tryoto.com/rest/v2/updatePickupLocation",
 
     ],
     /*
