@@ -313,7 +313,7 @@
 
         <!-- Products grid (featured products)-->
         @if ($featured_products->count() > 0 )
-            <div class="container mb-4">
+            <div class="container mb-4 ">
                 <div class="row __inline-62">
                     <div class="col-md-12">
                         <div class="feature-product-title">
@@ -1162,10 +1162,11 @@
             autoplay: false,
             margin: 20,
             nav: true,
+
             navText: ["<i class='czi-arrow-left'></i>", "<i class='czi-arrow-right'></i>"],
             dots: false,
             autoplayHoverPause: true,
-            '{{session('direction')}}': false,
+            '{{session('direction')}}': true,
             // center: true,
             responsive: {
                 //X-Small
