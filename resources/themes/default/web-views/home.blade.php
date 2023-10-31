@@ -264,6 +264,7 @@
                             <div class="carousel-wrap">
                                 <div class="owl-carousel owl-theme mt-2" id="flash-deal-slider">
                                     @foreach($web_config['flash_deals']->products as $key=>$deal)
+
                                         @if( $deal->product)
                                             @include('web-views.partials._product-card-1',['product'=>$deal->product,'decimal_point_settings'=>$decimal_point_settings])
                                         @endif
@@ -1023,7 +1024,7 @@
             navText: ["<i class='czi-arrow-left'></i>", "<i class='czi-arrow-right'></i>"],
             dots: false,
             autoplayHoverPause: true,
-            '{{session('direction')}}': false,
+            '{{session('direction')}}': true,
             // center: true,
             responsive: {
                 //X-Small

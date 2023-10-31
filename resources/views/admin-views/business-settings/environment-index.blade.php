@@ -103,31 +103,31 @@
                                     placeholder="{{ translate('ex') }} : 3306" required disabled>
                         </div>
                     </div>
-{{--                    <div class="col-md-4 col-12">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label class="title-color d-flex">{{translate('DB_database')}}</label>--}}
-{{--                            <input type="text" value="{{ env('APP_MODE') != 'demo' ? env('DB_DATABASE') : '---' }}"--}}
-{{--                                    name="db_database" class="form-control"--}}
-{{--                                    placeholder="{{ translate('ex') }} : demo_db" required disabled>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="col-md-4 col-12">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label class="title-color d-flex">{{translate('DB_username')}}</label>--}}
-{{--                            <input type="text" value="{{ env('APP_MODE') != 'demo' ? env('DB_USERNAME') : '---' }}"--}}
-{{--                                    name="db_username" class="form-control"--}}
-{{--                                    placeholder="{{ translate('ex') }} : {{ translate('root') }}" required disabled>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="col-md-4 col-12">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label class="title-color d-flex">{{translate('DB_password')}}</label>--}}
-{{--                            <input type="text" value="{{ env('APP_MODE') != 'demo' ? env('DB_PASSWORD') : '---' }}"--}}
-{{--                                    name="db_password" class="form-control"--}}
-{{--                                    placeholder="{{ translate('ex') }} : {{ translate('password') }}" disabled>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+                    <div class="col-md-4 col-12">
+                        <div class="form-group">
+                            <label class="title-color d-flex">{{translate('DB_database')}}</label>
+                            <input type="text" value="{{ env('APP_MODE') != 'demo' ? env('DB_DATABASE') : '---' }}"
+                                    name="db_database" class="form-control"
+                                    placeholder="{{ translate('ex') }} : demo_db" required disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <div class="form-group">
+                            <label class="title-color d-flex">{{translate('DB_username')}}</label>
+                            <input type="text" value="{{ env('APP_MODE') != 'demo' ? env('DB_USERNAME') : '---' }}"
+                                    name="db_username" class="form-control"
+                                    placeholder="{{ translate('ex') }} : {{ translate('root') }}" required disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <div class="form-group">
+                            <label class="title-color d-flex">{{translate('DB_password')}}</label>
+                            <input type="text" value="{{ env('APP_MODE') != 'demo' ? env('DB_PASSWORD') : '---' }}"
+                                    name="db_password" class="form-control"
+                                    placeholder="{{ translate('ex') }} : {{ translate('password') }}" disabled>
+                        </div>
+                    </div>
+                </div>
 
 {{--                <div class="row">--}}
 {{--                    <div class="col-md-6 col-12">--}}

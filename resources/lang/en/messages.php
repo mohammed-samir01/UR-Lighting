@@ -6377,4 +6377,5 @@
   'shop_address_is_required' => 'Shop address is required',
   'shop_apply_successfully' => 'Shop apply successfully',
   'value_is_greater_or_equal_to' => 'Value is greater or equal to',
+  'deal_added_successfully' => 'Deal added successfully',
 );

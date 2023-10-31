@@ -134,7 +134,6 @@ class AppServiceProvider extends ServiceProvider
                     $shops = Shop::whereHas('seller', function ($query) {
                         return $query->approved();
                     })->take(9)->get();
-
                     $recaptcha = Helpers::get_business_settings('recaptcha');
                     $socials_login = Helpers::get_business_settings('social_login');
                     $social_login_text = false;
