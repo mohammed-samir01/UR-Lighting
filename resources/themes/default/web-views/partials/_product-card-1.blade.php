@@ -1,6 +1,5 @@
 @if(isset($product))
     @php($overallRating = \App\CPU\ProductManager::get_overall_rating($product->reviews))
-
     <div class="flash_deal_product rtl" onclick="location.href='{{route('product',$product->slug)}}'">
         @if($product->discount > 0)
         <span class="for-discoutn-value p-1 pl-2 pr-2">

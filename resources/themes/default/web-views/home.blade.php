@@ -200,15 +200,15 @@
         </section>
 
         {{--flash deal--}}
-        @if ($web_config['flash_deals'])
+        @if ($flash_deals)
             <section class="overflow-hidden">
                 <div class="container">
                     <div
                         class="flash-deal-view-all-web row d-none d-lg-flex justify-content-{{Session::get('direction') === "rtl" ? 'start' : 'end'}}"
                         style="{{Session::get('direction') === "rtl" ? 'margin-left: 2px;' : 'margin-right:2px;'}}">
-                        @if (count($web_config['flash_deals']->products)>0)
+                        @if (count($flash_deals->products)>0)
                             <a class="text-capitalize view-all-text"
-                               href="{{route('flash-deals',[$web_config['flash_deals']?$web_config['flash_deals']['id']:0])}}">
+                               href="{{route('flash-deals',[$flash_deals?$flash_deals['id']:0])}}">
                                 {{ translate('view_all')}}
                                 <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'left mr-1 ml-n1 mt-1 float-left' : 'right ml-1 mr-n1'}}"></i>
                             </a>
@@ -225,7 +225,7 @@
                                 <div class="text-center text-white">
                                     <div class="countdown-background">
                                 <span class="cz-countdown d-flex justify-content-center align-items-center"
-                                      data-countdown="{{$web_config['flash_deals']?date('m/d/Y',strtotime($web_config['flash_deals']['end_date'])):''}} 11:59:00 PM">
+                                      data-countdown="{{$flash_deals?date('m/d/Y',strtotime($flash_deals['end_date'])):''}} 11:59:00 PM">
                                     <span class="cz-countdown-days">
                                         <span class="cz-countdown-value"></span>
                                         <span>{{ translate('day')}}</span>
@@ -256,14 +256,14 @@
                         <div class="col-xl-9 col-lg-8 {{Session::get('direction') === "rtl" ? 'pr-md-4' : 'pl-md-4'}}">
                             <div class="d-lg-none {{Session::get('direction') === "rtl" ? 'text-left' : 'text-right'}}">
                                 <a class="mt-2 text-capitalize view-all-text"
-                                   href="{{route('flash-deals',[$web_config['flash_deals']?$web_config['flash_deals']['id']:0])}}">
+                                   href="{{route('flash-deals',[$flash_deals?$flash_deals['id']:0])}}">
                                     {{ translate('view_all')}}
                                     <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'left mr-1 ml-n1 mt-1 float-left' : 'right ml-1 mr-n1'}}"></i>
                                 </a>
                             </div>
                             <div class="carousel-wrap">
                                 <div class="owl-carousel owl-theme mt-2" id="flash-deal-slider">
-                                    @foreach($web_config['flash_deals']->products as $key=>$deal)
+                                    @foreach($flash_deals->products as $key=>$deal)
 
                                         @if( $deal->product)
                                             @include('web-views.partials._product-card-1',['product'=>$deal->product,'decimal_point_settings'=>$decimal_point_settings])
@@ -1211,9 +1211,9 @@
             loop: false,
             autoplay: false,
             margin: 10,
-            nav: false,
+            nav: true,
             '{{session('direction')}}': true,
-            dots: true,
+            dots: false,
             autoplayHoverPause: true,
             // center: true,
             responsive: {

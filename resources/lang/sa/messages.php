@@ -5981,4 +5981,7 @@
   2 => '2',
   1 => '1',
   'total_sold_amount' => 'Total sold amount',
+  'brand_Edit' => 'Brand Edit',
+  'brand_Update' => 'Brand Update',
+  'brand_updated_successfully' => 'Brand updated successfully',
 );
