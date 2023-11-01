@@ -57,6 +57,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
+
         Paginator::useBootstrap();
 
         Config::set('addon_admin_routes',$this->get_addon_admin_routes());
@@ -90,16 +91,9 @@ class AppServiceProvider extends ServiceProvider
                 'loyalty_point_status' => Helpers::get_business_settings('loyalty_point_status'),
                 'guest_checkout_status' => Helpers::get_business_settings('guest_checkout'),
             ];
-
+//                dd();
                 if (!Request::is('admin') && !Request::is('admin/*') && !Request::is('seller/*')) {
-                    $flash_deals = FlashDeal::with(['products.product.reviews', 'products.product' => function ($query) {
-                        $query->active()->with(['wish_list'=>function($query){
-                            return $query->where('customer_id', Auth::guard('customer')->user()->id ?? 0);
-                        }]);
-                    }])->where(['deal_type' => 'flash_deal', 'status' => 1])
-                        ->whereDate('start_date', '<=', date('Y-m-d'))
-                        ->whereDate('end_date', '>=', date('Y-m-d'))
-                        ->first();
+
 
                     $featured_deals = Product::active()
                         ->with([
@@ -134,7 +128,6 @@ class AppServiceProvider extends ServiceProvider
                     $shops = Shop::whereHas('seller', function ($query) {
                         return $query->approved();
                     })->take(9)->get();
-
                     $recaptcha = Helpers::get_business_settings('recaptcha');
                     $socials_login = Helpers::get_business_settings('social_login');
                     $social_login_text = false;
@@ -164,7 +157,6 @@ class AppServiceProvider extends ServiceProvider
                     }
 
                     $ref_earning_status = BusinessSetting::where('type', 'ref_earning_status')->first()->value ?? 0;
-
                     $web_config += [
                         'cookie_setting' => Helpers::get_settings($web, 'cookie_setting'),
                         'announcement' => Helpers::get_business_settings('announcement'),
@@ -178,7 +170,7 @@ class AppServiceProvider extends ServiceProvider
                         'refund_policy' => Helpers::get_business_settings('refund-policy'),
                         'return_policy' => Helpers::get_business_settings('return-policy'),
                         'cancellation_policy' => Helpers::get_business_settings('cancellation-policy'),
-                        'flash_deals' => $flash_deals,
+                        'flash_deals' => false,
                         'featured_deals' => $featured_deals,
                         'shops' => $shops,
                         'brand_setting' => Helpers::get_business_settings('product_brand'),

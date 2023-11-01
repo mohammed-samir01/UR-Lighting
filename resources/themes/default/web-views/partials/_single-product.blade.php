@@ -1,5 +1,4 @@
 @php($overallRating = \App\CPU\ProductManager::get_overall_rating($product->reviews))
-
 <div class="product-single-hover" >
     <div class="overflow-hidden position-relative">
         <div class=" inline_product clickable d-flex justify-content-center"

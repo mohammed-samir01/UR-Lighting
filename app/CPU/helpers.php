@@ -789,10 +789,12 @@ class Helpers
         $decimal_point_settings = Helpers::get_business_settings('decimal_point_settings');
         $position = Helpers::get_business_settings('currency_symbol_position');
         if (!is_null($position) && $position == 'left') {
-            $string = currency_symbol() . '' . number_format($amount, (!empty($decimal_point_settings) ? $decimal_point_settings : 0));
+            $string = currency_symbol() . ' ' . number_format($amount, (!empty($decimal_point_settings) ? $decimal_point_settings : 0));
         } else {
-            $string = number_format($amount, !empty($decimal_point_settings) ? $decimal_point_settings : 0) . '' . currency_symbol();
+            $string = number_format($amount, !empty($decimal_point_settings) ? $decimal_point_settings : 0) . ' ' . currency_symbol();
         }
+        if (currency_symbol() == 'ريال' && \session('direction') == 'rtl')
+            $string = number_format($amount, !empty($decimal_point_settings) ? $decimal_point_settings : 0) . ' ' . currency_symbol();
         return $string;
     }
 
@@ -857,6 +859,8 @@ if (!function_exists('currency_symbol')) {
         Helpers::currency_load();
         if (\session()->has('currency_symbol')) {
             $symbol = \session('currency_symbol');
+            if (session('direction') == 'rtl' && $symbol == 'SAR')
+                $symbol = 'ريال';
         } else {
             $system_default_currency_info = \session('system_default_currency_info');
             $symbol = $system_default_currency_info->symbol;

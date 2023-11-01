@@ -13297,7 +13297,6 @@ a.nav-link:hover .media-tab-media {
 
     .navbar-expand-md .dropdown-menu > .dropdown .dropdown-menu {
         top: 0;
-        right: auto;
         left: 100%;
         width: auto;
         margin-top: -.5rem;
