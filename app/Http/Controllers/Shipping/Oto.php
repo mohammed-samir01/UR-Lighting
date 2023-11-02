@@ -112,7 +112,7 @@ class Oto
             'Authorization' => 'Bearer ' . config('oto.access_token')
         ])->post($url, $data);
 
-        $responseResult = json_decode($response->getBody()->getContents(), true);
+       return $responseResult = json_decode($response->getBody()->getContents(), true);
         return json_encode($responseResult);
     }
 

@@ -7,6 +7,7 @@ use App\CPU\Helpers;
 use App\CPU\ImageManager;
 use App\CPU\OrderManager;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Shipping\Oto;
 use App\Model\DeliveryCountryCode;
 use App\Model\DeliveryMan;
 use App\Model\DeliveryZipCode;
@@ -617,6 +618,7 @@ class UserProfileController extends Controller
     {
         $order = Order::where(['id' => $id])->first();
         if ($order['payment_method'] == 'cash_on_delivery' && $order['order_status'] == 'pending') {
+            Oto::cancelOrder($id);
             OrderManager::stock_update_on_order_status_change($order, 'canceled');
             Order::where(['id' => $id])->update([
                 'order_status' => 'canceled'
