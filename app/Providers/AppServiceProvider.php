@@ -57,9 +57,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-
         Paginator::useBootstrap();
-
         Config::set('addon_admin_routes',$this->get_addon_admin_routes());
         Config::set('get_payment_publish_status',$this->get_payment_publish_status());
 

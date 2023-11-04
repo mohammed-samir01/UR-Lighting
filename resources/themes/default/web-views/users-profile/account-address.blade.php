@@ -9,8 +9,9 @@
 
     <style>
         .cz-sidebar-body h3:hover + .divider-role {
-            border-bottom: 3px solid {{$web_config['primary_color']}} !important;
+            border-bottom: 3px solid {{$web_config['primary_color']}}      !important;
         }
+
         .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
             background-color: {{$web_config['primary_color']}};
         }
@@ -18,21 +19,26 @@
         .iconHad {
             color: {{$web_config['primary_color']}};
         }
+
         .namHad {
-            padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 13px;
+            padding- {{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 13px;
         }
+
         .modal-backdrop {
             z-index: 0 !important;
             display: none;
         }
+
         .donate-now li {
             margin: {{Session::get('direction') === "rtl" ? '0 0 0 5px' : '0 5px 0 0'}};
         }
+
         .donate-now input[type="radio"]:checked + label,
         .Checked + label {
             background: {{$web_config['primary_color']}};
         }
-        .filter-option{
+
+        .filter-option {
             display: block;
             width: 100%;
             height: calc(1.5em + 1.25rem + 2px);
@@ -49,7 +55,7 @@
             transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
 
-        .btn-light + .dropdown-menu{
+        .btn-light + .dropdown-menu {
             transform: none !important;
             top: 41px !important;
         }
@@ -58,8 +64,9 @@
 
 @section('content')
     <div class="__account-address">
-        <div class="modal fade rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
+        <div class="modal fade rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
+             id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog  modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -82,7 +89,8 @@
                                             <label for="a50" class="component">{{translate('home')}}</label>
                                         </li>
                                         <li>
-                                            <input type="radio" id="a75" name="addressAs" value="office" checked="checked"/>
+                                            <input type="radio" id="a75" name="addressAs" value="office"
+                                                   checked="checked"/>
                                             <label for="a75" class="component">{{translate('office')}}</label>
                                         </li>
 
@@ -92,18 +100,18 @@
                                 <div class="col-md-6 d-flex">
                                     <!-- Nav pills -->
 
-                                <ul class="donate-now">
-                                    <li>
-                                        <input type="radio" name="is_billing" id="b25" value="0" checked/>
-                                        <label for="b25" class="billing_component">{{translate('shipping')}}</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" name="is_billing" id="b50" value="1"/>
-                                        <label for="b50" class="billing_component">{{translate('billing')}}</label>
-                                    </li>
-                                </ul>
+                                    <ul class="donate-now">
+                                        <li>
+                                            <input type="radio" name="is_billing" id="b25" value="0" checked/>
+                                            <label for="b25" class="billing_component">{{translate('shipping')}}</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" name="is_billing" id="b50" value="1"/>
+                                            <label for="b50" class="billing_component">{{translate('billing')}}</label>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
@@ -120,64 +128,86 @@
                                             <input class="form-control" type="text" id="phone" name="phone" required>
                                         </div>
 
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="address-city">{{translate('city')}}</label>
-                                        <input class="form-control" type="text" id="address-city" name="city" required>
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="zip">{{translate('zip_code')}}</label>
-                                        @if($zip_restrict_status)
-                                            <select name="zip" id="" class="form-control selectpicker" data-live-search="true">
-                                                @foreach($zip_codes as $code)
-                                                    <option value="{{ $code->zipcode }}">{{ $code->zipcode }}</option>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="address-city">{{translate('country')}}</label>
+                                            <select name="country_id" id="" class="form-control selectpicker"
+                                                    data-live-search="true" required>
+                                                <option value="">{{ translate('Select your country') }}</option>
+                                                @foreach($countries as $d)
+                                                    <option value="{{ $d['id'] }}">{{ $d['name'] }}</option>
                                                 @endforeach
                                             </select>
-                                        @else
-                                            <input class="form-control" type="text" id="zip" name="zip" required>
-                                        @endif
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>{{translate('state')}}</label>
+                                            <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" required>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="address-city">{{translate('city')}}</label>
+                                            <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city_id" required>
+
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="zip">{{translate('zip_code')}}</label>
+                                            @if($zip_restrict_status)
+                                                <select name="zip" id="" class="form-control selectpicker"
+                                                        data-live-search="true">
+                                                    @foreach($zip_codes as $code)
+                                                        <option
+                                                            value="{{ $code->zipcode }}">{{ $code->zipcode }}</option>
+                                                    @endforeach
+                                                </select>
+                                            @else
+                                                <input class="form-control" type="text" id="zip" name="zip" required>
+                                            @endif
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="address">{{translate('address')}}</label>
+
+                                            <textarea class="form-control" id="address"
+                                                      type="text" name="address" required></textarea>
+                                        </div>
+                                        @php($default_location=\App\CPU\Helpers::get_business_settings('default_location'))
+                                        <div class="form-group col-md-12">
+                                            <input id="pac-input" class="controls rounded __inline-46"
+                                                   title="{{translate('search_your_location_here')}}" type="text"
+                                                   placeholder="{{translate('search_here')}}"/>
+                                            <div class="__h-200px" id="location_map_canvas"></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-12">
-                                        <label for="address-city">{{translate('country')}}</label>
-                                        <select name="country" id="" class="form-control selectpicker" data-live-search="true">
-                                            @foreach($countries as $d)
-                                                <option value="{{ $d['name'] }}">{{ $d['name'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group col-md-12">
-                                        <label for="address">{{translate('address')}}</label>
-
-                                        <textarea class="form-control" id="address"
-                                                            type="text"  name="address" required></textarea>
-                                    </div>
-                                    @php($default_location=\App\CPU\Helpers::get_business_settings('default_location'))
-                                    <div class="form-group col-md-12">
-                                        <input id="pac-input" class="controls rounded __inline-46" title="{{translate('search_your_location_here')}}" type="text" placeholder="{{translate('search_here')}}"/>
-                                        <div class="__h-200px" id="location_map_canvas"></div>
-                                    </div>
+                                <input type="hidden" id="latitude"
+                                       name="latitude" class="form-control d-inline"
+                                       placeholder="{{ translate('ex')}} : -94.22213"
+                                       value="{{$default_location?$default_location['lat']:0}}" required readonly>
+                                <input type="hidden"
+                                       name="longitude" class="form-control"
+                                       placeholder="{{ translate('ex')}} : 103.344322" id="longitude"
+                                       value="{{$default_location?$default_location['lng']:0}}" required readonly>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">{{translate('close')}}</button>
+                                    <button type="submit"
+                                            class="btn btn--primary">{{translate('add_informations')}}  </button>
                                 </div>
                             </div>
-                            <input type="hidden" id="latitude"
-                                name="latitude" class="form-control d-inline"
-                                placeholder="{{ translate('ex')}} : -94.22213" value="{{$default_location?$default_location['lat']:0}}" required readonly>
-                            <input type="hidden"
-                                name="longitude" class="form-control"
-                                placeholder="{{ translate('ex')}} : 103.344322" id="longitude" value="{{$default_location?$default_location['lng']:0}}" required readonly>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{translate('close')}}</button>
-                                <button type="submit" class="btn btn--primary">{{translate('add_informations')}}  </button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
 
             </div>
         </div>
@@ -187,20 +217,20 @@
             <h3 class="py-3 text-center headerTitle">{{translate('addresses')}}</h3>
             <div class="row g-3">
                 <!-- Sidebar-->
-            @include('web-views.partials._profile-aside')
-            <!-- Content  -->
+                @include('web-views.partials._profile-aside')
+                <!-- Content  -->
                 <section class="col-lg-9 col-md-9">
 
                     <!-- Addresses list-->
                     <div class="d-flex justify-content-end mb-3">
                         <button type="submit" class="btn btn--primary" data-toggle="modal"
-                            data-target="#exampleModal" id="add_new_address">{{translate('add_new_address')}}
+                                data-target="#exampleModal" id="add_new_address">{{translate('add_new_address')}}
                         </button>
                     </div>
                     <div class="row g-3">
-                    @foreach($shippingAddresses as $shippingAddress)
-                        <section class="col-lg-6 col-md-6">
-                            <div class="card __shadow h-100">
+                        @foreach($shippingAddresses as $shippingAddress)
+                            <section class="col-lg-6 col-md-6">
+                                <div class="card __shadow h-100">
 
                                     <div class="card-header d-flex justify-content-between d-flex align-items-center">
                                         <div>
@@ -213,26 +243,33 @@
                                         <div class="d-flex justify-content-between">
 
 
-                                                <a class="" title="Edit Address" id="edit" href="{{route('address-edit',$shippingAddress->id)}}">
-                                                    <i class="fa fa-edit fa-lg"></i>
-                                                </a>
+                                            <a class="" title="Edit Address" id="edit"
+                                               href="{{route('address-edit',$shippingAddress->id)}}">
+                                                <i class="fa fa-edit fa-lg"></i>
+                                            </a>
 
-                                                <a class="" title="Delete Address" href="{{ route('address-delete',['id'=>$shippingAddress->id])}}" onclick="return confirm('{{translate('are_you_sure_you_want_to_delete')}}?');" id="delete">
-                                                    <i class="fa fa-trash fa-lg"></i>
-                                                </a>
+                                            <a class="" title="Delete Address"
+                                               href="{{ route('address-delete',['id'=>$shippingAddress->id])}}"
+                                               onclick="return confirm('{{translate('are_you_sure_you_want_to_delete')}}?');"
+                                               id="delete">
+                                                <i class="fa fa-trash fa-lg"></i>
+                                            </a>
 
                                         </div>
                                     </div>
 
 
                                     {{-- Modal Address Edit --}}
-                                    <div class="modal fade" id="editAddress_{{$shippingAddress->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="editAddress_{{$shippingAddress->id}}" tabindex="-1"
+                                         role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog  modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                <div class="row">
-                                                    <div class="col-md-12"> <h5 class="modal-title font-name ">{{translate('update_address')}}  </h5></div>
-                                                </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12"><h5
+                                                                class="modal-title font-name ">{{translate('update_address')}}  </h5>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form id="updateForm">
@@ -240,19 +277,29 @@
                                                         <div class="row pb-1">
                                                             <div class="col-md-6 d-flex">
                                                                 <!-- Nav pills -->
-                                                                <input type="hidden" id="defaultValue" class="add_type" value="{{$shippingAddress->address_type}}">
+                                                                <input type="hidden" id="defaultValue" class="add_type"
+                                                                       value="{{$shippingAddress->address_type}}">
                                                                 <ul class="donate-now">
                                                                     <li class="address_type_li">
-                                                                        <input type="radio" class="address_type" id="a25" name="addressAs" value="permanent"  {{ $shippingAddress->address_type == 'permanent' ? 'checked' : ''}} />
-                                                                        <label for="a25" class="component">{{translate('permanent')}}</label>
+                                                                        <input type="radio" class="address_type"
+                                                                               id="a25" name="addressAs"
+                                                                               value="permanent" {{ $shippingAddress->address_type == 'permanent' ? 'checked' : ''}} />
+                                                                        <label for="a25"
+                                                                               class="component">{{translate('permanent')}}</label>
                                                                     </li>
                                                                     <li class="address_type_li">
-                                                                        <input type="radio" class="address_type" id="a50" name="addressAs" value="home" {{ $shippingAddress->address_type == 'home' ? 'checked' : ''}} />
-                                                                        <label for="a50" class="component">{{translate('home')}}</label>
+                                                                        <input type="radio" class="address_type"
+                                                                               id="a50" name="addressAs"
+                                                                               value="home" {{ $shippingAddress->address_type == 'home' ? 'checked' : ''}} />
+                                                                        <label for="a50"
+                                                                               class="component">{{translate('home')}}</label>
                                                                     </li>
                                                                     <li class="address_type_li">
-                                                                        <input type="radio" class="address_type" id="a75" name="addressAs" value="office" {{ $shippingAddress->address_type == 'office' ? 'checked' : ''}}/>
-                                                                        <label for="a75" class="component">{{translate('office')}}</label>
+                                                                        <input type="radio" class="address_type"
+                                                                               id="a75" name="addressAs"
+                                                                               value="office" {{ $shippingAddress->address_type == 'office' ? 'checked' : ''}}/>
+                                                                        <label for="a75"
+                                                                               class="component">{{translate('office')}}</label>
                                                                     </li>
                                                                 </ul>
                                                             </div>
@@ -261,62 +308,84 @@
                                                         <!-- Tab panes -->
                                                         <div class="form-row">
                                                             <div class="form-group col-md-6">
-                                                                <label for="person_name">{{translate('contact_person_name')}}</label>
+                                                                <label
+                                                                    for="person_name">{{translate('contact_person_name')}}</label>
                                                                 <input class="form-control" type="text" id="person_name"
-                                                                    name="name"
-                                                                    value="{{$shippingAddress->contact_person_name}}"
-                                                                    required>
+                                                                       name="name"
+                                                                       value="{{$shippingAddress->contact_person_name}}"
+                                                                       required>
                                                             </div>
                                                             <div class="form-group col-md-6">
                                                                 <label for="own_phone">{{translate('phone')}}</label>
-                                                                <input class="form-control" type="text" id="own_phone" name="phone" value="{{$shippingAddress->phone}}" required="required">
+                                                                <input class="form-control" type="text" id="own_phone"
+                                                                       name="phone" value="{{$shippingAddress->phone}}"
+                                                                       required="required">
                                                             </div>
                                                         </div>
                                                         <div class="form-row">
                                                             <div class="form-group col-md-6">
                                                                 <label for="city">{{translate('city')}}</label>
 
-                                                                    <input class="form-control" type="text" id="city" name="city" value="{{$shippingAddress->city}}" required>
-                                                                </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="zip_code">{{translate('zip_code')}}</label>
-                                                                    <input class="form-control" type="text" id="zip_code" name="zip" value="{{$shippingAddress->zip}}" required>
-                                                                </div>
+                                                                <input class="form-control" type="text" id="city"
+                                                                       name="city" value="{{$shippingAddress->city}}"
+                                                                       required>
                                                             </div>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-6">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="zip_code">{{translate('zip_code')}}</label>
+                                                                <input class="form-control" type="text" id="zip_code"
+                                                                       name="zip" value="{{$shippingAddress->zip}}"
+                                                                       required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
                                                                 <label for="own_state">{{translate('state')}}</label>
-                                                                    <input type="text" class="form-control" name="state" value="{{ $shippingAddress->state }}" id="own_state"  placeholder="" required>
-                                                                </div>
-                                                                <div class="form-group col-md-6">
-                                                                <label for="own_country">{{translate('country')}}</label>
-                                                                    <input type="text" class="form-control" id="own_country" name="country" value="{{ $shippingAddress->country }}" placeholder="" required>
-                                                                </div>
+                                                                <input type="text" class="form-control" name="state"
+                                                                       value="{{ $shippingAddress->state }}"
+                                                                       id="own_state" placeholder="" required>
                                                             </div>
-                                                            <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label
+                                                                    for="own_country">{{translate('country')}}</label>
+                                                                <input type="text" class="form-control" id="own_country"
+                                                                       name="country"
+                                                                       value="{{ $shippingAddress->country }}"
+                                                                       placeholder="" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
 
-                                                                <div class="form-group col-md-12">
-                                                                    <label for="own_address">{{translate('address')}}</label>
-                                                                    <input class="form-control" type="text" id="own_address"
-                                                                        name="address"
-                                                                        value="{{$shippingAddress->address}}" required>
-                                                                </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label
+                                                                    for="own_address">{{translate('address')}}</label>
+                                                                <input class="form-control" type="text" id="own_address"
+                                                                       name="address"
+                                                                       value="{{$shippingAddress->address}}" required>
                                                             </div>
-                                                            <input type="hidden" id="latitude"
-                                                                name="latitude" class="form-control d-inline"
-                                                                placeholder="{{ translate('ex')}} : -94.22213" value="{{$default_location?$default_location['lat']:0}}" required readonly>
-                                                            <input type="hidden"
-                                                                name="longitude" class="form-control"
-                                                                placeholder="{{ translate('ex')}} : 103.344322" id="longitude" value="{{$default_location?$default_location['lng']:0}}" required readonly>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="closeB btn btn-secondary" data-dismiss="modal">{{translate('close')}}</button>
-                                                                <button type="submit" class="btn btn--primary" id="addressUpdate" data-id="{{$shippingAddress->id}}">{{translate('update')}}  </button>
-                                                            </div>
-                                                        </form>
-                                                </div>
+                                                        </div>
+                                                        <input type="hidden" id="latitude"
+                                                               name="latitude" class="form-control d-inline"
+                                                               placeholder="{{ translate('ex')}} : -94.22213"
+                                                               value="{{$default_location?$default_location['lat']:0}}"
+                                                               required readonly>
+                                                        <input type="hidden"
+                                                               name="longitude" class="form-control"
+                                                               placeholder="{{ translate('ex')}} : 103.344322"
+                                                               id="longitude"
+                                                               value="{{$default_location?$default_location['lng']:0}}"
+                                                               required readonly>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="closeB btn btn-secondary"
+                                                                    data-dismiss="modal">{{translate('close')}}</button>
+                                                            <button type="submit" class="btn btn--primary"
+                                                                    id="addressUpdate"
+                                                                    data-id="{{$shippingAddress->id}}">{{translate('update')}}  </button>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
 
                                     <div class="card-body">
                                         <div class="font-name"><span>{{$shippingAddress['contact_person_name']}}</span>
@@ -334,21 +403,21 @@
 
                                     </div>
 
-                            </div>
-                        </section>
-                    @endforeach
-                </div>
-        </div>
-                </section>
+                                </div>
+                            </section>
+                        @endforeach
+                    </div>
             </div>
+            </section>
         </div>
+    </div>
     </div>
 @endsection
 
 @push('script')
     <script src="{{ asset('public/assets/front-end/js/bootstrap-select.min.js') }}"></script>
     <script>
-        $(document).ready(function (){
+        $(document).ready(function () {
             $('.address_type_li').on('click', function (e) {
                 // e.preventDefault();
                 $('.address_type_li').find('.address_type').removeAttr('checked', false);
@@ -362,7 +431,7 @@
             });
         })
 
-        $('#addressUpdate').on('click', function(e){
+        $('#addressUpdate').on('click', function (e) {
             e.preventDefault();
             let addressAs, address, name, zip, city, state, country, phone;
 
@@ -388,7 +457,7 @@
                     url: "{{route('address-update')}}",
                     method: 'POST',
                     data: {
-                        id : id,
+                        id: id,
                         addressAs: addressAs,
                         address: address,
                         name: name,
@@ -405,20 +474,27 @@
 
                     }
                 });
-            }else{
+            } else {
                 toastr.error('{{translate('all_input_field_required')}}.');
             }
 
         });
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{\App\CPU\Helpers::get_business_settings('map_api_key')}}&libraries=places&v=3.49"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{\App\CPU\Helpers::get_business_settings('map_api_key')}}&libraries=places&v=3.49"></script>
     <script>
 
         function initAutocomplete() {
-            var myLatLng = { lat: {{$default_location?$default_location['lat']:'-33.8688'}}, lng: {{$default_location?$default_location['lng']:'151.2195'}} };
+            var myLatLng = {
+                lat: {{$default_location?$default_location['lat']:'-33.8688'}},
+                lng: {{$default_location?$default_location['lng']:'151.2195'}}
+            };
 
             const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
-                center: { lat: {{$default_location?$default_location['lat']:'-33.8688'}}, lng: {{$default_location?$default_location['lng']:'151.2195'}} },
+                center: {
+                    lat: {{$default_location?$default_location['lat']:'-33.8688'}},
+                    lng: {{$default_location?$default_location['lng']:'151.2195'}}
+                },
                 zoom: 13,
                 mapTypeId: "roadmap",
             });
@@ -428,19 +504,19 @@
                 map: map,
             });
 
-            marker.setMap( map );
+            marker.setMap(map);
             var geocoder = geocoder = new google.maps.Geocoder();
             google.maps.event.addListener(map, 'click', function (mapsMouseEvent) {
                 var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
                 var coordinates = JSON.parse(coordinates);
-                var latlng = new google.maps.LatLng( coordinates['lat'], coordinates['lng'] ) ;
-                marker.setPosition( latlng );
-                map.panTo( latlng );
+                var latlng = new google.maps.LatLng(coordinates['lat'], coordinates['lng']);
+                marker.setPosition(latlng);
+                map.panTo(latlng);
 
                 document.getElementById('latitude').value = coordinates['lat'];
                 document.getElementById('longitude').value = coordinates['lng'];
 
-                geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                geocoder.geocode({'latLng': latlng}, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
                         if (results[1]) {
                             document.getElementById('address').value = results[1].formatted_address;
@@ -465,11 +541,11 @@
                 const places = searchBox.getPlaces();
 
                 if (places.length == 0) {
-                return;
+                    return;
                 }
                 // Clear out the old markers.
                 markers.forEach((marker) => {
-                marker.setMap(null);
+                    marker.setMap(null);
                 });
                 markers = [];
                 // For each place, get the icon, name and location.
@@ -508,8 +584,61 @@
 
         });
 
-        $(document).on("keydown", "input", function(e) {
-          if (e.which==13) e.preventDefault();
+        $(document).on("keydown", "input", function (e) {
+            if (e.which == 13) e.preventDefault();
         });
+        $(document).on('change', '[name=country_id]', function () {
+            var country_id = $(this).val();
+            if (country_id)
+                get_states(country_id);
+        });
+
+        $(document).on('change', '[name=state_id]', function () {
+            var state_id = $(this).val();
+            get_city(state_id);
+        });
+
+        function get_states(country_id) {
+            $('[name="state"]').html("");
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('get-state')}}",
+                type: 'GET',
+                data: {
+                    country_id: country_id
+                },
+                success: function (response) {
+                    var obj = JSON.parse(response);
+                    if (obj != '') {
+                        $('[name="state_id"]').html(obj);
+                        AIZ.plugins.bootstrapSelect('refresh');
+                    }
+                }
+            });
+        }
+
+        function get_city(state_id) {
+            $('[name="city"]').html("");
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('get-city')}}",
+                type: 'GET',
+                data: {
+                    state_id: state_id
+                },
+                success: function (response) {
+                    var obj = JSON.parse(response);
+                    if (obj != '') {
+                        $('[name="city_id"]').html(obj);
+                        AIZ.plugins.bootstrapSelect('refresh');
+                    }
+                }
+            });
+        }
+
     </script>
 @endpush

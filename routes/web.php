@@ -11,6 +11,8 @@
 |
  */
 
+use App\CPU\Helpers;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 
@@ -29,12 +31,14 @@ use App\Http\Controllers\Payment_Methods\BkashPaymentController;
 use App\Http\Controllers\Payment_Methods\PaystackController;
 
 
+
 //Route::get('/test', 'TestController@test')->name('test');
 
 //for maintenance mode
 Route::get('maintenance-mode', 'Web\WebController@maintenance_mode')->name('maintenance-mode');
 
 Route::group(['namespace' => 'Web','middleware'=>['maintenance_mode','guestCheck']], function () {
+
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::get('quick-view', 'WebController@quick_view')->name('quick-view');
@@ -120,6 +124,8 @@ Route::group(['namespace' => 'Web','middleware'=>['maintenance_mode','guestCheck
     Route::post('user-account-picture', 'UserProfileController@user_picture')->name('user-picture');
     Route::get('account-address-add', 'UserProfileController@account_address_add')->name('account-address-add');
     Route::get('account-address', 'UserProfileController@account_address')->name('account-address');
+    Route::get('get-states', 'UserProfileController@getStates')->name('get-state');
+    Route::get('get-cities', 'UserProfileController@getCities')->name('get-city');
     Route::post('account-address-store', 'UserProfileController@address_store')->name('address-store');
     Route::get('account-address-delete', 'UserProfileController@address_delete')->name('address-delete');
     ROute::get('account-address-edit/{id}','UserProfileController@address_edit')->name('address-edit');

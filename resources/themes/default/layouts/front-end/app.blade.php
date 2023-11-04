@@ -6,6 +6,8 @@
         @yield('title')
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+{{--    <link rel="stylesheet" href="{{ asset('public/assets/front-end/css/vendors.css') }}">--}}
+{{--    <link rel="stylesheet" href="{{ asset('public/assets/front-end/css/aiz-core.css') }}">--}}
     <link rel="apple-touch-icon" sizes="180x180"
           href="{{asset('storage/app/public/company')}}/{{$web_config['fav_icon']->value}}">
     <link rel="icon" type="image/png" sizes="32x32"
@@ -41,7 +43,9 @@
 
     <link rel="stylesheet" href="{{asset('public/assets/front-end')}}/css/style.css">
     {{--dont touch this--}}
-    <meta name="_token" content="{{csrf_token()}}">
+    <meta name="csrf-token" content="{{csrf_token()}}">
+    <meta name="app-url" content="//ur-lighting-test.com/">
+    <meta name="file-base-url" content="//ur-lighting-test.com/public/">
     {{--dont touch this--}}
     <!--to make http ajax request to https-->
     <!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
@@ -313,13 +317,39 @@
 <!-- Main theme script-->
 <script src="{{asset('public/assets/front-end')}}/js/theme.min.js"></script>
 <script src="{{asset('public/assets/front-end')}}/js/slick.min.js"></script>
-
+    <script>
+        var AIZ = AIZ || {};
+        AIZ.local = {
+            nothing_selected: 'Nothing selected yes',
+            nothing_found: 'Nothing found',
+            choose_file: 'Choose File',
+            file_selected: 'File selected',
+            files_selected: 'Files selected',
+            add_more_files: 'Add more files',
+            adding_more_files: 'Adding more files',
+            drop_files_here_paste_or: 'Drop files here, paste or',
+            browse: 'Browse',
+            upload_complete: 'Upload complete',
+            upload_paused: 'Upload paused',
+            resume_upload: 'Resume upload',
+            pause_upload: 'Pause upload',
+            retry_upload: 'Retry upload',
+            cancel_upload: 'Cancel upload',
+            uploading: 'Uploading',
+            processing: 'Processing',
+            complete: 'Complete',
+            file: 'File',
+            files: 'Files',
+        }
+    </script>
+<script src="{{asset('public/assets/front-end/js/aiz-core.js')}}"></script>
 <script src="{{asset('public/assets/front-end')}}/js/sweet_alert.js"></script>
 {{--Toastr--}}
 <script src={{asset("public/assets/back-end/js/toastr.js")}}></script>
 {!! Toastr::message() !!}
 
 <script>
+
     toastr.options = {
         "closeButton": false,
         "debug": false,

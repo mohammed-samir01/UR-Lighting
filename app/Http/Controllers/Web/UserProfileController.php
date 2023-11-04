@@ -8,6 +8,8 @@ use App\CPU\ImageManager;
 use App\CPU\OrderManager;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Shipping\Oto;
+use App\Model\City;
+use App\Model\Country;
 use App\Model\DeliveryCountryCode;
 use App\Model\DeliveryMan;
 use App\Model\DeliveryZipCode;
@@ -17,6 +19,7 @@ use App\Model\Product;
 use App\Model\Review;
 use App\Model\Seller;
 use App\Model\ShippingAddress;
+use App\Model\State;
 use App\Model\SupportTicket;
 use App\Model\Wishlist;
 use App\Model\RefundRequest;
@@ -41,13 +44,13 @@ class UserProfileController extends Controller
     use CommonTrait;
 
     public function __construct(
-        private Order $order,
-        private Seller $seller,
-        private Product $product,
-        private Review $review,
-        private DeliveryMan $deliver_man,
+        private Order          $order,
+        private Seller         $seller,
+        private Product        $product,
+        private Review         $review,
+        private DeliveryMan    $deliver_man,
         private ProductCompare $compare,
-        private Wishlist $wishlist,
+        private Wishlist       $wishlist,
     )
     {
 
@@ -74,6 +77,7 @@ class UserProfileController extends Controller
         return view(VIEW_FILE_NAMES['user_account'], compact('customerDetail'));
 
     }
+
     public function user_update(Request $request)
     {
         $request->validate([
@@ -134,9 +138,9 @@ class UserProfileController extends Controller
         if (auth('customer')->id() == $id) {
             $user = User::find($id);
 
-            $ongoing = ['out_for_delivery','processing','confirmed', 'pending'];
+            $ongoing = ['out_for_delivery', 'processing', 'confirmed', 'pending'];
             $order = Order::where('customer_id', $user->id)->whereIn('order_status', $ongoing)->count();
-            if($order>0){
+            if ($order > 0) {
                 Toastr::warning(translate('you_can`t_delete_account_due_ongoing_order'));
                 return redirect()->back();
             }
@@ -149,7 +153,7 @@ class UserProfileController extends Controller
             Toastr::info(translate('Your_account_deleted_successfully!!'));
             return redirect()->route('home');
         } else {
-            Toastr::warning(translate('access_denied').'!!');
+            Toastr::warning(translate('access_denied') . '!!');
         }
 
     }
@@ -159,7 +163,8 @@ class UserProfileController extends Controller
         $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');
         $zip_restrict_status = Helpers::get_business_settings('delivery_zip_code_area_restriction');
 
-        $countries = $country_restrict_status ? $this->get_delivery_country_array() : COUNTRIES;
+        $countries = Country::where('status', 1)->get();
+
         $zip_codes = $zip_restrict_status ? DeliveryZipCode::all() : 0;
 
         if (auth('customer')->check()) {
@@ -216,9 +221,9 @@ class UserProfileController extends Controller
 
         Toastr::success(translate('address_added_successfully!'));
 
-        if(theme_root_path() == 'default'){
+        if (theme_root_path() == 'default') {
             return back();
-        }else{
+        } else {
             return redirect()->route('user-profile');
         }
     }
@@ -324,24 +329,24 @@ class UserProfileController extends Controller
     public function account_oder(Request $request)
     {
         $order_by = $request->order_by ?? 'desc';
-        if(theme_root_path() == 'theme_fashion'){
+        if (theme_root_path() == 'theme_fashion') {
             $show_order = $request->show_order ?? 'ongoing';
 
-            $array = ['pending','confirmed','out_for_delivery','processing'];
+            $array = ['pending', 'confirmed', 'out_for_delivery', 'processing'];
             $orders = $this->order->withSum('order_details', 'qty')
-                ->where(['customer_id'=> auth('customer')->id(), 'is_guest'=>'0'])
-                ->when($show_order == 'ongoing', function($query) use($array){
-                    $query->whereIn('order_status',$array);
+                ->where(['customer_id' => auth('customer')->id(), 'is_guest' => '0'])
+                ->when($show_order == 'ongoing', function ($query) use ($array) {
+                    $query->whereIn('order_status', $array);
                 })
-                ->when($show_order == 'previous', function($query) use($array){
-                    $query->whereNotIn('order_status',$array);
+                ->when($show_order == 'previous', function ($query) use ($array) {
+                    $query->whereNotIn('order_status', $array);
                 })
-                ->when($request['search'], function($query) use($request){
-                        $query->where('id', 'like', "%{$request['search']}%");
+                ->when($request['search'], function ($query) use ($request) {
+                    $query->where('id', 'like', "%{$request['search']}%");
                 })
-                ->orderBy('id', $order_by)->paginate(10)->appends(['show_order'=>$show_order, 'search'=>$request->search]);
-        }else{
-            $orders = Order::where(['customer_id'=> auth('customer')->id(), 'is_guest'=>'0'])
+                ->orderBy('id', $order_by)->paginate(10)->appends(['show_order' => $show_order, 'search' => $request->search]);
+        } else {
+            $orders = Order::where(['customer_id' => auth('customer')->id(), 'is_guest' => '0'])
                 ->orderBy('id', $order_by)
                 ->paginate(10);
         }
@@ -352,12 +357,12 @@ class UserProfileController extends Controller
     public function account_order_details(Request $request)
     {
         $order = $this->order->with(['details.product', 'delivery_man_review', 'offline_payments'])
-            ->where(['customer_id'=>auth('customer')->id(), 'is_guest'=>'0'])
+            ->where(['customer_id' => auth('customer')->id(), 'is_guest' => '0'])
             ->find($request->id);
 
         $refund_day_limit = \App\CPU\Helpers::get_business_settings('refund_day_limit');
         $current_date = \Carbon\Carbon::now();
-        if($order){
+        if ($order) {
             return view(VIEW_FILE_NAMES['account_order_details'], compact('order', 'refund_day_limit', 'current_date'));
         }
 
@@ -368,12 +373,12 @@ class UserProfileController extends Controller
     public function account_order_details_seller_info(Request $request)
     {
         $order = $this->order->with(['seller.shop'])->find($request->id);
-        $product_ids = $this->product->where(['added_by' => $order->seller_is , 'user_id'=>$order->seller_id])->pluck('id');
+        $product_ids = $this->product->where(['added_by' => $order->seller_is, 'user_id' => $order->seller_id])->pluck('id');
         $rating = $this->review->whereIn('product_id', $product_ids);
-        $avg_rating = $rating->avg('rating') ?? 0 ;
+        $avg_rating = $rating->avg('rating') ?? 0;
         $rating_percentage = round(($avg_rating * 100) / 5);
         $rating_count = $rating->count();
-        $product_count = $this->product->where(['added_by' => $order->seller_is , 'user_id'=>$order->seller_id])->active()->count();
+        $product_count = $this->product->where(['added_by' => $order->seller_is, 'user_id' => $order->seller_id])->active()->count();
 
         return view(VIEW_FILE_NAMES['seller_info'], compact('avg_rating', 'product_count', 'rating_count', 'order', 'rating_percentage'));
 
@@ -381,17 +386,17 @@ class UserProfileController extends Controller
 
     public function account_order_details_delivery_man_info(Request $request)
     {
-        $order = $this->order->with(['details.product','delivery_man.rating', 'delivery_man'=>function($query){
-                return $query->withCount('review');
-            }])
+        $order = $this->order->with(['details.product', 'delivery_man.rating', 'delivery_man' => function ($query) {
+            return $query->withCount('review');
+        }])
             ->find($request->id);
-        if(theme_root_path() == 'theme_fashion') {
-            foreach($order->details as $details) {
-                if($details->product) {
-                    if($details->product->product_type == 'physical'){
+        if (theme_root_path() == 'theme_fashion') {
+            foreach ($order->details as $details) {
+                if ($details->product) {
+                    if ($details->product->product_type == 'physical') {
                         $order['product_type_check'] = $details->product->product_type;
                         break;
-                    }else{
+                    } else {
                         $order['product_type_check'] = $details->product->product_type;
                     }
                 }
@@ -419,7 +424,7 @@ class UserProfileController extends Controller
     {
         if (auth('customer')->check()) {
             $supportTickets = null;
-            if(theme_root_path() != 'default') {
+            if (theme_root_path() != 'default') {
                 $supportTickets = SupportTicket::where('customer_id', auth('customer')->id())->latest()->paginate(10);
             }
             return view(VIEW_FILE_NAMES['account_tickets'], compact('supportTickets'));
@@ -478,7 +483,7 @@ class UserProfileController extends Controller
             'status' => 'close',
             'updated_at' => now(),
         ]);
-        Toastr::success(translate('ticket_closed').'!');
+        Toastr::success(translate('ticket_closed') . '!');
         return redirect('/account-tickets');
     }
 
@@ -523,6 +528,7 @@ class UserProfileController extends Controller
     {
         return view(VIEW_FILE_NAMES['tracking-page']);
     }
+
     public function track_order_wise_result(Request $request)
     {
         if (auth('customer')->check()) {
@@ -543,42 +549,42 @@ class UserProfileController extends Controller
             $user_id = User::where('phone', $request->phone_number)->first();
             $order = Order::where('id', $request['order_id'])->first();
 
-            if($order && $order->is_guest){
+            if ($order && $order->is_guest) {
                 $orderDetails = Order::where('id', $request['order_id'])
                     ->whereHas('shippingAddress', function ($query) use ($request) {
                         $query->where('phone', $request->phone_number);
                     })
                     ->first();
 
-                if(!$orderDetails){
+                if (!$orderDetails) {
                     $orderDetails = Order::where('id', $request['order_id'])
                         ->whereHas('billingAddress', function ($query) use ($request) {
                             $query->where('phone', $request->phone_number);
                         })->first();
                 }
-            }elseif($user_id){
+            } elseif ($user_id) {
                 $orderDetails = Order::where('id', $request['order_id'])->whereHas('details', function ($query) use ($user_id) {
                     $query->where('customer_id', $user_id->id);
                 })->first();
-            }else{
+            } else {
                 Toastr::error(translate('invalid_Phone_Number'));
                 return redirect()->back()->withInput();
             }
 
         } else {
             $order = Order::where('id', $request['order_id'])->first();
-            if($order && $order->is_guest){
+            if ($order && $order->is_guest) {
                 $orderDetails = Order::where('id', $request['order_id'])->whereHas('shippingAddress', function ($query) use ($request) {
                     $query->where('phone', $request->phone_number);
                 })->first();
 
-                if(!$orderDetails){
+                if (!$orderDetails) {
                     $orderDetails = Order::where('id', $request['order_id'])
                         ->whereHas('billingAddress', function ($query) use ($request) {
                             $query->where('phone', $request->phone_number);
                         })->first();
                 }
-            }elseif ($user->phone == $request->phone_number) {
+            } elseif ($user->phone == $request->phone_number) {
                 $orderDetails = Order::where('id', $request['order_id'])->whereHas('details', function ($query) {
                     $query->where('customer_id', auth('customer')->id());
                 })->first();
@@ -595,7 +601,7 @@ class UserProfileController extends Controller
         $order_verification_status = Helpers::get_business_settings('order_verification');
 
         if (isset($orderDetails)) {
-            return view(VIEW_FILE_NAMES['track_order'], compact('orderDetails','user_phone', 'order_verification_status'));
+            return view(VIEW_FILE_NAMES['track_order'], compact('orderDetails', 'user_phone', 'order_verification_status'));
         }
 
         Toastr::error(translate('invalid_Order_Id_or_phone_Number'));
@@ -641,7 +647,7 @@ class UserProfileController extends Controller
             $loyalty_point = CustomerManager::count_loyalty_point_for_amount($id);
 
             if ($user->loyalty_point < $loyalty_point) {
-                Toastr::warning(translate('you_have_not_sufficient_loyalty_point_to_refund_this_order').'!!');
+                Toastr::warning(translate('you_have_not_sufficient_loyalty_point_to_refund_this_order') . '!!');
                 return back();
             }
         }
@@ -666,7 +672,7 @@ class UserProfileController extends Controller
             $loyalty_point = CustomerManager::count_loyalty_point_for_amount($request->order_details_id);
 
             if ($user->loyalty_point < $loyalty_point) {
-                Toastr::warning(translate('you_have_not_sufficient_loyalty_point_to_refund_this_order').'!!');
+                Toastr::warning(translate('you_have_not_sufficient_loyalty_point_to_refund_this_order') . '!!');
                 return back();
             }
         }
@@ -712,7 +718,7 @@ class UserProfileController extends Controller
         $product = $this->product->find($order_details->product_id);
         $order = $this->order->find($order_details->order_id);
 
-        if($product) {
+        if ($product) {
             return view(VIEW_FILE_NAMES['refund_details'], compact('order_details', 'refund', 'product', 'order'));
         }
 
@@ -738,7 +744,7 @@ class UserProfileController extends Controller
     public function refer_earn(Request $request)
     {
         $ref_earning_status = Helpers::get_business_settings('ref_earning_status') ?? 0;
-        if(!$ref_earning_status){
+        if (!$ref_earning_status) {
             Toastr::error(translate('you_have_no_permission'));
             return redirect('/');
         }
@@ -753,13 +759,37 @@ class UserProfileController extends Controller
         $seller_ids = array_merge($seller_ids, [NULL, '0']);
 
         $coupons = Coupon::with('seller')
-                    ->where(['status' => 1])
-                    ->whereIn('customer_id',[auth('customer')->id(), '0'])
-                    ->whereIn('customer_id',[auth('customer')->id(), '0'])
-                    ->whereDate('start_date', '<=', date('Y-m-d'))
-                    ->whereDate('expire_date', '>=', date('Y-m-d'))
-                    ->paginate(8);
+            ->where(['status' => 1])
+            ->whereIn('customer_id', [auth('customer')->id(), '0'])
+            ->whereIn('customer_id', [auth('customer')->id(), '0'])
+            ->whereDate('start_date', '<=', date('Y-m-d'))
+            ->whereDate('expire_date', '>=', date('Y-m-d'))
+            ->paginate(8);
 
         return view(VIEW_FILE_NAMES['user_coupons'], compact('coupons'));
+    }
+
+    public function getStates()
+    {
+        $states = State::where('status', 1)->where('country_id', \request('country_id'))->get();
+        $html = '<option value="">' . translate("Select State") . '</option>';
+
+        foreach ($states as $state) {
+            $html .= '<option value="' . $state->id . '">' . $state->name . '</option>';
+        }
+
+        echo json_encode($html);
+    }
+
+    public function getCities()
+    {
+        $cities = City::where('status', 1)->where('state_id', \request('state_id'))->get();
+        $html = '<option value="">' . translate("Select City") . '</option>';
+
+        foreach ($cities as $row) {
+            $html .= '<option value="' . $row->id . '">' . $row->name . '</option>';
+        }
+
+        echo json_encode($html);
     }
 }

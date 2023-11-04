@@ -6378,4 +6378,12 @@
   'shop_apply_successfully' => 'Shop apply successfully',
   'value_is_greater_or_equal_to' => 'Value is greater or equal to',
   'deal_added_successfully' => 'Deal added successfully',
+  'my_Address' => 'My Address',
+  'add_informations' => 'Add informations',
+  'address_update_successfully' => 'Address update successfully',
+  'all_input_field_required' => 'All input field required',
+  'Select your country' => 'Select your country',
+  'state' => 'State',
+  'Select State' => 'Select State',
+  'Select City' => 'Select City',
 );

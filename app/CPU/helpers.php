@@ -146,6 +146,13 @@ class Helpers
         }
         return $lang;
     }
+    public static function app_lang()
+    {
+        $lang = self::default_lang();
+        if ($lang == 'sa')
+            return 'ar';
+        return $lang;
+    }
 
     public static function rating_count($product_id, $rating)
     {
