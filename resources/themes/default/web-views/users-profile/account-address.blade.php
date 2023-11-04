@@ -407,7 +407,6 @@
                             </section>
                         @endforeach
                     </div>
-            </div>
             </section>
         </div>
     </div>
