@@ -312,7 +312,7 @@
                                             <div class="d-flex">
                                                 <div class="w-0 flex-grow-1 justify-content-between">
                                                     <span>{{ translate('contact_person_name')}}: {{$address['contact_person_name']}}</span><br>
-                                                    <span>{{ translate('address')}} : {{$address['address']}}, {{$address['city']}}, {{$address['zip']}}.</span>
+                                                    <span>{{ translate('address')}} : {{$address['address']}}, {{$address['state']['name']}}, {{$address['city']['name']}}, {{$address['zip']}}.</span>
                                                 </div>
                                                 <div>
                                                     <a href="{{ route('address-edit', ['id' => $address->id]) }}"
