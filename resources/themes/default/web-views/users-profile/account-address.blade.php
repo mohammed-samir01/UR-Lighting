@@ -172,8 +172,6 @@
                                             @endif
                                         </div>
                                     </div>
-
-
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label for="address">{{translate('address')}}</label>
@@ -392,14 +390,18 @@
                                         </div>
                                         <div><span class="font-nameA"> <strong>{{translate('phone')}}  :</strong>  {{$shippingAddress['phone']}}</span>
                                         </div>
-                                        <div><span class="font-nameA"> <strong>{{translate('city')}}  :</strong>  {{$shippingAddress['city']}}</span>
+                                        <div><span class="font-nameA"> <strong>{{translate('country')}}  :</strong>  {{$shippingAddress->country->name}}</span>
+                                        </div>
+
+                                        <div><span class="font-nameA"> <strong>{{translate('state')}}  :</strong>  {{$shippingAddress->state->name}}</span>
+                                        </div>
+                                        <div><span class="font-nameA"> <strong>{{translate('city')}}  :</strong>  {{$shippingAddress->city->name}}</span>
                                         </div>
                                         <div><span class="font-nameA"> <strong> {{translate('zip_code')}} :</strong> {{$shippingAddress['zip']}}</span>
                                         </div>
                                         <div><span class="font-nameA"> <strong>{{translate('address')}} :</strong> {{$shippingAddress['address']}}</span>
                                         </div>
-                                        <div><span class="font-nameA"> <strong>{{translate('country')}} :</strong> {{$shippingAddress['country']}}</span>
-                                        </div>
+
 
                                     </div>
 

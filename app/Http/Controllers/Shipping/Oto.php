@@ -1,13 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Shipping;
+
+use App\Model\Setting;
 use Illuminate\Support\Facades\Http;
+
 class Oto
 {
 
     public static function refreshToken()
     {
-        $data = ["refresh_token" => config('oto.refresh_token')];
+        $oto = Setting::where('key_name', 'oto')
+            ->where('settings_type', 'shipping')->first();
+        $data = ["refresh_token" => $oto->live_values['refresh_token']];
         $url = config('oto.mode') == 'live' ? config('oto.live_urls')['refresh_token'] : config('oto.test_urls')['refresh_token'];
         $response = Http::withHeaders([
             'Accept' => 'application/json',
@@ -52,7 +57,7 @@ class Oto
             'Authorization' => 'Bearer ' . config('oto.access_token')
         ])->post($url, $data);
 
-    return    $responseResult = json_decode($response->getBody()->getContents(), true);
+        return $responseResult = json_decode($response->getBody()->getContents(), true);
         return json_encode($responseResult);
     }
 
@@ -94,7 +99,7 @@ class Oto
             'Authorization' => 'Bearer ' . config('oto.access_token')
         ])->post($url, $data);
 
-       return json_decode($response->getBody()->getContents(), true);
+        return json_decode($response->getBody()->getContents(), true);
 //        return json_encode($responseResult);
 
     }
@@ -112,7 +117,7 @@ class Oto
             'Authorization' => 'Bearer ' . config('oto.access_token')
         ])->post($url, $data);
 
-       return $responseResult = json_decode($response->getBody()->getContents(), true);
+        return $responseResult = json_decode($response->getBody()->getContents(), true);
         return json_encode($responseResult);
     }
 
@@ -153,6 +158,7 @@ class Oto
         return json_encode($responseResult);
 
     }
+
     public static function createPickupLocation(array $data)
     {
         Oto::refreshToken();
@@ -174,10 +180,11 @@ class Oto
             'Authorization' => 'Bearer ' . config('oto.access_token')
         ])->post($url, $data);
 
-       return json_decode($response->getBody()->getContents(), true);
+        return json_decode($response->getBody()->getContents(), true);
 //        return json_encode($responseResult);
 
     }
+
     public static function updatePickupLocation(array $data)
     {
         Oto::refreshToken();

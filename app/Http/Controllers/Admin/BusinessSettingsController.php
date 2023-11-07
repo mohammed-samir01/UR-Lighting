@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Shipping\Oto;
 use App\Model\BusinessSetting;
 use App\Model\Currency;
+use App\Model\Setting;
 use App\Model\SocialMedia;
 use Brian2694\Toastr\Facades\Toastr;
 use Firebase\JWT\JWT;
@@ -55,7 +56,7 @@ class BusinessSettingsController extends Controller
         if ($request->ajax()) {
             $data = SocialMedia::where('status', 1)->orderBy('id', 'desc')->get();
 
-            $data->map(function($social_media){
+            $data->map(function ($social_media) {
                 $social_media['name'] = translate($social_media['name']);
             });
 
@@ -127,7 +128,7 @@ class BusinessSettingsController extends Controller
             'active_status' => $request['status'],
         ]);
 
-        if($request->ajax()) {
+        if ($request->ajax()) {
             return response()->json([
                 'success' => 1,
             ], 200);
@@ -145,7 +146,7 @@ class BusinessSettingsController extends Controller
             'cancellation-policy',
         );
 
-        if(in_array($page, $pages)){
+        if (in_array($page, $pages)) {
             $data = BusinessSetting::where('type', $page)->first();
             return view('admin-views.business-settings.page', compact('page', 'data'));
         }
@@ -166,7 +167,7 @@ class BusinessSettingsController extends Controller
             'cancellation-policy',
         );
 
-        if(in_array($page, $pages)){
+        if (in_array($page, $pages)) {
             BusinessSetting::where('type', $page)->update([
                 'value' => json_encode([
                     'status' => is_null($request->status) ? 0 : 1,
@@ -174,7 +175,7 @@ class BusinessSettingsController extends Controller
                 ])
             ]);
             Toastr::success(translate('updated_successfully'));
-        }else{
+        } else {
             Toastr::error(translate('invalid_page'));
         }
         return redirect()->back();
@@ -257,10 +258,10 @@ class BusinessSettingsController extends Controller
         $company_name = BusinessSetting::where('type', 'company_name')->first();
         $company_email = BusinessSetting::where('type', 'company_email')->first();
         $company_phone = BusinessSetting::where('type', 'company_phone')->first();
-        $digital_product = \App\Model\BusinessSetting::where('type','digital_product')->first()->value;
-        $brand = \App\Model\BusinessSetting::where('type','product_brand')->first()->value;
+        $digital_product = \App\Model\BusinessSetting::where('type', 'digital_product')->first()->value;
+        $brand = \App\Model\BusinessSetting::where('type', 'product_brand')->first()->value;
 
-        return view('admin-views.business-settings.product-settings', compact('company_name','company_email','company_phone','digital_product','brand'));
+        return view('admin-views.business-settings.product-settings', compact('company_name', 'company_email', 'company_phone', 'digital_product', 'brand'));
     }
 
     public function updateInfo(Request $request)
@@ -350,9 +351,9 @@ class BusinessSettingsController extends Controller
 
         BusinessSetting::updateOrInsert(['type' => 'default_location'], [
             'value' => json_encode([
-                    'lat' => $request['latitude'],
-                    'lng' => $request['longitude'],
-                ]),
+                'lat' => $request['latitude'],
+                'lng' => $request['longitude'],
+            ]),
         ]);
 
         BusinessSetting::updateOrInsert(['type' => 'system_default_currency'], [
@@ -469,7 +470,7 @@ class BusinessSettingsController extends Controller
 
     public function announcement()
     {
-        $announcement=\App\CPU\Helpers::get_business_settings('announcement');
+        $announcement = \App\CPU\Helpers::get_business_settings('announcement');
         return view('admin-views.business-settings.website-announcement', compact('announcement'));
     }
 
@@ -477,7 +478,7 @@ class BusinessSettingsController extends Controller
     {
         DB::table('business_settings')->updateOrInsert(['type' => 'announcement'], [
             'value' => json_encode(
-                [   'status' => $request['announcement_status'],
+                ['status' => $request['announcement_status'],
                     'color' => $request['announcement_color'],
                     'text_color' => $request['text_color'],
                     'announcement' => $request['announcement'],
@@ -505,7 +506,7 @@ class BusinessSettingsController extends Controller
             'delivery_man_app_version_control',
         );
 
-        if(in_array($request->type, $types)){
+        if (in_array($request->type, $types)) {
             BusinessSetting::updateOrInsert(['type' => $request->type], [
                 'value' => json_encode([
                     'for_android' => $request['for_android'],
@@ -666,6 +667,39 @@ class BusinessSettingsController extends Controller
         return view('admin-views.business-settings.social-login.view', compact('data', 'apple'));
     }
 
+    public function viewShipping()
+    {
+        $shippings = Setting::whereIn('settings_type', ['shipping'])->get();
+
+        $shippings = $shippings->sortBy(function ($item) {
+            return count($item['live_values']);
+        })->values()->all();
+        return view('admin-views.business-settings.shipping.view', compact('shippings',));
+    }
+
+    public function updateShipping(Request $request)
+    {
+        $validation = $this->validate($request, [
+            'refresh_token' => 'required',
+            'gateway' => 'required|in:oto',
+            'mode' => 'required|in:live,test',
+        ]);
+        $validation['status'] = $request->boolean('status');
+
+        Setting::updateOrCreate(['key_name' => $request['gateway'], 'settings_type' => 'shipping'], [
+            'key_name' => $request['gateway'],
+            'live_values' => $validation,
+            'test_values' => $validation,
+            'settings_type' => 'shipping',
+            'mode' => $request['mode'],
+            'is_active' => $request->boolean('status'),
+        ]);
+        Toastr::success(GATEWAYS_DEFAULT_UPDATE_200['message']);
+        return back();
+
+    }
+
+
     public function updateSocialLogin($service, Request $request)
     {
         $socialLogin = BusinessSetting::where('type', 'social_login')->first();
@@ -731,7 +765,7 @@ class BusinessSettingsController extends Controller
 
     public function update_social_media_chat(Request $request, $service)
     {
-        if($service == 'messenger'){
+        if ($service == 'messenger') {
             DB::table('business_settings')->updateOrInsert(['type' => 'messenger'], [
                 'type' => 'messenger',
                 'value' => json_encode([
@@ -741,7 +775,7 @@ class BusinessSettingsController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }elseif($service == 'whatsapp'){
+        } elseif ($service == 'whatsapp') {
             DB::table('business_settings')->updateOrInsert(['type' => 'whatsapp'], [
                 'type' => 'whatsapp',
                 'value' => json_encode([
@@ -751,7 +785,7 @@ class BusinessSettingsController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }else{
+        } else {
             Toastr::warning(translate($service . '_information_update_fail'));
             return redirect()->back();
         }
@@ -766,6 +800,7 @@ class BusinessSettingsController extends Controller
         $config = (array)json_decode(BusinessSetting::where(['type' => 'recaptcha'])->first()->value);
         return view('admin-views.business-settings.recaptcha-index', compact('config'));
     }
+
     public function recaptcha_update(Request $request)
     {
         DB::table('business_settings')->updateOrInsert(['type' => 'recaptcha'], [
@@ -783,6 +818,7 @@ class BusinessSettingsController extends Controller
         Toastr::success(translate('Updated_Successfully'));
         return back();
     }
+
     public function map_api()
     {
         return view('admin-views.business-settings.map-api.index');
@@ -806,6 +842,7 @@ class BusinessSettingsController extends Controller
     {
         return view('admin-views.business-settings.analytics.index');
     }
+
     public function analytics_update(Request $request)
     {
         $request->validate([
@@ -819,6 +856,7 @@ class BusinessSettingsController extends Controller
         Toastr::success(translate('config_data_updated'));
         return back();
     }
+
     public function google_tag_analytics_update(Request $request)
     {
         $request->validate([
@@ -833,7 +871,8 @@ class BusinessSettingsController extends Controller
         return back();
     }
 
-    public function updateProductSettings(Request $request){
+    public function updateProductSettings(Request $request)
+    {
         DB::table('business_settings')->updateOrInsert(['type' => 'stock_limit'], [
             'value' => $request['stock_limit']
         ]);
@@ -862,8 +901,7 @@ class BusinessSettingsController extends Controller
             ]);
         }
 
-        if($request->ajax())
-        {
+        if ($request->ajax()) {
             return response()->json([
                 'message' => translate('delivery_country_restriction_status_changed_successfully'),
                 'status' => true
@@ -887,8 +925,7 @@ class BusinessSettingsController extends Controller
             ]);
         }
 
-        if($request->ajax())
-        {
+        if ($request->ajax()) {
             return response()->json([
                 'message' => translate('delivery_zip_code_restriction_status_changed_successfully'),
                 'status' => true,
@@ -898,7 +935,8 @@ class BusinessSettingsController extends Controller
         return back();
     }
 
-    public function cookie_settings(Request $request){
+    public function cookie_settings(Request $request)
+    {
         $data['cookie_setting'] = Helpers::get_business_settings('cookie_setting');
 
         return view('admin-views.business-settings.cookie-settings', compact('data'));
@@ -908,8 +946,8 @@ class BusinessSettingsController extends Controller
     {
         BusinessSetting::updateOrInsert(['type' => 'cookie_setting'], [
             'value' => json_encode([
-                'status'=>$request->status ?? 0,
-                'cookie_text'=>$request->cookie_text,
+                'status' => $request->status ?? 0,
+                'cookie_text' => $request->cookie_text,
             ]),
             'updated_at' => now()
         ]);
@@ -920,14 +958,14 @@ class BusinessSettingsController extends Controller
 
     public function otp_setup()
     {
-        $maximum_otp_hit = BusinessSetting::where('type','maximum_otp_hit')->first()->value ?? 0;
-        $otp_resend_time = BusinessSetting::where('type','otp_resend_time')->first()->value ?? 0;
-        $temporary_block_time = BusinessSetting::where('type','temporary_block_time')->first()->value ?? 0;
-        $maximum_login_hit = BusinessSetting::where('type','maximum_login_hit')->first()->value ?? 0;
-        $temporary_login_block_time = BusinessSetting::where('type','temporary_login_block_time')->first()->value ?? 0;
+        $maximum_otp_hit = BusinessSetting::where('type', 'maximum_otp_hit')->first()->value ?? 0;
+        $otp_resend_time = BusinessSetting::where('type', 'otp_resend_time')->first()->value ?? 0;
+        $temporary_block_time = BusinessSetting::where('type', 'temporary_block_time')->first()->value ?? 0;
+        $maximum_login_hit = BusinessSetting::where('type', 'maximum_login_hit')->first()->value ?? 0;
+        $temporary_login_block_time = BusinessSetting::where('type', 'temporary_login_block_time')->first()->value ?? 0;
 
         return view('admin-views.business-settings.otp-setup', compact('maximum_otp_hit', 'otp_resend_time',
-        'temporary_block_time', 'maximum_login_hit', 'temporary_login_block_time'));
+            'temporary_block_time', 'maximum_login_hit', 'temporary_login_block_time'));
     }
 
     public function otp_setup_update(Request $request): RedirectResponse
@@ -957,7 +995,7 @@ class BusinessSettingsController extends Controller
         $features_section_top = BusinessSetting::where('type', 'features_section_top')->first();
         $features_section_middle = BusinessSetting::where('type', 'features_section_middle')->first();
         $features_section_bottom = BusinessSetting::where('type', 'features_section_bottom')->first();
-        return view('admin-views.business-settings.features-section.view', compact('features_section_top','features_section_middle','features_section_bottom'));
+        return view('admin-views.business-settings.features-section.view', compact('features_section_top', 'features_section_middle', 'features_section_bottom'));
     }
 
     public function features_section_submit(Request $request)
@@ -969,9 +1007,8 @@ class BusinessSettingsController extends Controller
         ]);
 
         $section_middle = [];
-        if($request->features_section_middle)
-        {
-            foreach($request->features_section_middle['title'] as $key => $value){
+        if ($request->features_section_middle) {
+            foreach ($request->features_section_middle['title'] as $key => $value) {
                 $section_middle[] = [
                     'title' => $request->features_section_middle['title'][$key] ?? '',
                     'subtitle' => $request->features_section_middle['subtitle'][$key] ?? '',
@@ -984,19 +1021,16 @@ class BusinessSettingsController extends Controller
             'created_at' => Carbon::now(),
         ]);
 
-        if($request->features_section_bottom)
-        {
+        if ($request->features_section_bottom) {
             $features_section_bottom = BusinessSetting::where(['type' => 'features_section_bottom'])->first();
-            if($features_section_bottom)
-            {
+            if ($features_section_bottom) {
                 $section_bottom = json_decode($features_section_bottom->value);
-            }else{
+            } else {
                 $section_bottom = [];
             }
-            foreach($request->features_section_bottom['title'] as $key => $value){
+            foreach ($request->features_section_bottom['title'] as $key => $value) {
 
-                if (!empty($request->features_section_bottom_icon) && isset($request->features_section_bottom_icon[$key]))
-                {
+                if (!empty($request->features_section_bottom_icon) && isset($request->features_section_bottom_icon[$key])) {
                     $image = ImageManager::upload('banner/', 'png', $request->features_section_bottom_icon[$key]);
                 } else {
                     $image = '';
@@ -1024,13 +1058,12 @@ class BusinessSettingsController extends Controller
     {
         $data = BusinessSetting::where(['type' => 'features_section_bottom'])->first();
 
-        if($data){
+        if ($data) {
             $new_arr = [];
-            foreach(json_decode($data->value) as $item)
-            {
-                if($request->title != $item->title && $request->subtitle != $item->subtitle){
+            foreach (json_decode($data->value) as $item) {
+                if ($request->title != $item->title && $request->subtitle != $item->subtitle) {
                     $new_arr[] = $item;
-                }else{
+                } else {
                     ImageManager::delete("/banner/" . $item->icon);
                 }
             }
@@ -1041,7 +1074,7 @@ class BusinessSettingsController extends Controller
         }
 
         return response()->json([
-            'status'=>'success'
+            'status' => 'success'
         ]);
     }
 
@@ -1057,26 +1090,26 @@ class BusinessSettingsController extends Controller
             'url' => 'required',
         ]);
 
-        if($request->type == 'admin_login_url'){
+        if ($request->type == 'admin_login_url') {
             $employee_login_url = BusinessSetting::where(['type' => 'employee_login_url'])->first()->value ?? '';
-            if($employee_login_url != $request->url){
+            if ($employee_login_url != $request->url) {
                 BusinessSetting::updateOrInsert(['type' => 'admin_login_url'], [
                     'value' => strtolower($request->url),
                 ]);
                 Toastr::success(translate('Updated_successfully'));
-            }else{
+            } else {
                 Toastr::error(translate('admin_and_Employee_URL_cannot_be_same'));
             }
         }
 
-        if($request->type == 'employee_login_url'){
+        if ($request->type == 'employee_login_url') {
             $admin_login_url = BusinessSetting::where(['type' => 'admin_login_url'])->first()->value ?? '';
-            if($admin_login_url != $request->url){
+            if ($admin_login_url != $request->url) {
                 BusinessSetting::updateOrInsert(['type' => 'employee_login_url'], [
                     'value' => strtolower($request->url),
                 ]);
                 Toastr::success(translate('Updated_successfully'));
-            }else{
+            } else {
                 Toastr::error(translate('admin_and_Employee_URL_cannot_be_same'));
             }
         }

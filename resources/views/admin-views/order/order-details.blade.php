@@ -608,7 +608,7 @@
                 @if($physical_product)
                     <div class="card">
                         <!-- Body -->
-                        @php($shipping_address=json_decode($order['shipping_address_data']))
+                        @php($shipping_address=((object)$order['shipping_address_data']))
                         @if($shipping_address)
                             <div class="card-body">
                                 <div class="d-flex gap-2 align-items-center justify-content-between mb-4">
@@ -623,7 +623,6 @@
                                         <i class="tio-edit"></i>
                                     </button>
                                 </div>
-
                                 <div class="d-flex flex-column gap-2">
                                     <div>
                                         <span>{{translate('name')}} :</span>
@@ -641,7 +640,7 @@
                                     @endif
                                     <div>
                                         <span>{{translate('city')}} :</span>
-                                        <strong>{{$shipping_address->city}}</strong>
+                                        <strong>{{$shipping_address->city['name']}}</strong>
                                     </div>
                                     <div>
                                         <span>{{translate('zip_code')}} :</span>
@@ -700,7 +699,7 @@
                                 @endif
                                 <div>
                                     <span>{{translate('city')}} :</span>
-                                    <strong>{{$billing->city}}</strong>
+                                    <strong>{{$billing->city->name}}</strong>
                                 </div>
                                 <div>
                                     <span>{{translate('zip_code')}} :</span>
@@ -909,7 +908,7 @@
                                     <div class="form-group">
                                         <label for="city" class="title-color">{{translate('city')}}</label>
                                         <input type="text" name="city" id="city"
-                                               value="{{$shipping_address ? $shipping_address->city : ''}}"
+                                               value="{{$shipping_address ? $shipping_address->city['name'] : ''}}"
                                                class="form-control"
                                                placeholder="{{ translate('ex') }}:{{translate('dhaka')}}" required>
                                     </div>
@@ -1033,7 +1032,7 @@
                                             <div class="form-group">
                                                 <label for="city" class="title-color">{{translate('city')}}</label>
                                                 <input type="text" name="city" id="city"
-                                                       value="{{$billing ? $billing->city : ''}}" class="form-control"
+                                                       value="{{$billing ? $billing->city->name : ''}}" class="form-control"
                                                        placeholder="{{ translate('ex') }}:{{translate('dhaka')}}"
                                                        required>
                                             </div>

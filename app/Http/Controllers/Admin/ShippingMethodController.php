@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\CPU\BackEndHelper;
 use App\Http\Controllers\Controller;
+use App\Model\Country;
 use App\Model\ShippingMethod;
+use App\Model\State;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,24 +26,36 @@ class ShippingMethodController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'    => 'required|max:200',
+            'title' => 'required|max:200',
             'duration' => 'required',
-            'cost'     => 'numeric',
+            'cost' => 'numeric',
+            'states' => 'required',
+            'country_id' => 'required'
         ]);
 
-        DB::table('shipping_methods')->insert([
-            'creator_id'   => auth('admin')->id(),
-            'creator_type' => 'admin',
-            'title'        => $request['title'],
-            'duration'     => $request['duration'],
-            'cost'         => BackEndHelper::currency_to_usd($request['cost']),
-            'status'       => 1,
-            'created_at'   => now(),
-            'updated_at'   => now(),
-        ]);
+        $data = $request->all();
+
+        $data['creator_id'] = auth('admin')->id();
+        $data['creator_type'] = 'admin';
+        $data['cost'] = BackEndHelper::currency_to_usd($request['cost']);
+        $data['info'] = ['country_id' => $request->country_id, 'states' => $request->states];
+
+        ShippingMethod::create($data);
+
+//        DB::table('shipping_methods')->insert([
+//            'creator_id' => auth('admin')->id(),
+//            'creator_type' => 'admin',
+//            'title' => $request['title'],
+//            'duration' => $request['duration'],
+//            'cost' => BackEndHelper::currency_to_usd($request['cost']),
+//            'status' => 1,
+//            'created_at' => now(),
+//            'updated_at' => now(),
+//        ]);
 
         Toastr::success(translate('Successfully_added'));
         return back();
+
     }
 
     public function status_update(Request $request)
@@ -58,7 +72,11 @@ class ShippingMethodController extends Controller
     {
         if ($id != 1) {
             $method = ShippingMethod::where(['id' => $id])->first();
-            return view('admin-views.shipping-method.edit', compact('method'));
+            $countries = Country::where('status', 1)->get();
+            $states = [];
+            if (isset($method->info['country_id']))
+                $states = State::where('status', 1)->where('country_id', $method->info['country_id'])->get();
+            return view('admin-views.shipping-method.edit', compact('method','states','countries'));
         }
         return back();
     }
@@ -66,36 +84,31 @@ class ShippingMethodController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title'    => 'required|max:200',
+            'title' => 'required|max:200',
             'duration' => 'required',
-            'cost'     => 'numeric',
+            'cost' => 'numeric',
+            'states' => 'required',
+            'country_id' => 'required'
         ]);
 
-        DB::table('shipping_methods')->where(['id' => $id])->update([
-            'creator_id'   => auth('admin')->id(),
-            'creator_type' => 'admin',
-            'title'        => $request['title'],
-            'duration'     => $request['duration'],
-            'cost'         => BackEndHelper::currency_to_usd($request['cost']),
-            'status'       => 1,
-            'created_at'   => now(),
-            'updated_at'   => now(),
-        ]);
-
+        $data = $request->all();
+        $method = ShippingMethod::find($id);
+        $data['cost'] = BackEndHelper::currency_to_usd($request['cost']);
+        $data['info'] = ['country_id' => $request->country_id, 'states' => $request->states];
+        $method->update($data);
         Toastr::success(translate('successfully_updated'));
         return redirect()->back();
     }
 
     public function setting()
     {
+
         $shipping_methods = ShippingMethod::where(['creator_type' => 'admin'])->get();
         $all_category_ids = Category::where(['position' => 0])->pluck('id')->toArray();
-        $category_shipping_cost_ids = CategoryShippingCost::where('seller_id',0)->pluck('category_id')->toArray();
-
-        foreach($all_category_ids as $id)
-        {
-            if(!in_array($id,$category_shipping_cost_ids))
-            {
+        $category_shipping_cost_ids = CategoryShippingCost::where('seller_id', 0)->pluck('category_id')->toArray();
+        $countries = Country::where('status', 1)->get();
+        foreach ($all_category_ids as $id) {
+            if (!in_array($id, $category_shipping_cost_ids)) {
                 $new_category_shipping_cost = new CategoryShippingCost;
                 $new_category_shipping_cost->seller_id = 0;
                 $new_category_shipping_cost->category_id = $id;
@@ -103,8 +116,8 @@ class ShippingMethodController extends Controller
                 $new_category_shipping_cost->save();
             }
         }
-        $all_category_shipping_cost = CategoryShippingCost::where('seller_id',0)->get();
-        return view('admin-views.shipping-method.setting',compact('all_category_shipping_cost','shipping_methods'));
+        $all_category_shipping_cost = CategoryShippingCost::where('seller_id', 0)->get();
+        return view('admin-views.shipping-method.setting', compact('all_category_shipping_cost', 'shipping_methods', 'countries'));
     }
 
     public function shippingStore(Request $request)

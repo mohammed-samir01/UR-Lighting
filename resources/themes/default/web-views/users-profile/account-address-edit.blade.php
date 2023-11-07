@@ -9,8 +9,9 @@
 
     <style>
         .cz-sidebar-body h3:hover + .divider-role {
-            border-bottom: 3px solid {{$web_config['primary_color']}} !important;
+            border-bottom: 3px solid {{$web_config['primary_color']}}   !important;
         }
+
         .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
             background-color: {{$web_config['primary_color']}};
         }
@@ -18,17 +19,21 @@
         .iconHad {
             color: {{$web_config['primary_color']}};
         }
+
         .namHad {
-            padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 13px;
+            padding- {{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 13px;
         }
+
         .donate-now li {
             margin: {{Session::get('direction') === "rtl" ? '0 0 0 5px' : '0 5px 0 0'}};
         }
+
         .donate-now input[type="radio"]:checked + label,
         .Checked + label {
             background: {{$web_config['primary_color']}};
         }
-        .filter-option{
+
+        .filter-option {
             display: block;
             width: 100%;
             height: calc(1.5em + 1.25rem + 2px);
@@ -45,7 +50,7 @@
             transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
 
-        .btn-light + .dropdown-menu{
+        .btn-light + .dropdown-menu {
             transform: none !important;
             top: 41px !important;
         }
@@ -53,236 +58,326 @@
 @endpush
 
 @section('content')
-<div class="container pb-5 mb-2 mb-md-4 rtl __account-address" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
-    <h2 class="text-center py-3 m-0 headerTitle">{{translate('UPDATE_ADDRESSES')}}</h2>
-    <div class="row g-3">
-        <!-- Sidebar-->
-    @include('web-views.partials._profile-aside')
-    <section class="col-lg-9 col-md-9">
+    <div class="container pb-5 mb-2 mb-md-4 rtl __account-address"
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
+        <h2 class="text-center py-3 m-0 headerTitle">{{translate('UPDATE_ADDRESSES')}}</h2>
+        <div class="row g-3">
+            <!-- Sidebar-->
+            @include('web-views.partials._profile-aside')
+            <section class="col-lg-9 col-md-9">
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="col-12">
-                        <form action="{{route('address-update')}}" method="post">
-                            @csrf
-                            <div class="row pb-1">
-                                <div class="col-md-6">
-                                    <!-- Nav pills -->
-                                    <input type="hidden" name="id" value="{{$shippingAddress->id}}">
-                                    <ul class="donate-now">
-                                        <li class="address_type_li">
-                                            <input type="radio" class="address_type" id="a25" name="addressAs" value="permanent"  {{ $shippingAddress->address_type == 'permanent' ? 'checked' : ''}} />
-                                            <label for="a25" class="component">{{translate('permanent')}}</label>
-                                        </li>
-                                        <li class="address_type_li">
-                                            <input type="radio" class="address_type" id="a50" name="addressAs" value="home" {{ $shippingAddress->address_type == 'home' ? 'checked' : ''}} />
-                                            <label for="a50" class="component">{{translate('home')}}</label>
-                                        </li>
-                                        <li class="address_type_li">
-                                            <input type="radio" class="address_type" id="a75" name="addressAs" value="office" {{ $shippingAddress->address_type == 'office' ? 'checked' : ''}}/>
-                                            <label for="a75" class="component">{{translate('office')}}</label>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <!-- Nav pills -->
-                                    <input type="hidden" id="is_billing" value="{{$shippingAddress->is_billing}}">
-                                    <ul class="donate-now">
-                                        <li class="address_type_bl">
-                                            <input type="radio" class="bill_type" id="b25" name="is_billing" value="0"  {{ $shippingAddress->is_billing == '0' ? 'checked' : ''}} />
-                                            <label for="b25" class="component">{{translate('shipping')}}</label>
-                                        </li>
-                                        <li class="address_type_bl">
-                                            <input type="radio" class="bill_type" id="b50" name="is_billing" value="1" {{ $shippingAddress->is_billing == '1' ? 'checked' : ''}} />
-                                            <label for="b50" class="component">{{translate('billing')}}</label>
-                                        </li>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-12">
+                            <form action="{{route('address-update')}}" method="post">
+                                @csrf
+                                <div class="row pb-1">
+                                    <div class="col-md-6">
+                                        <!-- Nav pills -->
+                                        <input type="hidden" name="id" value="{{$shippingAddress->id}}">
+                                        <ul class="donate-now">
+                                            <li class="address_type_li">
+                                                <input type="radio" class="address_type" id="a25" name="addressAs"
+                                                       value="permanent" {{ $shippingAddress->address_type == 'permanent' ? 'checked' : ''}} />
+                                                <label for="a25" class="component">{{translate('permanent')}}</label>
+                                            </li>
+                                            <li class="address_type_li">
+                                                <input type="radio" class="address_type" id="a50" name="addressAs"
+                                                       value="home" {{ $shippingAddress->address_type == 'home' ? 'checked' : ''}} />
+                                                <label for="a50" class="component">{{translate('home')}}</label>
+                                            </li>
+                                            <li class="address_type_li">
+                                                <input type="radio" class="address_type" id="a75" name="addressAs"
+                                                       value="office" {{ $shippingAddress->address_type == 'office' ? 'checked' : ''}}/>
+                                                <label for="a75" class="component">{{translate('office')}}</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- Nav pills -->
+                                        <input type="hidden" id="is_billing" value="{{$shippingAddress->is_billing}}">
+                                        <ul class="donate-now">
+                                            <li class="address_type_bl">
+                                                <input type="radio" class="bill_type" id="b25" name="is_billing"
+                                                       value="0" {{ $shippingAddress->is_billing == '0' ? 'checked' : ''}} />
+                                                <label for="b25" class="component">{{translate('shipping')}}</label>
+                                            </li>
+                                            <li class="address_type_bl">
+                                                <input type="radio" class="bill_type" id="b50" name="is_billing"
+                                                       value="1" {{ $shippingAddress->is_billing == '1' ? 'checked' : ''}} />
+                                                <label for="b50" class="component">{{translate('billing')}}</label>
+                                            </li>
 
-                                    </ul>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Tab panes -->
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="person_name">{{translate('contact_person_name')}}</label>
-                                    <input class="form-control" type="text" id="person_name"
-                                        name="name"
-                                        value="{{$shippingAddress->contact_person_name}}"
-                                        required>
+                                <!-- Tab panes -->
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="person_name">{{translate('contact_person_name')}}</label>
+                                        <input class="form-control" type="text" id="person_name"
+                                               name="name"
+                                               value="{{$shippingAddress->contact_person_name}}"
+                                               required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="own_phone">{{translate('phone')}}</label>
+                                        <input class="form-control" type="text" id="own_phone" name="phone"
+                                               value="{{$shippingAddress->phone}}" required="required">
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="own_phone">{{translate('phone')}}</label>
-                                    <input class="form-control" type="text" id="own_phone" name="phone" value="{{$shippingAddress->phone}}" required="required">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="city">{{translate('city')}}</label>
-
-                                    <input class="form-control" type="text" id="city" name="city" value="{{$shippingAddress->city}}" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="zip_code">{{translate('zip_code')}}</label>
-                                    @if($zip_restrict_status)
-                                        <select name="zip" class="form-control selectpicker" data-live-search="true" id="" required>
-                                            @foreach($delivery_zipcodes as $zip)
-                                                <option value="{{ $zip->zipcode }}" {{ $zip->zipcode == $shippingAddress->zip? 'selected' : ''}}>{{ $zip->zipcode }}</option>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="address-city">{{translate('country')}}</label>
+                                        <select name="country_id" id="" class="form-control aiz-selectpicker"
+                                                data-live-search="true" required>
+                                            <option value="">{{ translate('Select your country') }}</option>
+                                            @foreach($countries as $d)
+                                                <option
+                                                    value="{{ $d['id'] }}" {{ $d['id'] == $shippingAddress->country_id? 'selected' : ''}}>{{ $d['name'] }}</option>
                                             @endforeach
                                         </select>
-                                    @else
-                                        <input class="form-control" type="text" id="zip_code" name="zip" value="{{$shippingAddress->zip}}" required>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="city">{{translate('country')}}</label>
-                                    <select name="country" class="form-control selectpicker" data-live-search="true" id="" required>
-                                        @if($country_restrict_status)
-                                            @foreach($delivery_countries as $country)
-                                                <option value="{{$country['name']}}" {{ $country['name'] == $shippingAddress->country? 'selected' : ''}}>{{$country['name']}}</option>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>{{translate('state')}}</label>
+                                        <select class="form-control mb-3 aiz-selectpicker" data-live-search="true"
+                                                name="state_id" required>
+                                            @foreach($states as $d)
+                                                <option
+                                                    value="{{ $d['id'] }}" {{ $d['id'] == $shippingAddress->state_id? 'selected' : ''}}>{{ $d['name'] }}</option>
                                             @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>{{translate('city')}}</label>
+                                        <select class="form-control mb-3 aiz-selectpicker" data-live-search="true"
+                                                name="city_id" required>
+                                            @foreach($cities as $d)
+                                                <option
+                                                    value="{{ $d['id'] }}" {{ $d['id'] == $shippingAddress->city_id? 'selected' : ''}}>{{ $d['name'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="zip_code">{{translate('zip_code')}}</label>
+                                        @if($zip_restrict_status)
+                                            <select name="zip" class="form-control selectpicker" data-live-search="true"
+                                                    id="" required>
+                                                @foreach($delivery_zipcodes as $zip)
+                                                    <option
+                                                        value="{{ $zip->zipcode }}" {{ $zip->zipcode == $shippingAddress->zip? 'selected' : ''}}>{{ $zip->zipcode }}</option>
+                                                @endforeach
+                                            </select>
                                         @else
-                                            @foreach(COUNTRIES as $country)
-                                                <option value="{{ $country['name'] }}" {{ $shippingAddress->country == $country['name']? 'selected' : '' }}>{{ $country['name'] }}</option>
-                                            @endforeach
+                                            <input class="form-control" type="text" id="zip_code" name="zip"
+                                                   value="{{$shippingAddress->zip}}" required>
                                         @endif
-                                    </select>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="own_address">{{translate('address')}}</label>
-                                    <textarea class="form-control" id="address"
-                                        type="text"  name="address" required>{{$shippingAddress->address}}</textarea>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="own_address">{{translate('address')}}</label>
+                                        <textarea class="form-control" id="address"
+                                                  type="text" name="address"
+                                                  required>{{$shippingAddress->address}}</textarea>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <input id="pac-input" class="controls rounded __inline-46"
+                                               title="{{translate('search_your_location_here')}}" type="text"
+                                               placeholder="{{translate('search_here')}}"/>
+                                        <div class="__h-200px" id="location_map_canvas"></div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-12">
-                                    <input id="pac-input" class="controls rounded __inline-46" title="{{translate('search_your_location_here')}}" type="text" placeholder="{{translate('search_here')}}"/>
-                                    <div class="__h-200px" id="location_map_canvas"></div>
+                                @php($shipping_latitude=$shippingAddress->latitude)
+                                @php($shipping_longitude=$shippingAddress->longitude)
+                                <input type="hidden" id="latitude"
+                                       name="latitude" class="form-control d-inline"
+                                       placeholder="{{ translate('ex')}} : -94.22213" value="{{$shipping_latitude??0}}"
+                                       required readonly>
+                                <input type="hidden"
+                                       name="longitude" class="form-control"
+                                       placeholder="{{ translate('ex')}} : 103.344322" id="longitude"
+                                       value="{{$shipping_longitude??0}}" required readonly>
+                                <div class="modal-footer">
+                                    <a href="{{ route('account-address') }}"
+                                       class="closeB btn btn-secondary">{{translate('close')}}</a>
+                                    <button type="submit" class="btn btn--primary">{{translate('update')}}  </button>
                                 </div>
-                            </div>
-                            @php($shipping_latitude=$shippingAddress->latitude)
-                            @php($shipping_longitude=$shippingAddress->longitude)
-                            <input type="hidden" id="latitude"
-                                name="latitude" class="form-control d-inline"
-                                placeholder="{{ translate('ex')}} : -94.22213" value="{{$shipping_latitude??0}}" required readonly>
-                            <input type="hidden"
-                                name="longitude" class="form-control"
-                                placeholder="{{ translate('ex')}} : 103.344322" id="longitude" value="{{$shipping_longitude??0}}" required readonly>
-                            <div class="modal-footer">
-                                <a href="{{ route('account-address') }}" class="closeB btn btn-secondary">{{translate('close')}}</a>
-                                <button type="submit" class="btn btn--primary">{{translate('update')}}  </button>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-    </section>
-</div>
-@endsection
+            </section>
 
-@push('script')
-<script src="https://maps.googleapis.com/maps/api/js?key={{\App\CPU\Helpers::get_business_settings('map_api_key')}}&libraries=places&v=3.49"></script>
-<script src="{{ asset('public/assets/front-end/js/bootstrap-select.min.js') }}"></script>
-<script>
 
-    function initAutocomplete() {
-        var myLatLng = { lat: {{$shipping_latitude??'-33.8688'}}, lng: {{$shipping_longitude??'151.2195'}} };
+        </div>
+        @endsection
 
-        const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
-            center: { lat: {{$shipping_latitude??'-33.8688'}}, lng: {{$shipping_longitude??'151.2195'}} },
-            zoom: 13,
-            mapTypeId: "roadmap",
-        });
+        @push('script')
+            <script
+                src="https://maps.googleapis.com/maps/api/js?key={{\App\CPU\Helpers::get_business_settings('map_api_key')}}&libraries=places&v=3.49"></script>
+            <script src="{{ asset('public/assets/front-end/js/bootstrap-select.min.js') }}"></script>
+            <script>
 
-        var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-        });
+                function initAutocomplete() {
 
-        marker.setMap( map );
-        var geocoder = geocoder = new google.maps.Geocoder();
-        google.maps.event.addListener(map, 'click', function (mapsMouseEvent) {
-            var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
-            var coordinates = JSON.parse(coordinates);
-            var latlng = new google.maps.LatLng( coordinates['lat'], coordinates['lng'] ) ;
-            marker.setPosition( latlng );
-            map.panTo( latlng );
+                    var myLatLng = {
+                        lat: {{$shipping_latitude?$shipping_latitude : '-33.8688'}},
+                        lng: {{$shipping_longitude? $shipping_longitude : '151.2195'}}
+                    };
 
-            document.getElementById('latitude').value = coordinates['lat'];
-            document.getElementById('longitude').value = coordinates['lng'];
+                    const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
+                        center: {lat: {{$shipping_latitude? $shipping_latitude:'-33.8688'}}, lng: {{$shipping_longitude? $shipping_longitude:'151.2195'}}},
+                        zoom: 13,
+                        mapTypeId: "roadmap",
+                    });
 
-            geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    if (results[1]) {
-                        document.getElementById('address').value = results[1].formatted_address;
-                        console.log(results[1].formatted_address);
-                    }
+                    var marker = new google.maps.Marker({
+                        position: myLatLng,
+                        map: map,
+                    });
+
+                    marker.setMap(map);
+                    var geocoder = geocoder = new google.maps.Geocoder();
+                    google.maps.event.addListener(map, 'click', function (mapsMouseEvent) {
+                        var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
+                        var coordinates = JSON.parse(coordinates);
+                        var latlng = new google.maps.LatLng(coordinates['lat'], coordinates['lng']);
+                        marker.setPosition(latlng);
+                        map.panTo(latlng);
+
+                        document.getElementById('latitude').value = coordinates['lat'];
+                        document.getElementById('longitude').value = coordinates['lng'];
+
+                        geocoder.geocode({'latLng': latlng}, function (results, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                if (results[1]) {
+                                    document.getElementById('address').value = results[1].formatted_address;
+                                    console.log(results[1].formatted_address);
+                                }
+                            }
+                        });
+                    });
+
+                    // Create the search box and link it to the UI element.
+                    const input = document.getElementById("pac-input");
+                    const searchBox = new google.maps.places.SearchBox(input);
+                    map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+                    // Bias the SearchBox results towards current map's viewport.
+                    map.addListener("bounds_changed", () => {
+                        searchBox.setBounds(map.getBounds());
+                    });
+                    let markers = [];
+                    // Listen for the event fired when the user selects a prediction and retrieve
+                    // more details for that place.
+                    searchBox.addListener("places_changed", () => {
+                        const places = searchBox.getPlaces();
+
+                        if (places.length == 0) {
+                            return;
+                        }
+                        // Clear out the old markers.
+                        markers.forEach((marker) => {
+                            marker.setMap(null);
+                        });
+                        markers = [];
+                        // For each place, get the icon, name and location.
+                        const bounds = new google.maps.LatLngBounds();
+                        places.forEach((place) => {
+                            if (!place.geometry || !place.geometry.location) {
+                                console.log("Returned place contains no geometry");
+                                return;
+                            }
+                            var mrkr = new google.maps.Marker({
+                                map,
+                                title: place.name,
+                                position: place.geometry.location,
+                            });
+
+                            google.maps.event.addListener(mrkr, "click", function (event) {
+                                document.getElementById('latitude').value = this.position.lat();
+                                document.getElementById('longitude').value = this.position.lng();
+
+                            });
+
+                            markers.push(mrkr);
+
+                            if (place.geometry.viewport) {
+                                // Only geocodes have viewport.
+                                bounds.union(place.geometry.viewport);
+                            } else {
+                                bounds.extend(place.geometry.location);
+                            }
+                        });
+                        map.fitBounds(bounds);
+                    });
+                };
+                $(document).on('ready', function () {
+                    initAutocomplete();
+
+                });
+
+                $(document).on("keydown", "input", function (e) {
+                    if (e.which == 13) e.preventDefault();
+                });
+                $(document).on('change', '[name=country_id]', function () {
+                    var country_id = $(this).val();
+                    if (country_id)
+                        get_states(country_id);
+                });
+
+                $(document).on('change', '[name=state_id]', function () {
+                    var state_id = $(this).val();
+                    get_city(state_id);
+                });
+
+                function get_states(country_id) {
+                    $('[name="state"]').html("");
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{route('get-state')}}",
+                        type: 'GET',
+                        data: {
+                            country_id: country_id
+                        },
+                        success: function (response) {
+                            var obj = JSON.parse(response);
+                            if (obj != '') {
+                                $('[name="state_id"]').html(obj);
+                                AIZ.plugins.bootstrapSelect('refresh');
+                            }
+                        }
+                    });
                 }
-            });
-        });
 
-        // Create the search box and link it to the UI element.
-        const input = document.getElementById("pac-input");
-        const searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-        // Bias the SearchBox results towards current map's viewport.
-        map.addListener("bounds_changed", () => {
-            searchBox.setBounds(map.getBounds());
-        });
-        let markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
-        searchBox.addListener("places_changed", () => {
-            const places = searchBox.getPlaces();
-
-            if (places.length == 0) {
-            return;
+                function get_city(state_id) {
+                    $('[name="city"]').html("");
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{route('get-city')}}",
+            type: 'GET',
+            data: {
+                state_id: state_id
+            },
+            success: function (response) {
+                var obj = JSON.parse(response);
+                if (obj != '') {
+                    $('[name="city_id"]').html(obj);
+                    AIZ.plugins.bootstrapSelect('refresh');
+                }
             }
-            // Clear out the old markers.
-            markers.forEach((marker) => {
-            marker.setMap(null);
-            });
-            markers = [];
-            // For each place, get the icon, name and location.
-            const bounds = new google.maps.LatLngBounds();
-            places.forEach((place) => {
-                if (!place.geometry || !place.geometry.location) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
-                var mrkr = new google.maps.Marker({
-                    map,
-                    title: place.name,
-                    position: place.geometry.location,
-                });
-
-                google.maps.event.addListener(mrkr, "click", function (event) {
-                    document.getElementById('latitude').value = this.position.lat();
-                    document.getElementById('longitude').value = this.position.lng();
-
-                });
-
-                markers.push(mrkr);
-
-                if (place.geometry.viewport) {
-                    // Only geocodes have viewport.
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
-            });
-            map.fitBounds(bounds);
         });
-    };
-    $(document).on('ready', function () {
-        initAutocomplete();
+    }
 
-    });
 
-    $(document).on("keydown", "input", function(e) {
-      if (e.which==13) e.preventDefault();
-    });
+
+
 </script>
 @endpush

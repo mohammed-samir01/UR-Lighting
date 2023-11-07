@@ -6,3 +6,23 @@ ALTER TABLE `shops` ADD `pickup_code` VARCHAR(191) NULL AFTER `banner`;
 
 INSERT INTO `business_settings` (`id`, `type`, `value`, `created_at`, `updated_at`) VALUES (NULL, 'pickup_location_code', '', NULL, NULL);
 
+ALTER TABLE `shipping_addresses`
+  DROP `city`,
+  DROP `country`;
+
+ALTER TABLE `shipping_addresses` ADD `country_id` INT NOT NULL AFTER `email`, ADD `state_id` INT NOT NULL AFTER `country_id`, ADD `city_id` INT NOT NULL AFTER `state_id`;
+ALTER TABLE `shipping_addresses`
+  DROP `state`;
+
+
+ALTER TABLE `shipping_methods` ADD `info` JSON NULL AFTER `status`;
+
+
+INSERT INTO `addon_settings` (`id`, `key_name`, `live_values`, `test_values`, `settings_type`, `mode`, `is_active`, `created_at`, `updated_at`, `additional_data`) VALUES ('070c766c-d777-11ed-96f4-0c7a158e4480', 'oto', '{\"gateway\":\"oto\",\"mode\":\"live\",\"status\":\"0\",\"refresh_token\":\"\"}', '{\"gateway\":\"oto\",\"mode\":\"live\",\"status\":\"0\",\"refresh_token\":\"\"}', 'shipping', 'live', '0', NULL, '2023-08-12 10:01:36', NULL);
+
+
+ALTER TABLE `cart_shippings` ADD `type` VARCHAR(191) NULL DEFAULT 'manual' AFTER `shipping_cost`, ADD `extra` JSON NULL AFTER `type`;
+
+
+ALTER TABLE `orders` ADD `shipping_company` JSON NULL AFTER `order_shipping`;
+

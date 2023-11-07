@@ -6386,4 +6386,6 @@
   'state' => 'State',
   'Select State' => 'Select State',
   'Select City' => 'Select City',
+  'are_you_sure_you_want_to_delete' => 'Are you sure you want to delete',
+  'update_address' => 'Update address',
 );

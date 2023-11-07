@@ -24,6 +24,8 @@ class Order extends Model
         'delivery_man_id'=>'integer',
         'shipping_method_id'=>'integer',
         'seller_id'=>'integer',
+        'shipping_company' => 'array',
+        'shipping_address_data' => 'array'
     ];
 
     public function details()

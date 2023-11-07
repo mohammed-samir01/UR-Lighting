@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Customer\SystemController;
 use App\Http\Controllers\Shipping\Oto;
+use App\Model\Country;
+use App\Traits\Processor;
 use App\User;
 use Carbon\Carbon;
 use App\Model\Cart;
@@ -70,6 +72,7 @@ use Illuminate\Support\Facades\File;
 class WebController extends Controller
 {
     use CommonTrait;
+    use Processor;
 
     public function __construct(
         private OrderDetail    $order_details,
@@ -379,7 +382,7 @@ class WebController extends Controller
         if ($country_restrict_status) {
             $countries = $this->get_delivery_country_array();
         } else {
-            $countries = COUNTRIES;
+            $countries = Country::where('status', 1)->get();
         }
 
         if ($zip_restrict_status) {
@@ -392,7 +395,7 @@ class WebController extends Controller
         $default_location = Helpers::get_business_settings('default_location');
 
         $user = Helpers::get_customer($request);
-        $shipping_addresses = ShippingAddress::where([
+        $shipping_addresses = ShippingAddress::with('country', 'state', 'city')->where([
             'customer_id' => $user == 'offline' ? session('guest_id') : auth('customer')->id(),
             'is_guest' => $user == 'offline' ? 1 : '0',
             'is_billing' => 0,
@@ -403,6 +406,7 @@ class WebController extends Controller
             'is_guest' => $user == 'offline' ? 1 : '0',
             'is_billing' => 1,
         ])->get();
+
         if (count($cart_group_ids) > 0) {
             return view(VIEW_FILE_NAMES['order_shipping'], compact('physical_product_view', 'zip_codes', 'country_restrict_status',
                 'zip_restrict_status', 'countries', 'billing_input_by_customer', 'default_location', 'shipping_addresses', 'billing_addresses'));
@@ -415,6 +419,7 @@ class WebController extends Controller
 
     public function checkout_payment(Request $request)
     {
+
         $cart_group_ids = CartManager::get_cart_group_ids();
         $shippingMethod = Helpers::get_business_settings('shipping_method');
 
@@ -451,16 +456,32 @@ class WebController extends Controller
         }
         unset($physical_products[0]);
         $address = ShippingAddress::find(\session()->get('address_id'));
-        $dataForOto = [
-            'weight' => $totalWeight,
-            'totalDue' => 0,
-            'originCity' => "Riyadh",
-            'destinationCity' => $address->city,
-        ];
-        $otoCompanies = Oto::checkDeliveryFee($dataForOto);
-        if ($otoCompanies['success']) {
-            $firstCom = $otoCompanies['deliveryCompany'][0];
-            SystemController::insert_into_cart_shipping_array([ 'id' => $firstCom['deliveryOptionId'], 'cost' => $firstCom['price']], false);
+        $shippingMethodManual = ShippingMethod::whereJsonContains('info->states', (string)$address->state_id)->first();
+        if ($shippingMethodManual) {
+            SystemController::insert_into_cart_shipping_array(['id' => $shippingMethodManual->id, 'cost' => $shippingMethodManual->cost], false);
+        }
+        if (!$shippingMethodManual) {
+            $oto = $this->payment_config('oto', 'shipping');
+            if ($oto->is_active) {
+                $dataForOto = [
+                    'weight' => $totalWeight,
+                    'totalDue' => 0,
+                    'originCity' => "Riyadh",
+                    'destinationCity' => $address->state->name_en,
+                ];
+                $shi = ShippingMethod::where('title', 'oto')->first();
+                $otoCompanies = Oto::checkDeliveryFee($dataForOto);
+                if ($otoCompanies['success'] && isset($otoCompanies['deliveryCompany'][0])) {
+                    $firstCom = $otoCompanies['deliveryCompany'][0];
+                    SystemController::insert_into_cart_shipping_array(['id' => $shi->id, 'cost' => $firstCom['price'], 'type' => 'oto', 'extra' => $firstCom], false);
+                } else {
+                    Toastr::info(translate('not_found_shipping'));
+                    return redirect('shop-cart');
+                }
+            } else {
+                Toastr::info(translate('not_found_shipping'));
+                return redirect('shop-cart');
+            }
         }
 
 
@@ -543,6 +564,7 @@ class WebController extends Controller
         $unique_id = OrderManager::gen_unique_id();
         $order_ids = [];
         $cart_group_ids = CartManager::get_cart_group_ids();
+
         $carts = Cart::whereIn('cart_group_id', $cart_group_ids)->get();
 
         $physical_product = false;

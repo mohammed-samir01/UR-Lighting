@@ -32,6 +32,7 @@ class PaymentMethodController extends Controller
         })->values()->all();
 
         $routes = config('addon_admin_routes');
+
         $desiredName = 'payment_setup';
         $payment_url = '';
 

@@ -177,6 +177,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'], fu
             Route::post('update/{service}', 'BusinessSettingsController@updateSocialLogin')->name('update');
             Route::post('update-apple/{service}', 'BusinessSettingsController@updateAppleLogin')->name('update-apple');
         });
+        Route::group(['prefix' => 'shipping', 'as' => 'shipping.','middleware'=>['module:system_settings']], function () {
+            Route::get('view', 'BusinessSettingsController@viewShipping')->name('view');
+            Route::put('update', 'BusinessSettingsController@updateShipping')->name('update-company');
+        });
 
         Route::group(['prefix' => 'social-media-chat', 'as' => 'social-media-chat.','middleware'=>['module:system_settings']], function () {
             Route::get('view', 'BusinessSettingsController@view_social_media_chat')->name('view');

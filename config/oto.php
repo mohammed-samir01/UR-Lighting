@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "refresh_token"  => "AMf-vByvxmPEQGsq77hAQPQLrLtPtlsbiuHXtSm_p-tNI-iJR-lqMpT8v_e4S6YVskGM7zdvjwa_H7HDpGISradGgntfQqpyJznw1snqk5j6soU4f0CCHnP8ExggBK2ezSSLRUTfn2WV-Jg1t-a5_BPWg84Mcjqn8IyZpqL2i4Wh2ub9bCAFBFmy0ucxO02gcM4xxudo2aSt-Og1tAw7mZslAi1xneEKtA",
+    "refresh_token"  => "",
     "access_token"   => "" ,
 
     /*

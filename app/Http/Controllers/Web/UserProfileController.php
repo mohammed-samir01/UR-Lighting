@@ -160,6 +160,7 @@ class UserProfileController extends Controller
 
     public function account_address()
     {
+
         $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');
         $zip_restrict_status = Helpers::get_business_settings('delivery_zip_code_area_restriction');
 
@@ -168,7 +169,8 @@ class UserProfileController extends Controller
         $zip_codes = $zip_restrict_status ? DeliveryZipCode::all() : 0;
 
         if (auth('customer')->check()) {
-            $shippingAddresses = \App\Model\ShippingAddress::where('customer_id', auth('customer')->id())->get();
+            $shippingAddresses = \App\Model\ShippingAddress::with('city', 'country', 'state')->where('customer_id', auth('customer')->id())->get();
+
             return view('web-views.users-profile.account-address', compact('shippingAddresses', 'country_restrict_status', 'zip_restrict_status', 'countries', 'zip_codes'));
         } else {
             return redirect()->route('home');
@@ -180,9 +182,10 @@ class UserProfileController extends Controller
         $request->validate([
             'name' => 'required',
             'phone' => 'required',
-            'city' => 'required',
             'zip' => 'required',
-            'country' => 'required',
+            'country_id' => 'required',
+            'state_id' => 'required',
+            'city_id' => 'required',
             'address' => 'required',
         ]);
 
@@ -192,10 +195,10 @@ class UserProfileController extends Controller
         $country_exist = self::delivery_country_exist_check($request->country);
         $zipcode_exist = self::delivery_zipcode_exist_check($request->zip);
 
-        if ($country_restrict_status && !$country_exist) {
-            Toastr::error(translate('Delivery_unavailable_in_this_country!'));
-            return back();
-        }
+//        if ($country_restrict_status && !$country_exist) {
+//            Toastr::error(translate('Delivery_unavailable_in_this_country!'));
+//            return back();
+//        }
 
         if ($zip_restrict_status && !$zipcode_exist) {
             Toastr::error(translate('Delivery_unavailable_in_this_zip_code_area!'));
@@ -207,9 +210,10 @@ class UserProfileController extends Controller
             'contact_person_name' => $request->name,
             'address_type' => $request->addressAs,
             'address' => $request->address,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
+            'country_id' => $request->country_id,
+            'state_id' => $request->state_id,
             'zip' => $request->zip,
-            'country' => $request->country,
             'phone' => $request->phone,
             'is_billing' => $request->is_billing,
             'latitude' => $request->latitude,
@@ -230,7 +234,10 @@ class UserProfileController extends Controller
 
     public function address_edit(Request $request, $id)
     {
-        $shippingAddress = ShippingAddress::where('customer_id', auth('customer')->id())->find($id);
+        $shippingAddress = ShippingAddress::with('city', 'country', 'state')->where('customer_id', auth('customer')->id())->find($id);
+        $countries = Country::where('status', 1)->get();
+        $states = State::where('status', 1)->where('country_id', $shippingAddress->country_id)->get();
+        $cities = City::where('status', 1)->where('state_id', $shippingAddress->state_id)->get();
         $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');
         $zip_restrict_status = Helpers::get_business_settings('delivery_zip_code_area_restriction');
 
@@ -244,8 +251,9 @@ class UserProfileController extends Controller
         } else {
             $delivery_zipcodes = 0;
         }
+
         if (isset($shippingAddress)) {
-            return view(VIEW_FILE_NAMES['account_address_edit'], compact('shippingAddress', 'country_restrict_status', 'zip_restrict_status', 'delivery_countries', 'delivery_zipcodes'));
+            return view(VIEW_FILE_NAMES['account_address_edit'], compact('shippingAddress', 'country_restrict_status', 'zip_restrict_status', 'delivery_countries', 'delivery_zipcodes', 'countries', 'states', 'cities'));
         } else {
             Toastr::warning(translate('access_denied'));
             return back();
@@ -254,12 +262,14 @@ class UserProfileController extends Controller
 
     public function address_update(Request $request)
     {
+
         $request->validate([
             'name' => 'required',
             'phone' => 'required',
-            'city' => 'required',
             'zip' => 'required',
-            'country' => 'required',
+            'country_id' => 'required',
+            'state_id' => 'required',
+            'city_id' => 'required',
             'address' => 'required',
         ]);
 
@@ -284,9 +294,10 @@ class UserProfileController extends Controller
             'contact_person_name' => $request->name,
             'address_type' => $request->addressAs,
             'address' => $request->address,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
+            'country_id' => $request->country_id,
+            'state_id' => $request->state_id,
             'zip' => $request->zip,
-            'country' => $request->country,
             'phone' => $request->phone,
             'is_billing' => $request->is_billing,
             'latitude' => $request->latitude,
@@ -624,7 +635,8 @@ class UserProfileController extends Controller
     {
         $order = Order::where(['id' => $id])->first();
         if ($order['payment_method'] == 'cash_on_delivery' && $order['order_status'] == 'pending') {
-            Oto::cancelOrder($id);
+            if (isset($order->shipping_company['type']) && $order->shipping_company['type'] == 'oto')
+                Oto::cancelOrder($id);
             OrderManager::stock_update_on_order_status_change($order, 'canceled');
             Order::where(['id' => $id])->update([
                 'order_status' => 'canceled'

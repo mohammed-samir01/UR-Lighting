@@ -9,5 +9,6 @@
         {{-- <li class="{{ Request::is('admin/business-settings/fcm-index') ?'active':'' }}"><a href="{{route('admin.business-settings.fcm-index')}}">{{translate('Push_Notification_Setup')}}</a></li> --}}
         <li class="{{ Request::is('admin/social-login/view') ?'active':'' }}"><a href="{{route('admin.social-login.view')}}">{{translate('Social_Media_Login')}}</a></li>
         <li class="{{ Request::is('admin/social-media-chat/view') ?'active':'' }}"><a href="{{route('admin.social-media-chat.view')}}">{{translate('Social_Media_Chat')}}</a></li>
+        <li class="{{ Request::is('admin/shipping/view') ?'active':'' }}"><a href="{{route('admin.shipping.view')}}">{{translate('shipping_companies')}}</a></li>
     </ul>
 </div>

@@ -11,7 +11,7 @@
         }
 
         .btn-outline {
-            border-color: {{$web_config['primary_color']}}    !important;
+            border-color: {{$web_config['primary_color']}}        !important;
         }
 
         .btn-outline:hover {
@@ -20,14 +20,14 @@
         }
 
         .btn-outline:focus {
-            border-color: {{$web_config['primary_color']}}    !important;
+            border-color: {{$web_config['primary_color']}}        !important;
         }
 
         /*#location_map_canvas {*/
         /*    height: 100%;*/
         /*}*/
 
-        .filter-option{
+        .filter-option {
             display: block;
             width: 100%;
             height: calc(1.5em + 1.25rem + 2px);
@@ -44,7 +44,7 @@
             transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
 
-        .btn-light + .dropdown-menu{
+        .btn-light + .dropdown-menu {
             transform: none !important;
             top: 41px !important;
         }
@@ -59,7 +59,7 @@
 @endpush
 
 @section('content')
-@php($billing_input_by_customer=\App\CPU\Helpers::get_business_settings('billing_input_by_customer'))
+    @php($billing_input_by_customer=\App\CPU\Helpers::get_business_settings('billing_input_by_customer'))
     <div class="container pb-5 mb-2 mb-md-4 rtl __inline-56"
          style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
@@ -71,11 +71,12 @@
             <section class="col-lg-8">
                 <div class="checkout_details">
                     <!-- Steps-->
-                @include('web-views.partials._checkout-steps',['step'=>2])
+                    @include('web-views.partials._checkout-steps',['step'=>2])
                     @php($default_location=\App\CPU\Helpers::get_business_settings('default_location'))
-                    <input type="hidden" id="physical_product" name="physical_product" value="{{ $physical_product_view ? 'yes':'no'}}">
+                    <input type="hidden" id="physical_product" name="physical_product"
+                           value="{{ $physical_product_view ? 'yes':'no'}}">
 
-                <!-- Shipping methods table-->
+                    <!-- Shipping methods table-->
                     @if($physical_product_view)
                         <h2 class="h4 pb-3 mb-2 mt-5">{{ translate('choose_shipping_address')}}</h2>
                         @php($shipping_addresses=\App\Model\ShippingAddress::where(['customer_id'=>auth('customer')->id(), 'is_billing'=>0, 'is_guest'=>0])->get())
@@ -83,7 +84,9 @@
                             <div class="card-body p-0">
                                 <ul class="list-group">
                                     @foreach($shipping_addresses as $key=>$address)
-                                        <li class="list-group-item __inline-57" onclick="$('#sh-{{$address['id']}}').prop( 'checked', true )">
+
+                                        <li class="list-group-item __inline-57"
+                                            onclick="$('#sh-{{$address['id']}}').prop( 'checked', true )">
                                             <input type="radio" name="shipping_method_id"
                                                    id="sh-{{$address['id']}}"
                                                    value="{{$address['id']}}" {{$key==0?'checked':''}}>
@@ -98,10 +101,12 @@
                                             <div class="d-flex">
                                                 <div class="w-0 flex-grow-1 justify-content-between">
                                                     <span>{{ translate('contact_person_name')}}: {{$address['contact_person_name']}}</span><br>
-                                                    <span>{{ translate('address')}} : {{$address['address']}}, {{$address['city']}}, {{$address['zip']}}.</span>
+                                                    <span>{{ translate('address')}} : {{$address['address']}}, {{$address['city']['name']}}, {{$address['state']['name']}}, {{$address['zip']}}.</span>
                                                 </div>
                                                 <div class="">
-                                                    <a href="{{ route('address-edit', ['id' => $address->id]) }}" title="{{ translate('edit_address')}}" class="mt-2"><i class="fa fa-edit fa-lg"></i></a>
+                                                    <a href="{{ route('address-edit', ['id' => $address->id]) }}"
+                                                       title="{{ translate('edit_address')}}" class="mt-2"><i
+                                                            class="fa fa-edit fa-lg"></i></a>
                                                 </div>
                                             </div>
                                         </li>
@@ -130,13 +135,13 @@
                                                                name="contact_person_name" {{$shipping_addresses->count()==0?'required':''}}>
                                                     </div>
                                                     @if(!auth('customer')->check())
-                                                    <div class="form-group">
-                                                        <label
-                                                            for="exampleInputEmail1">{{ translate('email')}}
-                                                            <span class="text-danger">*</span></label>
-                                                        <input type="email" class="form-control"
-                                                               name="email" {{$shipping_addresses->count()==0?'required':''}}>
-                                                    </div>
+                                                        <div class="form-group">
+                                                            <label
+                                                                for="exampleInputEmail1">{{ translate('email')}}
+                                                                <span class="text-danger">*</span></label>
+                                                            <input type="email" class="form-control"
+                                                                   name="email" {{$shipping_addresses->count()==0?'required':''}}>
+                                                        </div>
                                                     @endif
                                                     <div class="form-group">
                                                         <label for="exampleInputEmail1">{{ translate('phone')}}
@@ -156,45 +161,67 @@
                                                                 value="others">{{ translate('others')}}</option>
                                                         </select>
                                                     </div>
-
-                                                    <div class="form-group">
-                                                        <label for="exampleInputEmail1">{{ translate('city')}}<span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control"
-                                                               name="city" {{$shipping_addresses->count()==0?'required':''}}>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label
-                                                            for="exampleInputEmail1">{{ translate('zip_code')}}
-                                                            <span
-                                                                class="text-danger">*</span></label>
-                                                        @if($zip_restrict_status == 1)
-                                                            <select name="zip" class="form-control selectpicker" data-live-search="true" required>
-                                                                @forelse($zip_codes as $code)
-                                                                <option value="{{ $code->zipcode }}">{{ $code->zipcode }}</option>
-                                                                @empty
-                                                                    <option value="">{{ translate('no_zip_to_deliver') }}</option>
-                                                                @endforelse
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="address-city">{{translate('country')}}<span
+                                                                    class="text-danger">*</span></label>
+                                                            <select name="country_id" id=""
+                                                                    class="form-control aiz-selectpicker"
+                                                                    data-live-search="true" {{$shipping_addresses->count()==0?'required':''}}>
+                                                                <option
+                                                                    value="">{{ translate('Select your country') }}</option>
+                                                                @foreach($countries as $d)
+                                                                    <option
+                                                                        value="{{ $d['id'] }}">{{ $d['name'] }}</option>
+                                                                @endforeach
                                                             </select>
-                                                        @else
-                                                        <input type="text" class="form-control"
-                                                               name="zip" {{$shipping_addresses->count()==0?'required':''}}>
-                                                        @endif
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label>{{translate('state')}}<span
+                                                                    class="text-danger">*</span></label>
+                                                            <select class="form-control mb-3 aiz-selectpicker"
+                                                                    data-live-search="true"
+                                                                    name="state_id" {{$shipping_addresses->count()==0?'required':''}}>
+
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label
-                                                            for="exampleInputEmail1">{{ translate('country')}}
-                                                            <span
-                                                                style="color: red">*</span></label>
-                                                        <select name="country" id="" class="form-control selectpicker" data-live-search="true" required>
-                                                            @forelse($countries as $country)
-                                                                <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
-                                                            @empty
-                                                                <option value="">{{ translate('no_country_to_deliver') }}</option>
-                                                            @endforelse
-                                                        </select>
+
+                                                    <div class="form-row">
+
+                                                        <div class="form-group col-md-6">
+                                                            <label for="address-city">{{translate('city')}}<span
+                                                                    class="text-danger">*</span></label>
+                                                            <select class="form-control mb-3 aiz-selectpicker"
+                                                                    data-live-search="true"
+                                                                    name="city_id" {{$shipping_addresses->count()==0?'required':''}}>
+
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label
+                                                                for="exampleInputEmail1">{{ translate('zip_code')}}
+                                                                <span
+                                                                    class="text-danger">*</span></label>
+                                                            @if($zip_restrict_status == 1)
+                                                                <select name="zip" class="form-control selectpicker"
+                                                                        data-live-search="true" required>
+                                                                    @forelse($zip_codes as $code)
+                                                                        <option
+                                                                            value="{{ $code->zipcode }}">{{ $code->zipcode }}</option>
+                                                                    @empty
+                                                                        <option
+                                                                            value="">{{ translate('no_zip_to_deliver') }}</option>
+                                                                    @endforelse
+                                                                </select>
+                                                            @else
+                                                                <input type="text" class="form-control"
+                                                                       name="zip" {{$shipping_addresses->count()==0?'required':''}}>
+                                                            @endif
+                                                        </div>
                                                     </div>
+
 
                                                     <div class="form-group">
                                                         <label
@@ -205,27 +232,35 @@
                                                                   name="address" {{$shipping_addresses->count()==0?'required':''}}></textarea>
                                                     </div>
                                                     <div class="form-group">
-                                                        <input id="pac-input" class="controls rounded __inline-46" title="{{translate('search_your_location_here')}}" type="text" placeholder="{{translate('search_here')}}"/>
+                                                        <input id="pac-input" class="controls rounded __inline-46"
+                                                               title="{{translate('search_your_location_here')}}"
+                                                               type="text" placeholder="{{translate('search_here')}}"/>
                                                         <div class="__h-200px" id="location_map_canvas"></div>
                                                     </div>
                                                     @if(auth('customer')->check())
-                                                    <div class="form-check" style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.25rem;">
-                                                        <input type="checkbox" name="save_address" class="form-check-input"
-                                                               id="exampleCheck1">
-                                                        <label class="form-check-label" for="exampleCheck1" style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.09rem">
-                                                            {{ translate('save_this_address')}}
-                                                        </label>
-                                                    </div>
+                                                        <div class="form-check"
+                                                             style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.25rem;">
+                                                            <input type="checkbox" name="save_address"
+                                                                   class="form-check-input"
+                                                                   id="exampleCheck1">
+                                                            <label class="form-check-label" for="exampleCheck1"
+                                                                   style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.09rem">
+                                                                {{ translate('save_this_address')}}
+                                                            </label>
+                                                        </div>
                                                     @endif
                                                     <input type="hidden" id="latitude"
                                                            name="latitude" class="form-control d-inline"
                                                            placeholder="{{ translate('ex')}} : -94.22213"
-                                                           value="{{$default_location?$default_location['lat']:0}}" required
+                                                           value="{{$default_location?$default_location['lat']:0}}"
+                                                           required
                                                            readonly>
                                                     <input type="hidden"
                                                            name="longitude" class="form-control"
-                                                           placeholder="{{ translate('ex')}} : 103.344322" id="longitude"
-                                                           value="{{$default_location?$default_location['lng']:0}}" required
+                                                           placeholder="{{ translate('ex')}} : 103.344322"
+                                                           id="longitude"
+                                                           value="{{$default_location?$default_location['lng']:0}}"
+                                                           required
                                                            readonly>
 
                                                     <button type="submit" class="btn btn--primary" style="display: none"
@@ -246,11 +281,12 @@
                         @php($billing_addresses=\App\Model\ShippingAddress::where(['customer_id'=>auth('customer')->id(), 'is_billing'=>1, 'is_guest'=>'0'])->get())
                         @if($physical_product_view)
                             <div class="form-check mb-2"
-                                style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.25rem;">
+                                 style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.25rem;">
                                 <input type="checkbox" id="same_as_shipping_address" onclick="hide_billingAddress()"
-                                    name="same_as_shipping_address" class="form-check-input" {{$billing_input_by_customer==1?'':'checked'}}>
+                                       name="same_as_shipping_address"
+                                       class="form-check-input" {{$billing_input_by_customer==1?'':'checked'}}>
                                 <label class="form-check-label" for="same_as_shipping_address"
-                                    style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.09rem">
+                                       style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.09rem">
                                     {{ translate('same_as_shipping_address')}}
                                 </label>
                             </div>
@@ -260,14 +296,15 @@
                                 <ul class="list-group">
                                     @foreach($billing_addresses as $key=>$address)
 
-                                        <li class="list-group-item __inline-57" onclick="$('#bh-{{$address['id']}}').prop( 'checked', true )">
+                                        <li class="list-group-item __inline-57"
+                                            onclick="$('#bh-{{$address['id']}}').prop( 'checked', true )">
                                             <input type="radio" name="billing_method_id"
-                                                id="bh-{{$address['id']}}"
-                                                value="{{$address['id']}}">
+                                                   id="bh-{{$address['id']}}"
+                                                   value="{{$address['id']}}">
                                             <span class="checkmark"
-                                                style="margin-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 10px"></span>
+                                                  style="margin-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 10px"></span>
                                             <label class="badge"
-                                                style="background: {{$web_config['primary_color']}}; color:white !important;">{{$address['address_type']}}</label>
+                                                   style="background: {{$web_config['primary_color']}}; color:white !important;">{{$address['address_type']}}</label>
                                             <small>
                                                 <i class="fa fa-phone"></i> {{$address['phone']}}
                                             </small>
@@ -278,7 +315,9 @@
                                                     <span>{{ translate('address')}} : {{$address['address']}}, {{$address['city']}}, {{$address['zip']}}.</span>
                                                 </div>
                                                 <div>
-                                                    <a href="{{ route('address-edit', ['id' => $address->id]) }}" title="Edit Address" class="mt-2"><i class="fa fa-edit fa-lg"></i></a>
+                                                    <a href="{{ route('address-edit', ['id' => $address->id]) }}"
+                                                       title="Edit Address" class="mt-2"><i
+                                                            class="fa fa-edit fa-lg"></i></a>
                                                 </div>
                                             </div>
 
@@ -286,27 +325,27 @@
                                     @endforeach
                                     <li class="list-group-item" onclick="billingAddress()">
                                         <input type="radio" name="billing_method_id"
-                                            id="bh-0" value="0" data-toggle="collapse"
-                                            data-target="#billing_model" checked>
-{{--                                        {{$billing_addresses->count()==0?'checked':''}}--}}
+                                               id="bh-0" value="0" data-toggle="collapse"
+                                               data-target="#billing_model" checked>
+                                        {{--                                        {{$billing_addresses->count()==0?'checked':''}}--}}
                                         <span class="checkmark"
-                                            style="margin-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 10px"></span>
+                                              style="margin-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 10px"></span>
 
                                         <button type="button" class="btn btn-outline" data-toggle="collapse"
                                                 data-target="#billing_model">{{ translate('another_address')}}
                                         </button>
                                         <div id="accordion">
                                             <div id="billing_model"
-                                                class="collapse {{$billing_addresses->count()==0?'show':''}}"
-                                                aria-labelledby="headingThree"
-                                                data-parent="#accordion">
+                                                 class="collapse {{$billing_addresses->count()==0?'show':''}}"
+                                                 aria-labelledby="headingThree"
+                                                 data-parent="#accordion">
                                                 <div class="card-body">
                                                     <div class="form-group">
                                                         <label
                                                             for="exampleInputEmail1">{{ translate('contact_person_name')}}
                                                             <span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control"
-                                                            name="billing_contact_person_name" {{$billing_addresses->count()==0?'required':''}}>
+                                                               name="billing_contact_person_name" {{$billing_addresses->count()==0?'required':''}}>
                                                     </div>
                                                     @if(!auth('customer')->check())
                                                         <div class="form-group">
@@ -322,7 +361,7 @@
                                                             <span
                                                                 class="text-danger">*</span></label>
                                                         <input type="text" class="form-control"
-                                                            name="billing_phone" {{$billing_addresses->count()==0?'required':''}}>
+                                                               name="billing_phone" {{$billing_addresses->count()==0?'required':''}}>
                                                     </div>
                                                     <div class="form-group">
                                                         <label
@@ -336,78 +375,107 @@
                                                         </select>
                                                     </div>
 
-                                                    <div class="form-group">
-                                                        <label for="exampleInputEmail1">{{ translate('city')}}<span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control"
-                                                            name="billing_city" {{$billing_addresses->count()==0?'required':''}}>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label
-                                                            for="exampleInputEmail1">{{ translate('zip_code')}}
-                                                            <span class="text-danger">*</span></label>
-                                                        @if($zip_restrict_status)
-                                                            <select name="billing_zip" id="" class="form-control selectpicker" data-live-search="true">
-                                                                @foreach($zip_codes as $code)
-                                                                    <option value="{{ $code->zipcode }}">{{ $code->zipcode }}</option>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="address-city">{{translate('country')}}<span
+                                                                    class="text-danger">*</span></label>
+                                                            <select name="billing_country_id" id=""
+                                                                    class="form-control aiz-selectpicker"
+                                                                    data-live-search="true" {{$billing_addresses->count()==0?'required':''}}>
+                                                                <option
+                                                                    value="">{{ translate('Select your country') }}</option>
+                                                                @foreach($countries as $d)
+                                                                    <option
+                                                                        value="{{ $d['id'] }}">{{ $d['name'] }}</option>
                                                                 @endforeach
                                                             </select>
-                                                        @else
-                                                            <input type="text" class="form-control"
-                                                                   name="billing_zip" {{$billing_addresses->count()==0?'required':''}}>
-                                                        @endif
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label>{{translate('state')}}<span
+                                                                    class="text-danger">*</span></label>
+                                                            <select class="form-control mb-3 aiz-selectpicker"
+                                                                    data-live-search="true"
+                                                                    name="billing_state_id" {{$billing_addresses->count()==0?'required':''}}>
 
+                                                            </select>
+                                                        </div>
                                                     </div>
 
-                                                    <div class="form-group">
-                                                        <label
-                                                            for="exampleInputEmail1">{{ translate('country')}}
-                                                            <span style="color: red">*</span></label>
-                                                        <select name="billing_country" id="" class="form-control selectpicker" data-live-search="true">
-                                                            @foreach($countries as $country)
-                                                                <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="address-city">{{translate('city')}}<span
+                                                                    class="text-danger">*</span></label>
+                                                            <select class="form-control mb-3 aiz-selectpicker"
+                                                                    data-live-search="true"
+                                                                    name="billing_city_id" {{$billing_addresses->count()==0?'required':''}}>
 
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label
+                                                                for="exampleInputEmail1">{{ translate('zip_code')}}
+                                                                <span class="text-danger">*</span></label>
+                                                            @if($zip_restrict_status)
+                                                                <select name="billing_zip" id=""
+                                                                        class="form-control selectpicker"
+                                                                        data-live-search="true">
+                                                                    @foreach($zip_codes as $code)
+                                                                        <option
+                                                                            value="{{ $code->zipcode }}">{{ $code->zipcode }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            @else
+                                                                <input type="text" class="form-control"
+                                                                       name="billing_zip" {{$billing_addresses->count()==0?'required':''}}>
+                                                            @endif
+                                                        </div>
+
+                                                    </div>
                                                     <div class="form-group">
                                                         <label
                                                             for="exampleInputEmail1">{{ translate('address')}}<span
                                                                 class="text-danger">*</span></label>
                                                         <textarea class="form-control" id="billing_address"
-                                                                type="billing_text"
-                                                                name="billing_address" {{$billing_addresses->count()==0?'required':''}}></textarea>
+                                                                  type="billing_text"
+                                                                  name="billing_address" {{$billing_addresses->count()==0?'required':''}}></textarea>
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <input id="pac-input-billing" class="controls rounded __inline-46"
-                                                            title="{{translate('search_your_location_here')}}"
-                                                            type="text"
-                                                            placeholder="{{translate('search_here')}}"/>
+                                                        <input id="pac-input-billing"
+                                                               class="controls rounded __inline-46"
+                                                               title="{{translate('search_your_location_here')}}"
+                                                               type="text"
+                                                               placeholder="{{translate('search_here')}}"/>
                                                         <div class="__h-200px" id="location_map_canvas_billing"></div>
                                                     </div>
 
                                                     @if(auth('customer')->check())
-                                                        <div class="form-check" style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.25rem;">
-                                                            <input type="checkbox" name="save_address_billing" class="form-check-input"
-                                                                id="save_address_billing">
-                                                            <label class="form-check-label" for="save_address_billing" style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.09rem">
+                                                        <div class="form-check"
+                                                             style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.25rem;">
+                                                            <input type="checkbox" name="save_address_billing"
+                                                                   class="form-check-input"
+                                                                   id="save_address_billing">
+                                                            <label class="form-check-label" for="save_address_billing"
+                                                                   style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.09rem">
                                                                 {{ translate('save_this_address')}}
                                                             </label>
                                                         </div>
                                                     @endif
 
                                                     <input type="hidden" id="billing_latitude"
-                                                        name="billing_latitude" class="form-control d-inline"
-                                                        placeholder="{{ translate('ex')}} : -94.22213"
-                                                        value="{{$default_location?$default_location['lat']:0}}" required
-                                                        readonly>
+                                                           name="billing_latitude" class="form-control d-inline"
+                                                           placeholder="{{ translate('ex')}} : -94.22213"
+                                                           value="{{$default_location?$default_location['lat']:0}}"
+                                                           required
+                                                           readonly>
                                                     <input type="hidden"
-                                                        name="billing_longitude" class="form-control"
-                                                        placeholder="{{ translate('ex')}} : 103.344322" id="billing_longitude"
-                                                        value="{{$default_location?$default_location['lng']:0}}" required
-                                                        readonly>
+                                                           name="billing_longitude" class="form-control"
+                                                           placeholder="{{ translate('ex')}} : 103.344322"
+                                                           id="billing_longitude"
+                                                           value="{{$default_location?$default_location['lng']:0}}"
+                                                           required
+                                                           readonly>
 
                                                     <button type="submit" class="btn btn--primary" style="display: none"
                                                             id="address_submit"></button>
@@ -483,7 +551,9 @@
         }
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key={{\App\CPU\Helpers::get_business_settings('map_api_key')}}&callback=mapsShopping&libraries=places&v=3.49" defer></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{\App\CPU\Helpers::get_business_settings('map_api_key')}}&callback=mapsShopping&libraries=places&v=3.49"
+        defer></script>
     <script>
         function initAutocomplete() {
             var myLatLng = {
@@ -698,7 +768,7 @@
         function proceed_to_next() {
             let physical_product = $('#physical_product').val();
 
-            if(physical_product === 'yes') {
+            if (physical_product === 'yes') {
                 var billing_addresss_same_shipping = $('#same_as_shipping_address').is(":checked");
 
                 let allAreFilled = true;
@@ -731,7 +801,7 @@
                         }
                     });
                 }
-            }else {
+            } else {
                 var billing_addresss_same_shipping = false;
             }
 
@@ -777,6 +847,68 @@
             });
 
 
+        }
+
+        $(document).on('change', '[name=country_id]', function () {
+            var country_id = $(this).val();
+            if (country_id)
+                get_states(country_id);
+        });
+        $(document).on('change', '[name=billing_country_id]', function () {
+            var country_id = $(this).val();
+            if (country_id)
+                get_states(country_id,'[name="billing_state_id"]');
+        });
+
+        $(document).on('change', '[name=state_id]', function () {
+            var state_id = $(this).val();
+            get_city(state_id);
+        });
+        $(document).on('change', '[name=billing_state_id]', function () {
+            var state_id = $(this).val();
+            get_city(state_id,'[name="billing_city_id"]');
+        });
+
+        function get_states(country_id, ele = '[name="state_id"]') {
+            $('[name="state"]').html("");
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('get-state')}}",
+                type: 'GET',
+                data: {
+                    country_id: country_id
+                },
+                success: function (response) {
+                    var obj = JSON.parse(response);
+                    if (obj != '') {
+                        $(ele).html(obj);
+                        AIZ.plugins.bootstrapSelect('refresh');
+                    }
+                }
+            });
+        }
+
+        function get_city(state_id, ele = '[name="city_id"]') {
+            $('[name="city"]').html("");
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('get-city')}}",
+                type: 'GET',
+                data: {
+                    state_id: state_id
+                },
+                success: function (response) {
+                    var obj = JSON.parse(response);
+                    if (obj != '') {
+                        $(ele).html(obj);
+                        AIZ.plugins.bootstrapSelect('refresh');
+                    }
+                }
+            });
         }
     </script>
 @endpush

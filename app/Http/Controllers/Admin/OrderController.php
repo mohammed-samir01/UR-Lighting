@@ -243,6 +243,7 @@ class OrderController extends Controller
 
     public function details($id)
     {
+
         //for edit  address
         $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');
         $zip_restrict_status = Helpers::get_business_settings('delivery_zip_code_area_restriction');
@@ -253,9 +254,9 @@ class OrderController extends Controller
         $company_web_logo = BusinessSetting::where('type', 'company_web_logo')->first()->value;
 
         $order = $this->order->with('details.product_all_status', 'verification_images', 'shipping', 'seller.shop', 'offline_payments', 'delivery_man')->where(['id' => $id])->first();
-
-        $orderStatus = Oto::orderStatus($order->id);
-
+        $orderStatus['success'] = false;
+        if (isset($order->shipping_company['type']) && $order->shipping_company['type'] == 'oto')
+            $orderStatus = Oto::orderStatus($order->id);
         $physical_product = false;
         foreach ($order->details as $product) {
             if (isset($product->product) && $product->product->product_type == 'physical') {
@@ -279,11 +280,12 @@ class OrderController extends Controller
             $query->where(['seller_id' => 0]);
         })->get();
 
-        $shipping_address = ShippingAddress::find($order->shipping_address);
+        $shipping_address = $order['shipping_address_data'];
+
         if ($order->order_type == 'default_type') {
             return view('admin-views.order.order-details', compact('shipping_address', 'order', 'linked_orders',
                 'delivery_men', 'total_delivered', 'company_name', 'company_web_logo', 'physical_product',
-                'country_restrict_status', 'zip_restrict_status', 'countries', 'zip_codes','orderStatus'));
+                'country_restrict_status', 'zip_restrict_status', 'countries', 'zip_codes', 'orderStatus'));
         } else {
             return view('admin-views.pos.order.order-details', compact('order', 'company_name', 'company_web_logo'));
         }

@@ -519,7 +519,7 @@ class OrderManager
 
         $customer_id = $user == 'offline' ? $guest_id : $user->id;
         $order_total = CartManager::cart_grand_total($cart_group_id) - $discount - $free_shipping_discount;
-        $shippingAddress = ShippingAddress::find($address_id);
+        $shippingAddress = ShippingAddress::with('country','state','city')->find($address_id);
         $or = [
             'id' => $order_id,
             'verification_code' => rand(100000, 999999),
@@ -544,13 +544,14 @@ class OrderManager
             'shipping_address' => $address_id,
             'shipping_address_data' => $shippingAddress,
             'billing_address' => $billing_address_id,
-            'billing_address_data' => ShippingAddress::find($billing_address_id),
+            'billing_address_data' => ShippingAddress::with('country','state','city')->find($billing_address_id),
             'shipping_responsibility' => Helpers::get_business_settings('shipping_method'),
             'shipping_cost' => CartManager::get_shipping_cost($data['cart_group_id']),
             'extra_discount' => $free_shipping_discount,
             'extra_discount_type' => $free_shipping_type,
             'free_delivery_bearer' => $seller_data->seller_is == 'seller' ? $free_shipping_responsibility : 'admin',
             'is_shipping_free' => $is_shipping_free,
+            'shipping_company' => $shipping_method,
             'shipping_method_id' => $shipping_method_id,
             'shipping_type' => $shipping_type,
             'created_at' => now(),
@@ -722,12 +723,16 @@ class OrderManager
         } catch (\Exception $exception) {
 
         }
-        $orderData = ['orderId' => $order_id, 'payment_method' => 'paid', 'amount' => $order_total, 'amount_due' => 0, 'packageCount' => $totalCount, 'packageWeight' => $totalWeight, 'orderDate' => now()->format('Y-m-d H-i')];
-        $customeData = ['name' => $user->f_name . ' ' . $user->l_name, 'email' => $user->email, 'mobile' => $user->phone];
-        $addressData = ['address' => $shippingAddress->address, 'city' => $shippingAddress->city, 'country' => 'SA', 'lat' => $shippingAddress->latitude, 'lng' => $shippingAddress->longitude];
-        $response = Oto::createOrder($orderData, $customeData, $addressData, $items);
-        if ($response['success'])
-            Order::where('id', $order_id)->update(['order_shipping' => $response['otoId']]);
+        if ($shipping_method->type == 'oto') {
+            $orderData = ['orderId' => $order_id, 'payment_method' => 'paid', 'amount' => $order_total, 'amount_due' => 0, 'packageCount' => $totalCount, 'packageWeight' => $totalWeight, 'orderDate' => now()->format('Y-m-d H-i')];
+            $customeData = ['name' => $user->f_name . ' ' . $user->l_name, 'email' => $user->email, 'mobile' => $user->phone];
+            $addressData = ['address' => $shippingAddress->address, 'city' => $shippingAddress->city->name_en, 'country' => 'SA', 'lat' => $shippingAddress->latitude, 'lng' => $shippingAddress->longitude];
+            $response = Oto::createOrder($orderData, $customeData, $addressData, $items);
+
+            if ($response['success'])
+                Order::where('id', $order_id)->update(['order_shipping' => $response['otoId']]);
+        }
+
         return $order_id;
     }
 
