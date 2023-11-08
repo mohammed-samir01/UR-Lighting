@@ -105,11 +105,13 @@ class SystemController extends Controller
                 return response()->json([
                     'errors' => translate('Fill_all_required_fields_of_shipping_address')
                 ], 403);
-            } elseif ($country_restrict_status && !self::delivery_country_exist_check($shipping['country'])) {
-                return response()->json([
-                    'errors' => translate('Delivery_unavailable_in_this_country.')
-                ], 403);
-            } elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($shipping['zip'])) {
+            }
+//            elseif ($country_restrict_status && !self::delivery_country_exist_check($shipping['country_id'])) {
+//                return response()->json([
+//                    'errors' => translate('Delivery_unavailable_in_this_country.')
+//                ], 403);
+//            }
+            elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($shipping['zip'])) {
                 return response()->json([
                     'errors' => translate('Delivery_unavailable_in_this_zip_code_area')
                 ], 403);
@@ -177,11 +179,12 @@ class SystemController extends Controller
                     return response()->json([
                         'errors' => translate('Please_update_country_and_zip_for_this_shipping_address')
                     ], 403);
-                } elseif ($country_restrict_status && !self::delivery_country_exist_check($address->country)) {
-                    return response()->json([
-                        'errors' => translate('Delivery_unavailable_in_this_country')
-                    ], 403);
-                } elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($address->zip)) {
+                }
+//                elseif ($country_restrict_status && !self::delivery_country_exist_check($address->country)) {
+//                    return response()->json([
+//                        'errors' => translate('Delivery_unavailable_in_this_country')
+//                    ], 403);                }
+                elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($address->zip)) {
                     return response()->json([
                         'errors' => translate('Delivery_unavailable_in_this_zip_code_area')
                     ], 403);
@@ -199,11 +202,13 @@ class SystemController extends Controller
                     return response()->json([
                         'errors' => translate('Fill_all_required_fields_of_billing_address')
                     ], 403);
-                } elseif ($country_restrict_status && !self::delivery_country_exist_check($billing['billing_country'])) {
-                    return response()->json([
-                        'errors' => translate('Delivery_unavailable_in_this_country')
-                    ], 403);
-                } elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($billing['billing_zip'])) {
+                }
+//                elseif ($country_restrict_status && !self::delivery_country_exist_check($billing['billing_country'])) {
+//                    return response()->json([
+//                        'errors' => translate('Delivery_unavailable_in_this_country')
+//                    ], 403);
+//                }
+                elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($billing['billing_zip'])) {
                     return response()->json([
                         'errors' => translate('Delivery_unavailable_in_this_zip_code_area')
                     ], 403);
@@ -235,11 +240,13 @@ class SystemController extends Controller
                     return response()->json([
                         'errors' => translate('Fill_all_required_fields_of_billing_address')
                     ], 403);
-                } elseif ($country_restrict_status && !self::delivery_country_exist_check($billing['billing_country'])) {
-                    return response()->json([
-                        'errors' => translate('Delivery_unavailable_in_this_country')
-                    ], 403);
-                } elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($billing['billing_zip'])) {
+                }
+//                elseif ($country_restrict_status && !self::delivery_country_exist_check($billing['billing_country'])) {
+//                    return response()->json([
+//                        'errors' => translate('Delivery_unavailable_in_this_country')
+//                    ], 403);
+//                }
+                elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($billing['billing_zip'])) {
                     return response()->json([
                         'errors' => translate('Delivery_unavailable_in_this_zip_code_area')
                     ], 403);
@@ -270,11 +277,13 @@ class SystemController extends Controller
                         return response()->json([
                             'errors' => translate('Update_country_and_zip_for_this_billing_address')
                         ], 403);
-                    } elseif ($country_restrict_status && !self::delivery_country_exist_check($address->country)) {
-                        return response()->json([
-                            'errors' => translate('Delivery_unavailable_in_this_country')
-                        ], 403);
-                    } elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($address->zip)) {
+                    }
+//                    elseif ($country_restrict_status && !self::delivery_country_exist_check($address->country)) {
+//                        return response()->json([
+//                            'errors' => translate('Delivery_unavailable_in_this_country')
+//                        ], 403);
+//                    }
+                    elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($address->zip)) {
                         return response()->json([
                             'errors' => translate('Delivery_unavailable_in_this_zip_code_area')
                         ], 403);
