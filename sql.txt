@@ -26,3 +26,4 @@ ALTER TABLE `cart_shippings` ADD `type` VARCHAR(191) NULL DEFAULT 'manual' AFTER
 
 ALTER TABLE `orders` ADD `shipping_company` JSON NULL AFTER `order_shipping`;
 
+INSERT INTO `shipping_methods` (`id`, `creator_id`, `creator_type`, `title`, `cost`, `duration`, `status`, `info`, `created_at`, `updated_at`) VALUES (NULL, '1', 'admin', 'oto', '0.00', '', '1', NULL, '2023-11-04 10:51:45', '2023-11-04 10:51:45');

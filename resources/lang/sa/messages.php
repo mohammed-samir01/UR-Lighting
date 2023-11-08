@@ -6104,4 +6104,9 @@
   'ex :' => 'Ex :',
   'شحن جديد' => 'شحن جديد',
   'oto' => 'Oto',
+  'without_configuring_this_section_map_functionality_will_not_work_properly' => 'Without configuring this section map functionality will not work properly',
+  'thus_the_whole_system_will_not_work_as_it_planned' => 'Thus the whole system will not work as it planned',
+  'client_key_should_have_enable_map_javascript_api_and_you_can_restrict_it_with_http_refere' => 'Client key should have enable map javascript api and you can restrict it with http refere',
+  'server_key_should_have_enable_place_api_key_and_you_can_restrict_it_with_ip' => 'Server key should have enable place api key and you can restrict it with ip',
+  'you_can_use_same_api_for_both_field_without_any_restrictions' => 'You can use same api for both field without any restrictions',
 );
