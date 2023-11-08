@@ -140,11 +140,13 @@ class SystemController extends Controller
                 return response()->json([
                     'errors' => translate('Fill_all_required_fields_of_shipping/billing_address')
                 ], 403);
-            } elseif ($country_restrict_status && !self::delivery_country_exist_check($shipping['country'])) {
-                return response()->json([
-                    'errors' => translate('Delivery_unavailable_in_this_country')
-                ], 403);
-            } elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($shipping['zip'])) {
+            }
+//            elseif ($country_restrict_status && !self::delivery_country_exist_check($shipping['country_id'])) {
+//                return response()->json([
+//                    'errors' => translate('Delivery_unavailable_in_this_country')
+//                ], 403);
+//            }
+            elseif ($zip_restrict_status && !self::delivery_zipcode_exist_check($shipping['zip'])) {
                 return response()->json([
                     'errors' => translate('Delivery_unavailable_in_this_zip_code_area')
                 ], 403);
