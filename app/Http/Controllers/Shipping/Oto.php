@@ -86,12 +86,14 @@ class Oto
 //                "district" => $addressData['district'],
                 "city" => $addressData['city'],
                 "country" => $addressData['country'],
-                "lat" => $addressData['lat'],
-                "lon" => $addressData['lng']
+//                "lat" => $addressData['lat'],
+//                "lon" => $addressData['lng'],
+                "lat" =>null,
+                "lon" => null
             ],
             "items" => $items
         ];
-        dd($data);
+
         $url = config('oto.mode') == 'live' ? config('oto.live_urls')['create_order'] : config('oto.test_urls')['create_order'];
         $response = Http::withHeaders([
             'Accept' => 'application/json',
