@@ -723,7 +723,6 @@ class OrderManager
         } catch (\Exception $exception) {
 
         }
-        dd($shipping_method);
         if ($shipping_method->type == 'oto') {
             $orderData = ['orderId' => $order_id, 'payment_method' => 'paid', 'amount' => $order_total, 'amount_due' => 0, 'packageCount' => $totalCount, 'packageWeight' => $totalWeight, 'orderDate' => now()->format('Y-m-d H-i')];
             $customeData = ['name' => $user->f_name . ' ' . $user->l_name, 'email' => $user->email, 'mobile' => $user->phone];
