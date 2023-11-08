@@ -86,10 +86,9 @@ class Oto
 //                "district" => $addressData['district'],
                 "city" => $addressData['city'],
                 "country" => $addressData['country'],
-//                "lat" => $addressData['lat'],
-//                "lon" => $addressData['lng'],
-                "lat" =>null,
-                "lon" => null
+                "lat" => $addressData['lat'],
+                "lon" => $addressData['lng'],
+
             ],
             "items" => $items
         ];
