@@ -376,7 +376,7 @@ class WebController extends Controller
 //            }
 //        }
 
-//        $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');
+        $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');
         $zip_restrict_status = Helpers::get_business_settings('delivery_zip_code_area_restriction');
 
 //        if ($country_restrict_status) {
