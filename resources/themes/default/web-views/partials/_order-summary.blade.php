@@ -1,3 +1,4 @@
+@php use Illuminate\Http\Request; @endphp
 <style>
     .cart_title {
         font-weight: 400 !important;
@@ -12,7 +13,7 @@
     .cart_total_value {
         font-weight: 700 !important;
         font-size: 25px !important;
-        color: {{$web_config['primary_color']}}     !important;
+        color: {{$web_config['primary_color']}}       !important;
     }
 </style>
 
@@ -56,12 +57,16 @@
                     {{\App\CPU\Helpers::currency_converter($total_tax)}}
                 </span>
             </div>
-            <div class="d-flex justify-content-between">
-                <span class="cart_title">{{translate('shipping')}}</span>
-                <span class="cart_value">
+
+            @if(request()->is('checkout-payment'))
+                <div class="d-flex justify-content-between">
+                    <span class="cart_title">{{translate('shipping')}}</span>
+                    <span class="cart_value">
                     {{\App\CPU\Helpers::currency_converter($total_shipping_cost)}}
                 </span>
-            </div>
+                </div>
+            @endif
+
             <div class="d-flex justify-content-between">
                 <span class="cart_title">{{translate('discount_on_product')}}</span>
                 <span class="cart_value">
@@ -81,43 +86,59 @@
                     @php($coupon_dis=session('coupon_discount'))
                 @else
                     <div class="pt-2">
-                        <form class="needs-validation" action="javascript:" method="post" novalidate id="coupon-code-ajax">
+                        <form class="needs-validation" action="javascript:" method="post" novalidate
+                              id="coupon-code-ajax">
                             <div class="form-group">
-                                <input class="form-control input_code" type="text" name="code" placeholder="{{translate('coupon_code')}}"
-                                    required>
+                                <input class="form-control input_code" type="text" name="code"
+                                       placeholder="{{translate('coupon_code')}}"
+                                       required>
                                 <div class="invalid-feedback">{{translate('please_provide_coupon_code')}}</div>
                             </div>
-                            <button class="btn btn--primary btn-block" type="button" onclick="couponCode()">{{translate('apply_code')}}
+                            <button class="btn btn--primary btn-block" type="button"
+                                    onclick="couponCode()">{{translate('apply_code')}}
                             </button>
                         </form>
                     </div>
                 @endif
             @endif
             <hr class="mt-2 mb-2">
+            @if(request()->is('checkout-payment'))
             <div class="d-flex justify-content-between">
                 <span class="cart_title">{{translate('total')}}</span>
                 <span class="cart_value">
                 {{\App\CPU\Helpers::currency_converter($sub_total+$total_tax+$total_shipping_cost-$coupon_dis-$total_discount_on_product-$order_wise_shipping_discount)}}
                 </span>
             </div>
+            @else
+                <div class="d-flex justify-content-between">
+                    <span class="cart_title">{{translate('total')}}</span>
+                    <span class="cart_value">
+                {{\App\CPU\Helpers::currency_converter($sub_total+$total_tax-$coupon_dis-$total_discount_on_product-$order_wise_shipping_discount)}}
+                </span>
+                </div>
+            @endif
         </div>
         <div class="container mt-2">
             <div class="row p-0">
                 <div class="col-md-3 p-0 text-center mobile-padding">
-                    <img class="order-summery-footer-image" src="{{asset("public/assets/front-end/png/delivery.png")}}" alt="">
+                    <img class="order-summery-footer-image" src="{{asset("public/assets/front-end/png/delivery.png")}}"
+                         alt="">
                     <div class="deal-title">3 {{translate('days_free_delivery')}} </div>
                 </div>
 
                 <div class="col-md-3 p-0 text-center">
-                    <img class="order-summery-footer-image" src="{{asset("public/assets/front-end/png/money.png")}}" alt="">
+                    <img class="order-summery-footer-image" src="{{asset("public/assets/front-end/png/money.png")}}"
+                         alt="">
                     <div class="deal-title">{{translate('money_back_guarantee')}}</div>
                 </div>
                 <div class="col-md-3 p-0 text-center">
-                    <img class="order-summery-footer-image" src="{{asset("public/assets/front-end/png/Genuine.png")}}" alt="">
+                    <img class="order-summery-footer-image" src="{{asset("public/assets/front-end/png/Genuine.png")}}"
+                         alt="">
                     <div class="deal-title">100% {{translate('genuine_product')}}</div>
                 </div>
                 <div class="col-md-3 p-0 text-center">
-                    <img class="order-summery-footer-image" src="{{asset("public/assets/front-end/png/Payment.png")}}" alt="">
+                    <img class="order-summery-footer-image" src="{{asset("public/assets/front-end/png/Payment.png")}}"
+                         alt="">
                     <div class="deal-title">{{translate('authentic_payment')}}</div>
                 </div>
             </div>

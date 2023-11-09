@@ -74,8 +74,10 @@ class Oto
             "payment_method" => $orderData['payment_method'],
             "amount" => $orderData['amount'],
             "amount_due" => $orderData['amount_due'],
+            "deliveryOptionId" => $orderData['deliveryOptionId'],
             "currency" => config('oto.currency'),
             "packageCount" => $orderData['packageCount'],
+            "createShipment" => true,
             "packageWeight" => $orderData['packageWeight'],
             "orderDate" => $orderData['orderDate'],
             "customer" => [

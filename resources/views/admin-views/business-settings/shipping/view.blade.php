@@ -42,9 +42,9 @@
                                 <label class="switcher show-status-text">
                                     <input class="switcher_input" type="checkbox" name="status" value="1"
                                            onclick="smsMethodStatusModal(event,'{{$shipping->key_name}}','{{ $img_path }}',
-                                    '{{translate('want_to_Turn_ON_')}}{{ucwords(str_replace('_',' ',$shipping->key_name))}}{{translate('_as_the_SMS_Gateway')}}?','{{translate('want_to_Turn_OFF_')}}{{ucwords(str_replace('_',' ',$shipping->key_name))}}{{translate('_as_the_SMS_Gateway')}}??',
-                                    `<p>{{translate('if_enabled_system_can_use_this_SMS_Gateway')}}</p>`,
-                                    `<p>{{translate('if_disabled_system_cannot_use_this_SMS_Gateway')}}</p>`)"
+                                    '{{translate('want_to_Turn_ON_')}}{{ucwords(str_replace('_',' ',$shipping->key_name))}}{{translate('_as_the_shipping_Gateway')}}?','{{translate('want_to_Turn_OFF_')}}{{ucwords(str_replace('_',' ',$shipping->key_name))}}{{translate('_as_the_shipping_Gateway')}}??',
+                                    `<p>{{translate('if_enabled_system_can_use_this_Shipping_Gateway')}}</p>`,
+                                    `<p>{{translate('if_disabled_system_cannot_use_this_shipping_Gateway')}}</p>`)"
                                            id="{{$shipping->key_name}}" {{$shipping['is_active']==1?'checked':''}}>
 
                                     <span class="switcher_control" data-ontitle="{{ translate('on') }}" data-offtitle="{{ translate('off') }}"></span>

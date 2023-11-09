@@ -6388,4 +6388,8 @@
   'Select City' => 'Select City',
   'are_you_sure_you_want_to_delete' => 'Are you sure you want to delete',
   'update_address' => 'Update address',
+  'shipping_companies' => 'Shipping companies',
+  '_as_the_shipping_Gateway' => ' as the shipping Gateway',
+  'if_enabled_system_can_use_this_Shipping_Gateway' => 'If enabled system can use this Shipping Gateway',
+  'if_disabled_system_cannot_use_this_shipping_Gateway' => 'If disabled system cannot use this shipping Gateway',
 );

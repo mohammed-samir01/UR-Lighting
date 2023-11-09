@@ -723,8 +723,9 @@ class OrderManager
         } catch (\Exception $exception) {
 
         }
+
         if ($shipping_method->type == 'oto') {
-            $orderData = ['orderId' => $order_id, 'payment_method' => 'paid', 'amount' => $order_total, 'amount_due' => 0, 'packageCount' => $totalCount, 'packageWeight' => $totalWeight, 'orderDate' => now()->format('Y-m-d H-i')];
+            $orderData = ['deliveryOptionId' => $shipping_method->extra['deliveryOptionId'],'orderId' => $order_id, 'payment_method' => 'paid', 'amount' => $order_total, 'amount_due' => 0, 'packageCount' => $totalCount, 'packageWeight' => $totalWeight, 'orderDate' => now()->format('Y-m-d H-i')];
             $customeData = ['name' => $user->f_name . ' ' . $user->l_name, 'email' => $user->email, 'mobile' => $user->phone];
             $addressData = ['address' => $shippingAddress->address, 'city' => $shippingAddress->city->name_en, 'country' => 'SA', 'lat' => $shippingAddress->latitude, 'lng' => $shippingAddress->longitude];
             $response = Oto::createOrder($orderData, $customeData, $addressData, $items);
