@@ -422,7 +422,6 @@ class WebController extends Controller
         $cart_group_ids = CartManager::get_cart_group_ids();
         $shippingMethod = Helpers::get_business_settings('shipping_method');
 
-
         $verify_status = OrderManager::minimum_order_amount_verify($request);
 
         if ($verify_status['status'] == 0) {
@@ -556,7 +555,6 @@ class WebController extends Controller
 
     public function checkout_complete(Request $request)
     {
-
         if ($request->payment_method != 'cash_on_delivery') {
             return back()->with('error', 'Something went wrong!');
         }

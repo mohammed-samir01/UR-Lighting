@@ -276,8 +276,13 @@ class BusinessSettingsController extends Controller
             'contact_email' => $request['company_email'],
             'contact_name' => $request['company_name'],
         ];
+        $type_location = BusinessSetting::where('type', 'pickup_location_code')->first();
 
-        $pickup_location = Oto::updatePickupLocation($location);
+        if (isset($type_location['value']) && $type_location->value)
+            $pickup_location = Oto::updatePickupLocation($location);
+        else
+            $pickup_location = Oto::createPickupLocation($location);
+
         if ($pickup_location['success'])
             BusinessSetting::updateOrInsert(['type' => 'pickup_location_code'], [
                 'value' => $pickup_location['pickupLocationCode']

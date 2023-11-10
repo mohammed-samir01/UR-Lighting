@@ -5,6 +5,7 @@ namespace App\CPU;
 use App\Http\Controllers\Shipping\Oto;
 use App\Model\Admin;
 use App\Model\AdminWallet;
+use App\Model\BusinessSetting;
 use App\Model\Cart;
 use App\Model\CartShipping;
 use App\Model\Color;
@@ -519,7 +520,7 @@ class OrderManager
 
         $customer_id = $user == 'offline' ? $guest_id : $user->id;
         $order_total = CartManager::cart_grand_total($cart_group_id) - $discount - $free_shipping_discount;
-        $shippingAddress = ShippingAddress::with('country','state','city')->find($address_id);
+        $shippingAddress = ShippingAddress::with('country', 'state', 'city')->find($address_id);
         $or = [
             'id' => $order_id,
             'verification_code' => rand(100000, 999999),
@@ -544,7 +545,7 @@ class OrderManager
             'shipping_address' => $address_id,
             'shipping_address_data' => $shippingAddress,
             'billing_address' => $billing_address_id,
-            'billing_address_data' => ShippingAddress::with('country','state','city')->find($billing_address_id),
+            'billing_address_data' => ShippingAddress::with('country', 'state', 'city')->find($billing_address_id),
             'shipping_responsibility' => Helpers::get_business_settings('shipping_method'),
             'shipping_cost' => CartManager::get_shipping_cost($data['cart_group_id']),
             'extra_discount' => $free_shipping_discount,
@@ -668,11 +669,15 @@ class OrderManager
             }
             DB::table('admin_wallets')->where('admin_id', $order['seller_id'])->increment('pending_amount', $order['order_amount']);
         }
-
+        $pickupLocation = '';
         if ($seller_data->seller_is == 'admin') {
             $seller = Admin::find($seller_data->seller_id);
+            $type_location = BusinessSetting::where('type', 'pickup_location_code')->first();
+            if ($type_location)
+                $pickupLocation = $type_location->value;
         } else {
             $seller = Seller::find($seller_data->seller_id);
+            $pickupLocation = $seller->shop->pickup_code;
         }
 
         try {
@@ -725,7 +730,7 @@ class OrderManager
         }
 
         if ($shipping_method->type == 'oto') {
-            $orderData = ['deliveryOptionId' => $shipping_method->extra['deliveryOptionId'],'orderId' => $order_id, 'payment_method' => 'paid', 'amount' => $order_total, 'amount_due' => 0, 'packageCount' => $totalCount, 'packageWeight' => $totalWeight, 'orderDate' => now()->format('Y-m-d H-i')];
+            $orderData = ['pickupLocationCode' => $pickupLocation, 'deliveryOptionId' => $shipping_method->extra['deliveryOptionId'], 'orderId' => $order_id, 'payment_method' => 'paid', 'amount' => $order_total, 'amount_due' => 0, 'packageCount' => $totalCount, 'packageWeight' => $totalWeight, 'orderDate' => now()->format('Y-m-d H-i')];
             $customeData = ['name' => $user->f_name . ' ' . $user->l_name, 'email' => $user->email, 'mobile' => $user->phone];
             $addressData = ['address' => $shippingAddress->address, 'city' => $shippingAddress->city->name_en, 'country' => 'SA', 'lat' => $shippingAddress->latitude, 'lng' => $shippingAddress->longitude];
             $response = Oto::createOrder($orderData, $customeData, $addressData, $items);

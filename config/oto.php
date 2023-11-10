@@ -31,6 +31,7 @@ return [
         "cancel_order"          => "https://api.tryoto.com/rest/v2/cancelOrder",
         "order_status"          => "https://api.tryoto.com/rest/v2/orderStatus",
         "create_shipment"       => "https://api.tryoto.com/rest/v2/createShipment",
+        "cancel_shipment"       => "https://api.tryoto.com/rest/v2/cancelShipment",
         "create_return_shipment"=> "https://api.tryoto.com/rest/v2/createReturnShipment",
         "create_pickup_location"=> "https://api.tryoto.com/rest/v2/createPickupLocation",
         "update_pickup_location"=> "https://api.tryoto.com/rest/v2/updatePickupLocation",

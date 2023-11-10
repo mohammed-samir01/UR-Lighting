@@ -75,6 +75,7 @@ class Oto
             "amount" => $orderData['amount'],
             "amount_due" => $orderData['amount_due'],
             "deliveryOptionId" => $orderData['deliveryOptionId'],
+            "pickupLocationCode" => $orderData['pickupLocationCode'],
             "currency" => config('oto.currency'),
             "packageCount" => $orderData['packageCount'],
             "createShipment" => true,
@@ -122,6 +123,22 @@ class Oto
 
         return $responseResult = json_decode($response->getBody()->getContents(), true);
         return json_encode($responseResult);
+    }
+
+    public static function cancelShipment($orderId, $shipmentId)
+    {
+        Oto::refreshToken();
+        $data = [
+            'orderId' => $orderId,
+            'shipmentId' => $shipmentId
+        ];
+        $url = config('oto.mode') == 'live' ? config('oto.live_urls')['cancel_shipment'] : config('oto.test_urls')['cancel_shipment'];
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . config('oto.access_token')
+        ])->post($url, $data);
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     public static function orderStatus($orderId)

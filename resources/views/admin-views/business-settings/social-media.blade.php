@@ -37,9 +37,9 @@
                                             <option value="linkedin">{{translate('linkedIn')}}</option>
                                             <option value="pinterest">{{translate('pinterest')}}</option>
                                             <option value="google-plus">{{translate('google_plus')}}</option>
-                                            <option value="youtube">youtube</option>
-                                            <option value="snapchat">snapchat</option>
-                                            <option value="tiktok">tiktok</option>
+                                            <option value="youtube">{{translate('youtube')}}</option>
+                                            <option value="snapchat">{{translate('snapchat')}}</option>
+                                            <option value="tiktok">{{translate('tiktok')}}</option>
                                         </select>
                                     </div>
                                     <div class="col-md-12 mt-2">
