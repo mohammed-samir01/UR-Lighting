@@ -699,6 +699,12 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'], fu
             Route::post('upload', 'AddonController@upload')->name('upload');
             Route::post('delete', 'AddonController@delete_theme')->name('delete');
         });
+        // zatca route
+        Route::group(['namespace' => 'Zatca','prefix' => 'zatca', 'as' => 'zatca.','middleware'=>['module:system_settings']], function () {
+            Route::get('/report-invoice', 'ApiZatcaController@reporting_invoice');
+
+        });
+
     });
 });
 

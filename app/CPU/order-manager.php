@@ -525,6 +525,7 @@ class OrderManager
             'id' => $order_id,
             'verification_code' => rand(100000, 999999),
             'customer_id' => $customer_id,
+            'uuid' => Str::uuid(),
             'is_guest' => $is_guest,
             'seller_id' => $seller_data->seller_id,
             'seller_is' => $seller_data->seller_is,

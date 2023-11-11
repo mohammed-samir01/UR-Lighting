@@ -30,3 +30,7 @@ INSERT INTO `shipping_methods` (`id`, `creator_id`, `creator_type`, `title`, `co
 
 /************* 10 11 2023 ********
 ALTER TABLE `admins` ADD `pickup_code` VARCHAR(191) NULL AFTER `status`;
+
+
+/**** 11 11 ********/
+ALTER TABLE `orders` ADD `uuid` VARCHAR(191) NULL AFTER `customer_id`;
