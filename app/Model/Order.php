@@ -19,11 +19,11 @@ class Order extends Model
         'shipping_cost' => 'float',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'billing_address'=> 'integer',
-        'extra_discount'=>'float',
-        'delivery_man_id'=>'integer',
-        'shipping_method_id'=>'integer',
-        'seller_id'=>'integer',
+        'billing_address' => 'integer',
+        'extra_discount' => 'float',
+        'delivery_man_id' => 'integer',
+        'shipping_method_id' => 'integer',
+        'seller_id' => 'integer',
         'shipping_company' => 'array',
         'shipping_address_data' => 'array'
     ];
@@ -35,7 +35,9 @@ class Order extends Model
 
     public function seller()
     {
-        return $this->belongsTo(Seller::class);
+        if ($this->seller_is == 'seller')
+            return $this->belongsTo(Seller::class);
+        return $this->belongsTo(Admin::class, 'seller_id');
     }
 
     public function sellerName()
@@ -57,6 +59,7 @@ class Order extends Model
     {
         return $this->belongsTo(ShippingAddress::class, 'shipping_address');
     }
+
     public function billingAddress()
     {
         return $this->belongsTo(ShippingAddress::class, 'billing_address');
@@ -64,23 +67,26 @@ class Order extends Model
 
     public function delivery_man()
     {
-        return $this->belongsTo(DeliveryMan::class,'delivery_man_id');
+        return $this->belongsTo(DeliveryMan::class, 'delivery_man_id');
     }
 
     public function delivery_man_review()
     {
-        return $this->hasOne(Review::class,'order_id');
+        return $this->hasOne(Review::class, 'order_id');
     }
 
-    public function order_transaction(){
+    public function order_transaction()
+    {
         return $this->hasOne(OrderTransaction::class, 'order_id');
     }
 
-    public function coupon(){
+    public function coupon()
+    {
         return $this->belongsTo(Coupon::class, 'coupon_code', 'code');
     }
 
-    public function order_status_history(){
+    public function order_status_history()
+    {
         return $this->hasMany(OrderStatusHistory::class);
     }
 
@@ -89,10 +95,13 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class, 'order_id');
     }
 
-    public function offline_payments(){
+    public function offline_payments()
+    {
         return $this->belongsTo(OfflinePayments::class, 'id', 'order_id');
     }
-    public function verification_images(){
-        return $this->hasMany(OrderDeliveryVerification::class,'order_id');
+
+    public function verification_images()
+    {
+        return $this->hasMany(OrderDeliveryVerification::class, 'order_id');
     }
 }

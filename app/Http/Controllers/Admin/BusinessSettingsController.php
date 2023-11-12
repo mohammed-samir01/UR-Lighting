@@ -7,9 +7,12 @@ use App\CPU\ImageManager;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Shipping\Oto;
 use App\Model\BusinessSetting;
+use App\Model\City;
+use App\Model\Country;
 use App\Model\Currency;
 use App\Model\Setting;
 use App\Model\SocialMedia;
+use App\Model\State;
 use Brian2694\Toastr\Facades\Toastr;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -213,18 +216,26 @@ class BusinessSettingsController extends Controller
         return redirect()->back();
     }
 
-    public function companyInfo()
+    public static function business_setting()
     {
-
         $web = BusinessSetting::all();
         $settings = Helpers::get_settings($web, 'colors');
         $data = json_decode($settings['value'], true);
 
-        $business_setting = [
+        return [
             'primary_color' => $data['primary'] ?? '',
             'secondary_color' => $data['secondary'] ?? '',
             'primary_color_light' => isset($data['primary_light']) ? $data['primary_light'] : '',
             'company_name' => Helpers::get_settings($web, 'company_name')->value ?? '',
+            'country_id' => Helpers::get_settings($web, 'country_id')->value ?? '',
+            'state_id' => Helpers::get_settings($web, 'state_id')->value ?? '',
+            'city_id' => Helpers::get_settings($web, 'city_id')->value ?? '',
+            'commercial_num' => Helpers::get_settings($web, 'commercial_num')->value ?? '',
+            'tax_num' => Helpers::get_settings($web, 'tax_num')->value ?? '',
+            'additional_num' => Helpers::get_settings($web, 'additional_num')->value ?? '',
+            'build_num' => Helpers::get_settings($web, 'build_num')->value ?? '',
+            'subdivision' => Helpers::get_settings($web, 'subdivision')->value ?? '',
+            'zib' => Helpers::get_settings($web, 'zib')->value ?? '',
             'company_email' => Helpers::get_settings($web, 'company_email')->value ?? '',
             'company_phone' => Helpers::get_settings($web, 'company_phone')->value ?? '',
             'language' => Helpers::get_settings($web, 'language')->value ?? '',
@@ -245,11 +256,21 @@ class BusinessSettingsController extends Controller
             'copyright_text' => Helpers::get_settings($web, 'company_copyright_text')->value ?? '',
             'decimal_point_settings' => !empty(\App\CPU\Helpers::get_business_settings('decimal_point_settings')) ? \App\CPU\Helpers::get_business_settings('decimal_point_settings') : 0,
         ];
+    }
 
+    public function companyInfo()
+    {
+        $business_setting = self::business_setting();
+        $countries = Country::where('status', 1)->get();
+        $states = State::where('status', 1)->where('country_id', $business_setting['country_id'])->get();
+        $cities = City::where('status', 1)->where('state_id', $business_setting['state_id'])->get();
         $CurrencyList = Currency::all();
         return view('admin-views.business-settings.website-info', [
             'CurrencyList' => $CurrencyList,
             'business_setting' => $business_setting,
+            'countries' => $countries,
+            'states' => $states,
+            'cities' => $cities,
         ]);
     }
 
@@ -266,6 +287,7 @@ class BusinessSettingsController extends Controller
 
     public function updateInfo(Request $request)
     {
+
         $location = [
             'name' => $request['company_name'],
             'code' => rand(10, 1000),
@@ -298,7 +320,43 @@ class BusinessSettingsController extends Controller
         BusinessSetting::updateOrInsert(['type' => 'company_name'], [
             'value' => $request['company_name']
         ]);
+        // country name
+        BusinessSetting::updateOrInsert(['type' => 'country_id'], [
+            'value' => $request['country_id']
+        ]);
+        // state name
+        BusinessSetting::updateOrInsert(['type' => 'state_id'], [
+            'value' => $request['state_id']
+        ]);
+        // city name
+        BusinessSetting::updateOrInsert(['type' => 'city_id'], [
+            'value' => $request['city_id']
+        ]);
+        // commercial_num
+        BusinessSetting::updateOrInsert(['type' => 'commercial_num'], [
+            'value' => $request['commercial_num']
+        ]);
+        // tax_num
+        BusinessSetting::updateOrInsert(['type' => 'tax_num'], [
+            'value' => $request['tax_num']
+        ]);
+        // build_num
+        BusinessSetting::updateOrInsert(['type' => 'build_num'], [
+            'value' => $request['build_num']
+        ]);
+        // build_num
+        BusinessSetting::updateOrInsert(['type' => 'additional_num'], [
+            'value' => $request['additional_num']
+        ]);
+        // subdivision
+        BusinessSetting::updateOrInsert(['type' => 'subdivision'], [
+            'value' => $request['subdivision']
+        ]);
 
+        // zib
+        BusinessSetting::updateOrInsert(['type' => 'zib'], [
+            'value' => $request['zib']
+        ]);
         // company email
         BusinessSetting::updateOrInsert(['type' => 'company_email'], [
             'value' => $request['company_email']

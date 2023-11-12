@@ -34,3 +34,9 @@ ALTER TABLE `admins` ADD `pickup_code` VARCHAR(191) NULL AFTER `status`;
 
 /**** 11 11 ********/
 ALTER TABLE `orders` ADD `uuid` VARCHAR(191) NULL AFTER `customer_id`;
+
+
+/****** 12 11 *******/
+ALTER TABLE `business_settings` CHANGE `value` `value` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
+
+ALTER TABLE `shops` ADD `country_id` INT NOT NULL AFTER `pickup_code`, ADD `state_id` INT NOT NULL AFTER `country_id`, ADD `city_id` INT NOT NULL AFTER `state_id`, ADD `commercial_num` VARCHAR(191) NULL AFTER `city_id`, ADD `tax_num` VARCHAR(191) NULL AFTER `commercial_num`, ADD `additional_num` SMALLINT UNSIGNED NULL AFTER `tax_num`, ADD `build_num` SMALLINT UNSIGNED NULL AFTER `additional_num`, ADD `zib` VARCHAR(191) NULL AFTER `build_num`, ADD `subdivision` VARCHAR(191) NULL AFTER `zib`;

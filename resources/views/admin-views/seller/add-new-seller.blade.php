@@ -7,180 +7,306 @@
 @endpush
 
 @section('content')
-<div class="content container-fluid main-card {{Session::get('direction')}}">
+    <div class="content container-fluid main-card {{Session::get('direction')}}">
 
-    <!-- Page Title -->
-    <div class="mb-4">
-        <h2 class="h1 mb-0 text-capitalize d-flex align-items-center gap-2">
-            <img src="{{asset('/public/assets/back-end/img/add-new-seller.png')}}" class="mb-1" alt="">
-            {{translate('add_new_seller')}}
-        </h2>
-    </div>
-    <!-- End Page Title -->
+        <!-- Page Title -->
+        <div class="mb-4">
+            <h2 class="h1 mb-0 text-capitalize d-flex align-items-center gap-2">
+                <img src="{{asset('/public/assets/back-end/img/add-new-seller.png')}}" class="mb-1" alt="">
+                {{translate('add_new_seller')}}
+            </h2>
+        </div>
+        <!-- End Page Title -->
 
-    <form class="user" action="{{route('shop.apply')}}" method="post" enctype="multipart/form-data">
-    @csrf
-        <div class="card">
-            <div class="card-body">
-                <input type="hidden" name="status" value="approved">
-                <h5 class="mb-0 text-capitalize d-flex align-items-center gap-2 border-bottom pb-3 mb-4 pl-4">
-                    <img src="{{asset('/public/assets/back-end/img/seller-information.png')}}" class="mb-1" alt="">
-                    {{translate('seller_information')}}
-                </h5>
-                <div class="row align-items-center">
-                    <div class="col-lg-6 mb-4 mb-lg-0">
-                        <div class="form-group">
-                            <label for="exampleFirstName" class="title-color d-flex gap-1 align-items-center">{{translate('first_name')}}</label>
-                            <input type="text" class="form-control form-control-user" id="exampleFirstName" name="f_name" value="{{old('f_name')}}" placeholder="{{translate('ex')}}: Jhone" required>
+        <form class="user" action="{{route('shop.apply')}}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="card">
+                <div class="card-body">
+                    <input type="hidden" name="status" value="approved">
+                    <h5 class="mb-0 text-capitalize d-flex align-items-center gap-2 border-bottom pb-3 mb-4 pl-4">
+                        <img src="{{asset('/public/assets/back-end/img/seller-information.png')}}" class="mb-1" alt="">
+                        {{translate('seller_information')}}
+                    </h5>
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="form-group">
+                                <label for="exampleFirstName"
+                                       class="title-color d-flex gap-1 align-items-center">{{translate('first_name')}}</label>
+                                <input type="text" class="form-control form-control-user" id="exampleFirstName"
+                                       name="f_name" value="{{old('f_name')}}" placeholder="{{translate('ex')}}: Jhone"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleLastName"
+                                       class="title-color d-flex gap-1 align-items-center">{{translate('last_name')}}</label>
+                                <input type="text" class="form-control form-control-user" id="exampleLastName"
+                                       name="l_name" value="{{old('l_name')}}" placeholder="{{translate('ex')}}: Doe"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPhone"
+                                       class="title-color d-flex gap-1 align-items-center">{{translate('phone')}}</label>
+                                <input type="number" class="form-control form-control-user" id="exampleInputPhone"
+                                       name="phone" value="{{old('phone')}}"
+                                       placeholder="{{translate('ex')}}: +09587498" required>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="exampleLastName" class="title-color d-flex gap-1 align-items-center">{{translate('last_name')}}</label>
-                            <input type="text" class="form-control form-control-user" id="exampleLastName" name="l_name" value="{{old('l_name')}}" placeholder="{{translate('ex')}}: Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPhone" class="title-color d-flex gap-1 align-items-center">{{translate('phone')}}</label>
-                            <input type="number" class="form-control form-control-user" id="exampleInputPhone" name="phone" value="{{old('phone')}}" placeholder="{{translate('ex')}}: +09587498" required>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <center>
+                                    <img class="upload-img-view" id="viewer"
+                                         src="{{asset('public\assets\back-end\img\400x400\img2.jpg')}}"
+                                         alt="banner image"/>
+                                </center>
+                            </div>
+
+                            <div class="form-group">
+                                <div
+                                    class="title-color mb-2 d-flex gap-1 align-items-center">{{translate('seller_Image')}}
+                                    <span class="text-info">({{translate('ratio')}} {{translate('1')}}:{{translate('1')}})</span>
+                                </div>
+                                <div class="custom-file text-left">
+                                    <input type="file" name="image" id="customFileUpload" class="custom-file-input"
+                                           accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                    <label class="custom-file-label"
+                                           for="customFileUpload">{{translate('upload_image')}}</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <input type="hidden" name="status" value="approved">
+                    <h5 class="mb-0 text-capitalize d-flex align-items-center gap-2 border-bottom pb-3 mb-4 pl-4">
+                        <img src="{{asset('/public/assets/back-end/img/seller-information.png')}}" class="mb-1" alt="">
+                        {{translate('account_information')}}
+                    </h5>
+                    <div class="row">
+                        <div class="col-lg-4 form-group">
+                            <label for="exampleInputEmail"
+                                   class="title-color d-flex gap-1 align-items-center">{{translate('email')}}</label>
+                            <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                   name="email" value="{{old('email')}}"
+                                   placeholder="{{translate('ex')}}: Jhone@company.com" required>
+                        </div>
+                        <div class="col-lg-4 form-group">
+                            <label for="exampleInputPassword"
+                                   class="title-color d-flex gap-1 align-items-center">{{translate('password')}}</label>
+                            <input type="password" class="form-control form-control-user" minlength="8"
+                                   id="exampleInputPassword" name="password"
+                                   placeholder="{{translate('ex')}} : {{ translate('8+_Character') }}" required>
+                        </div>
+                        <div class="col-lg-4 form-group">
+                            <label for="exampleRepeatPassword"
+                                   class="title-color d-flex gap-1 align-items-center">{{translate('confirm_password')}}</label>
+                            <input type="password" class="form-control form-control-user" minlength="8"
+                                   id="exampleRepeatPassword"
+                                   placeholder="{{translate('ex')}} : {{ translate('8+_Character') }}" required>
+                            <div
+                                class="pass invalid-feedback">{{translate('repeat')}}  {{translate('password')}} {{translate('not_match')}}
+                                .
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="mb-0 text-capitalize d-flex align-items-center gap-2 border-bottom pb-3 mb-4 pl-4">
+                        <img src="{{asset('/public/assets/back-end/img/seller-information.png')}}" class="mb-1" alt="">
+                        {{translate('shop_information')}}
+                    </h5>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="title-color d-flex">{{translate('country')}} </label>
+                                <select name="country_id" id="" class="form-control selectpicker"
+                                        data-live-search="true" required>
+                                    <option value="">{{ translate('Select your country') }}</option>
+                                    @foreach($countries as $d)
+                                        <option
+                                            value="{{ $d['id'] }}">{{ $d['name'] }}</option>
+                                    @endforeach
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="title-color d-flex">{{translate('state')}}</label>
+                                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true"
+                                        name="state_id" required>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="address-city" class="title-color d-flex">{{translate('city')}}</label>
+                                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true"
+                                        name="city_id" required>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 form-group">
+                            <label for="shop_name"
+                                   class="title-color d-flex gap-1 align-items-center">{{translate('shop_name')}}</label>
+                            <input type="text" class="form-control form-control-user" id="shop_name" name="shop_name"
+                                   placeholder="{{translate('ex')}}: Jhon" value="{{old('shop_name')}}" required>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 form-group">
+                            <label for="shop_address"
+                                   class="title-color d-flex gap-1 align-items-center">{{translate('shop_address')}}</label>
+                            <textarea name="shop_address" class="form-control" id="shop_address" rows="1"
+                                      placeholder="{{translate('ex')}}: Doe">{{old('shop_address')}}</textarea>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="title-color d-flex">{{translate('commercial_num')}}</label>
+                                <input type="text" value="{{ old('commercial_num') }}"
+                                       name="commercial_num" class="form-control"
+                                       placeholder="{{translate('commercial_num')}}"
+                                >
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="title-color d-flex">{{translate('tax_num')}}</label>
+                                <input type="text" value="{{ old('tax_num') }}"
+                                       name="tax_num" class="form-control"
+                                       placeholder="{{translate('tax_num')}}"
+                                >
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="title-color d-flex">{{translate('build_num')}}</label>
+                                <input type="text" value="{{ old('build_num') }}"
+                                       name="build_num" class="form-control"
+                                       placeholder="{{translate('build_num')}}"
+                                >
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="title-color d-flex">{{translate('additional_num')}}</label>
+                                <input type="text" value="{{ old('additional_num') }}"
+                                       name="additional_num" class="form-control"
+                                       placeholder="{{translate('additional_num')}}"
+                                >
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="title-color d-flex">{{translate('subdivision')}}</label>
+                                <input type="text" value="{{ old('subdivision') }}"
+                                       name="subdivision" class="form-control"
+                                       placeholder="{{translate('subdivision')}}"
+                                >
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="title-color d-flex">{{translate('zib')}}</label>
+                                <input type="text" value="{{ old('zib') }}"
+                                       name="zib" class="form-control"
+                                       placeholder="{{translate('zib')}}"
+                                >
+                            </div>
+                        </div>
+                        <div class="col-lg-6 form-group">
                             <center>
-                                <img class="upload-img-view" id="viewer"
-                                    src="{{asset('public\assets\back-end\img\400x400\img2.jpg')}}" alt="banner image"/>
+                                <img class="upload-img-view" id="viewerLogo"
+                                     src="{{asset('public\assets\back-end\img\400x400\img2.jpg')}}" alt="banner image"/>
                             </center>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="title-color mb-2 d-flex gap-1 align-items-center">{{translate('seller_Image')}} <span class="text-info">({{translate('ratio')}} {{translate('1')}}:{{translate('1')}})</span></div>
-                            <div class="custom-file text-left">
-                                <input type="file" name="image" id="customFileUpload" class="custom-file-input"
-                                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
-                                <label class="custom-file-label" for="customFileUpload">{{translate('upload_image')}}</label>
+                            <div class="mt-4">
+                                <div class="d-flex gap-1 align-items-center title-color mb-2">
+                                    {{translate('shop_logo')}}
+                                    <span class="text-info">({{translate('ratio')}} {{translate('1')}}:{{translate('1')}})</span>
+                                </div>
+
+                                <div class="custom-file">
+                                    <input type="file" name="logo" id="LogoUpload" class="custom-file-input"
+                                           accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                    <label class="custom-file-label"
+                                           for="LogoUpload">{{translate('upload_logo')}}</label>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-lg-6 form-group">
+                            <center>
+                                <img class="upload-img-view upload-img-view__banner" id="viewerBanner"
+                                     src="{{asset('public\assets\back-end\img\400x400\img2.jpg')}}" alt="banner image"/>
+                            </center>
+
+                            <div class="mt-4">
+                                <div class="d-flex gap-1 align-items-center title-color mb-2">
+                                    {{translate('shop_banner')}}
+                                    <span
+                                        class="text-info">{{ THEME_RATIO[theme_root_path()]['Store cover Image'] }}</span>
+                                </div>
+
+                                <div class="custom-file">
+                                    <input type="file" name="banner" id="BannerUpload" class="custom-file-input"
+                                           accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                    <label class="custom-file-label"
+                                           for="BannerUpload">{{translate('upload_Banner')}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if(theme_root_path() == "theme_aster")
+                            <div class="col-lg-6 form-group">
+                                <center>
+                                    <img class="upload-img-view upload-img-view__banner" id="viewerBottomBanner"
+                                         src="{{asset('public\assets\back-end\img\400x400\img2.jpg')}}"
+                                         alt="banner image"/>
+                                </center>
+
+                                <div class="mt-4">
+                                    <div class="d-flex gap-1 align-items-center title-color mb-2">
+                                        {{translate('shop_secondary_banner')}}
+                                        <span
+                                            class="text-info">{{ THEME_RATIO[theme_root_path()]['Store Banner Image'] }}</span>
+                                    </div>
+
+                                    <div class="custom-file">
+                                        <input type="file" name="bottom_banner" id="BottomBannerUpload"
+                                               class="custom-file-input"
+                                               accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                        <label class="custom-file-label"
+                                               for="BottomBannerUpload">{{translate('Upload')}} {{translate('Bottom')}} {{translate('Banner')}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-end gap-10">
+                        <input type="hidden" name="from_submit" value="admin">
+                        <button type="reset" onclick="resetBtn()"
+                                class="btn btn-secondary">{{translate('reset')}} </button>
+                        <button type="submit" class="btn btn--primary btn-user"
+                                id="apply">{{translate('submit')}}</button>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="card mt-3">
-            <div class="card-body">
-                <input type="hidden" name="status" value="approved">
-                <h5 class="mb-0 text-capitalize d-flex align-items-center gap-2 border-bottom pb-3 mb-4 pl-4">
-                    <img src="{{asset('/public/assets/back-end/img/seller-information.png')}}" class="mb-1" alt="">
-                    {{translate('account_information')}}
-                </h5>
-                <div class="row">
-                    <div class="col-lg-4 form-group">
-                        <label for="exampleInputEmail" class="title-color d-flex gap-1 align-items-center">{{translate('email')}}</label>
-                        <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email" value="{{old('email')}}" placeholder="{{translate('ex')}}: Jhone@company.com" required>
-                    </div>
-                    <div class="col-lg-4 form-group">
-                        <label for="exampleInputPassword" class="title-color d-flex gap-1 align-items-center">{{translate('password')}}</label>
-                        <input type="password" class="form-control form-control-user" minlength="8" id="exampleInputPassword" name="password" placeholder="{{translate('ex')}} : {{ translate('8+_Character') }}" required>
-                    </div>
-                    <div class="col-lg-4 form-group">
-                        <label for="exampleRepeatPassword" class="title-color d-flex gap-1 align-items-center">{{translate('confirm_password')}}</label>
-                        <input type="password" class="form-control form-control-user" minlength="8" id="exampleRepeatPassword" placeholder="{{translate('ex')}} : {{ translate('8+_Character') }}" required>
-                        <div class="pass invalid-feedback">{{translate('repeat')}}  {{translate('password')}} {{translate('not_match')}} .</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mt-3">
-            <div class="card-body">
-                <h5 class="mb-0 text-capitalize d-flex align-items-center gap-2 border-bottom pb-3 mb-4 pl-4">
-                    <img src="{{asset('/public/assets/back-end/img/seller-information.png')}}" class="mb-1" alt="">
-                    {{translate('shop_information')}}
-                </h5>
-
-                <div class="row">
-                    <div class="col-lg-6 form-group">
-                        <label for="shop_name" class="title-color d-flex gap-1 align-items-center">{{translate('shop_name')}}</label>
-                        <input type="text" class="form-control form-control-user" id="shop_name" name="shop_name" placeholder="{{translate('ex')}}: Jhon" value="{{old('shop_name')}}"required>
-                    </div>
-                    <div class="col-lg-6 form-group">
-                        <label for="shop_address" class="title-color d-flex gap-1 align-items-center">{{translate('shop_address')}}</label>
-                        <textarea name="shop_address" class="form-control" id="shop_address"rows="1" placeholder="{{translate('ex')}}: Doe">{{old('shop_address')}}</textarea>
-                    </div>
-                    <div class="col-lg-6 form-group">
-                        <center>
-                            <img class="upload-img-view" id="viewerLogo"
-                                src="{{asset('public\assets\back-end\img\400x400\img2.jpg')}}" alt="banner image"/>
-                        </center>
-
-                        <div class="mt-4">
-                            <div class="d-flex gap-1 align-items-center title-color mb-2">
-                                {{translate('shop_logo')}}
-                                <span class="text-info">({{translate('ratio')}} {{translate('1')}}:{{translate('1')}})</span>
-                            </div>
-
-                            <div class="custom-file">
-                                <input type="file" name="logo" id="LogoUpload" class="custom-file-input"
-                                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
-                                <label class="custom-file-label" for="LogoUpload">{{translate('upload_logo')}}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 form-group">
-                        <center>
-                            <img class="upload-img-view upload-img-view__banner" id="viewerBanner"
-                                    src="{{asset('public\assets\back-end\img\400x400\img2.jpg')}}" alt="banner image"/>
-                        </center>
-
-                        <div class="mt-4">
-                            <div class="d-flex gap-1 align-items-center title-color mb-2">
-                                {{translate('shop_banner')}}
-                                <span class="text-info">{{ THEME_RATIO[theme_root_path()]['Store cover Image'] }}</span>
-                            </div>
-
-                            <div class="custom-file">
-                                <input type="file" name="banner" id="BannerUpload" class="custom-file-input"
-                                        accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
-                                <label class="custom-file-label" for="BannerUpload">{{translate('upload_Banner')}}</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    @if(theme_root_path() == "theme_aster")
-                    <div class="col-lg-6 form-group">
-                        <center>
-                            <img class="upload-img-view upload-img-view__banner" id="viewerBottomBanner"
-                                    src="{{asset('public\assets\back-end\img\400x400\img2.jpg')}}" alt="banner image"/>
-                        </center>
-
-                        <div class="mt-4">
-                            <div class="d-flex gap-1 align-items-center title-color mb-2">
-                                {{translate('shop_secondary_banner')}}
-                                <span class="text-info">{{ THEME_RATIO[theme_root_path()]['Store Banner Image'] }}</span>
-                            </div>
-
-                            <div class="custom-file">
-                                <input type="file" name="bottom_banner" id="BottomBannerUpload" class="custom-file-input"
-                                        accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
-                                <label class="custom-file-label" for="BottomBannerUpload">{{translate('Upload')}} {{translate('Bottom')}} {{translate('Banner')}}</label>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-
-                </div>
-
-                <div class="d-flex align-items-center justify-content-end gap-10">
-                    <input type="hidden" name="from_submit" value="admin">
-                    <button type="reset" onclick="resetBtn()" class="btn btn-secondary">{{translate('reset')}} </button>
-                    <button type="submit" class="btn btn--primary btn-user" id="apply">{{translate('submit')}}</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 @endsection
 
 
 <script>
-    function resetBtn(){
+    function resetBtn() {
         let placeholderImg = $("#placeholderImg").data('img');
         $('#viewer').attr('src', placeholderImg);
         $('#viewerBanner').attr('src', placeholderImg);
@@ -189,8 +315,7 @@
         $('.spartan_remove_row').click();
     }
 
-    function openInfoWeb()
-    {
+    function openInfoWeb() {
         var x = document.getElementById("website_info");
         if (x.style.display === "none") {
             x.style.display = "block";
@@ -200,8 +325,8 @@
     }
 </script>
 @push('script')
-<script>
-    $('#inputCheckd').change(function () {
+    <script>
+        $('#inputCheckd').change(function () {
             // console.log('jell');
             if ($(this).is(':checked')) {
                 $('#apply').removeAttr('disabled');
@@ -211,108 +336,158 @@
 
         });
 
-    $('#exampleInputPassword ,#exampleRepeatPassword').on('keyup',function () {
-        var pass = $("#exampleInputPassword").val();
-        var passRepeat = $("#exampleRepeatPassword").val();
-        if (pass==passRepeat){
-            $('.pass').hide();
-        }
-        else{
-            $('.pass').show();
-        }
-    });
-    $('#apply').on('click',function () {
+        $('#exampleInputPassword ,#exampleRepeatPassword').on('keyup', function () {
+            var pass = $("#exampleInputPassword").val();
+            var passRepeat = $("#exampleRepeatPassword").val();
+            if (pass == passRepeat) {
+                $('.pass').hide();
+            } else {
+                $('.pass').show();
+            }
+        });
+        $('#apply').on('click', function () {
 
-        var image = $("#image-set").val();
-        if (image=="")
-        {
-            $('.image').show();
-            return false;
-        }
-        var pass = $("#exampleInputPassword").val();
-        var passRepeat = $("#exampleRepeatPassword").val();
-        if (pass!=passRepeat){
-            $('.pass').show();
-            return false;
-        }
-
-
-    });
-    function Validate(file) {
-        var x;
-        var le = file.length;
-        var poin = file.lastIndexOf(".");
-        var accu1 = file.substring(poin, le);
-        var accu = accu1.toLowerCase();
-        if ((accu != '.png') && (accu != '.jpg') && (accu != '.jpeg')) {
-            x = 1;
-            return x;
-        } else {
-            x = 0;
-            return x;
-        }
-    }
-
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#viewer').attr('src', e.target.result);
+            var image = $("#image-set").val();
+            if (image == "") {
+                $('.image').show();
+                return false;
+            }
+            var pass = $("#exampleInputPassword").val();
+            var passRepeat = $("#exampleRepeatPassword").val();
+            if (pass != passRepeat) {
+                $('.pass').show();
+                return false;
             }
 
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
 
-    $("#customFileUpload").change(function () {
-        readURL(this);
-    });
+        });
 
-    function readlogoURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#viewerLogo').attr('src', e.target.result);
+        function Validate(file) {
+            var x;
+            var le = file.length;
+            var poin = file.lastIndexOf(".");
+            var accu1 = file.substring(poin, le);
+            var accu = accu1.toLowerCase();
+            if ((accu != '.png') && (accu != '.jpg') && (accu != '.jpeg')) {
+                x = 1;
+                return x;
+            } else {
+                x = 0;
+                return x;
             }
-
-            reader.readAsDataURL(input.files[0]);
         }
-    }
 
-    function readBannerURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('#viewerBanner').attr('src', e.target.result);
+                reader.onload = function (e) {
+                    $('#viewer').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
             }
-
-            reader.readAsDataURL(input.files[0]);
         }
-    }
 
-    function readBottomBannerURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+        $("#customFileUpload").change(function () {
+            readURL(this);
+        });
 
-            reader.onload = function (e) {
-                $('#viewerBottomBanner').attr('src', e.target.result);
+        function readlogoURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#viewerLogo').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
             }
-
-            reader.readAsDataURL(input.files[0]);
         }
-    }
 
-    $("#LogoUpload").change(function () {
-        readlogoURL(this);
-    });
-    $("#BannerUpload").change(function () {
-        readBannerURL(this);
-    });
-    $("#BottomBannerUpload").change(function () {
-        readBottomBannerURL(this);
-    });
-</script>
+        function readBannerURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#viewerBanner').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function readBottomBannerURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#viewerBottomBanner').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#LogoUpload").change(function () {
+            readlogoURL(this);
+        });
+        $("#BannerUpload").change(function () {
+            readBannerURL(this);
+        });
+        $("#BottomBannerUpload").change(function () {
+            readBottomBannerURL(this);
+        });
+        $(document).on('change', '[name=country_id]', function () {
+            var country_id = $(this).val();
+            if (country_id)
+                get_states(country_id);
+        });
+        $(document).on('change', '[name=state_id]', function () {
+            var state_id = $(this).val();
+            get_city(state_id);
+        });
+
+        function get_states(country_id) {
+            $('[name="state"]').html("");
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('get-state')}}",
+                type: 'GET',
+                data: {
+                    country_id: country_id
+                },
+                success: function (response) {
+                    var obj = JSON.parse(response);
+                    if (obj != '') {
+                        $('[name="state_id"]').html(obj);
+                        AIZ.plugins.bootstrapSelect('refresh');
+                    }
+                }
+            });
+        }
+
+        function get_city(state_id) {
+            $('[name="city"]').html("");
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('get-city')}}",
+                type: 'GET',
+                data: {
+                    state_id: state_id
+                },
+                success: function (response) {
+                    var obj = JSON.parse(response);
+                    if (obj != '') {
+                        $('[name="city_id"]').html(obj);
+                        AIZ.plugins.bootstrapSelect('refresh');
+                    }
+                }
+            });
+        }
+    </script>
 @endpush

@@ -97,6 +97,15 @@ class RegisterController extends Controller
         $shop->seller_id = $seller->id;
         $shop->name = $request->shop_name;
         $shop->address = $request->shop_address;
+        $shop->country_id = $request->country_id;
+        $shop->state_id = $request->state_id;
+        $shop->city_id = $request->city_id;
+        $shop->commercial_num = $request->commercial_num;
+        $shop->tax_num = $request->tax_num;
+        $shop->build_num = $request->build_num;
+        $shop->additional_num = $request->additional_num;
+        $shop->subdivision = $request->subdivision;
+        $shop->zib = $request->zib;
         $shop->contact = $request->phone;
         $shop->image = ImageManager::upload('shop/', 'png', $request->file('logo'));
         $shop->banner = ImageManager::upload('shop/banner/', 'png', $request->file('banner'));

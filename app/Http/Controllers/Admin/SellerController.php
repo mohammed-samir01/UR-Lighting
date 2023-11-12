@@ -6,6 +6,7 @@ use App\CPU\BackEndHelper;
 use App\CPU\Helpers;
 use App\CPU\ProductManager;
 use App\Http\Controllers\Controller;
+use App\Model\Country;
 use App\Model\DeliveryZipCode;
 use App\Model\Order;
 use App\Model\Product;
@@ -26,12 +27,15 @@ use Rap2hpoutre\FastExcel\FastExcel;
 class SellerController extends Controller
 {
     use CommonTrait;
+
     public function __construct(
         private DeliveryZipCode $delivery_zip_code,
-        private Seller $seller,
-    ){
+        private Seller          $seller,
+    )
+    {
 
     }
+
     public function index(Request $request)
     {
         $query_param = [];
@@ -39,7 +43,7 @@ class SellerController extends Controller
         $current_date = date('Y-m-d');
 
         $sellers = Seller::with(['orders', 'product'])
-            ->when($search, function($query) use($search){
+            ->when($search, function ($query) use ($search) {
                 $key = explode(' ', $search);
                 foreach ($key as $value) {
                     $query->orWhere('f_name', 'like', "%{$value}%")
@@ -57,45 +61,43 @@ class SellerController extends Controller
 
     public function view(Request $request, $id, $tab = null)
     {
-        $seller = $this->seller->with(['product'])->withCount('orders','product')->where('id',$id)->first();
+        $seller = $this->seller->with(['product'])->withCount('orders', 'product')->where('id', $id)->first();
         /**
          * for seller rating
          */
-            $seller?->product?->map(function($product){
-                $product['rating'] = $product?->reviews->pluck('rating')->sum();
-                $product['rating_count'] = $product->reviews->count();
+        $seller?->product?->map(function ($product) {
+            $product['rating'] = $product?->reviews->pluck('rating')->sum();
+            $product['rating_count'] = $product->reviews->count();
 
-                $product['single_rating_5'] = 0;
-                $product['single_rating_4'] = 0;
-                $product['single_rating_3'] = 0;
-                $product['single_rating_2'] = 0;
-                $product['single_rating_1'] = 0;
-                foreach($product->reviews as $review)
-                {
-                    $rating = $review->rating;
-                    match ($rating) {
-                        5 => $product->single_rating_5++,
-                        4 => $product->single_rating_4++,
-                        3 => $product->single_rating_3++,
-                        2 => $product->single_rating_2++,
-                        1 => $product->single_rating_1++,
-                    };
-                }
+            $product['single_rating_5'] = 0;
+            $product['single_rating_4'] = 0;
+            $product['single_rating_3'] = 0;
+            $product['single_rating_2'] = 0;
+            $product['single_rating_1'] = 0;
+            foreach ($product->reviews as $review) {
+                $rating = $review->rating;
+                match ($rating) {
+                    5 => $product->single_rating_5++,
+                    4 => $product->single_rating_4++,
+                    3 => $product->single_rating_3++,
+                    2 => $product->single_rating_2++,
+                    1 => $product->single_rating_1++,
+                };
+            }
 
-            });
-            $seller['single_rating_5'] = $seller?->product->pluck('single_rating_5')->sum();
-            $seller['single_rating_4'] = $seller?->product->pluck('single_rating_4')->sum();
-            $seller['single_rating_3'] = $seller?->product->pluck('single_rating_3')->sum();
-            $seller['single_rating_2'] = $seller?->product->pluck('single_rating_2')->sum();
-            $seller['single_rating_1'] = $seller?->product->pluck('single_rating_1')->sum();
-            $seller['total_rating'] = $seller?->product->pluck('rating')->sum();
-            $seller['rating_count'] = $seller->product->pluck('rating_count')->sum();
-            $seller['average_rating'] = $seller['total_rating'] / ($seller['rating_count'] == 0 ? 1 : $seller['rating_count']);
-         /**
+        });
+        $seller['single_rating_5'] = $seller?->product->pluck('single_rating_5')->sum();
+        $seller['single_rating_4'] = $seller?->product->pluck('single_rating_4')->sum();
+        $seller['single_rating_3'] = $seller?->product->pluck('single_rating_3')->sum();
+        $seller['single_rating_2'] = $seller?->product->pluck('single_rating_2')->sum();
+        $seller['single_rating_1'] = $seller?->product->pluck('single_rating_1')->sum();
+        $seller['total_rating'] = $seller?->product->pluck('rating')->sum();
+        $seller['rating_count'] = $seller->product->pluck('rating_count')->sum();
+        $seller['average_rating'] = $seller['total_rating'] / ($seller['rating_count'] == 0 ? 1 : $seller['rating_count']);
+        /**
          * End for seller rating
          */
-        if(!isset($seller))
-        {
+        if (!isset($seller)) {
             Toastr::error(translate('seller_not_found_It_may_be_deleted'));
             return back();
         }
@@ -103,7 +105,7 @@ class SellerController extends Controller
 
         if ($tab == 'order') {
             $id = $seller->id;
-            $orders = Order::where(['seller_is'=>'seller'])->where(['seller_id'=>$id])->where('order_type','default_type')->latest()->paginate(Helpers::pagination_limit());
+            $orders = Order::where(['seller_is' => 'seller'])->where(['seller_id' => $id])->where('order_type', 'default_type')->latest()->paginate(Helpers::pagination_limit());
 
             return view('admin-views.seller.view.order', compact('seller', 'orders'));
         } else if ($tab == 'product') {
@@ -141,22 +143,21 @@ class SellerController extends Controller
                 }
             }
             if ($request->has('seller_pos_update')) {
-                    $seller = Seller::find($id);
-                    $seller->pos_status = $request->get('seller_pos', 0);
-                    $seller->save();
+                $seller = Seller::find($id);
+                $seller->pos_status = $request->get('seller_pos', 0);
+                $seller->save();
 
-                    Toastr::success(translate('seller_pos_permission_updated.'));
+                Toastr::success(translate('seller_pos_permission_updated.'));
             }
 
             //return back();
             return view('admin-views.seller.view.setting', compact('seller'));
         } else if ($tab == 'transaction') {
-            $transactions = OrderTransaction::with('order.customer')->where('seller_is','seller')->where('seller_id',$seller->id);
+            $transactions = OrderTransaction::with('order.customer')->where('seller_is', 'seller')->where('seller_id', $seller->id);
 
             $query_param = [];
             $search = $request['search'];
-            if ($request->has('search'))
-            {
+            if ($request->has('search')) {
                 $key = explode(' ', $request['search']);
                 $transactions = $transactions->where(function ($q) use ($key) {
                     foreach ($key as $value) {
@@ -165,12 +166,11 @@ class SellerController extends Controller
                     }
                 });
                 $query_param = ['search' => $request['search']];
-            }else{
+            } else {
                 $transactions = $transactions;
             }
             $status = $request['status'];
-            if ($request->has('status') && $status!='all')
-            {
+            if ($request->has('status') && $status != 'all') {
                 $key = explode(' ', $request['status']);
                 $transactions = $transactions->where(function ($q) use ($key) {
                     foreach ($key as $value) {
@@ -179,9 +179,9 @@ class SellerController extends Controller
                 });
                 $query_param = ['status' => $request['status']];
             }
-               $transactions = $transactions->latest()->paginate(Helpers::pagination_limit())->appends($query_param);
+            $transactions = $transactions->latest()->paginate(Helpers::pagination_limit())->appends($query_param);
 
-            return view('admin-views.seller.view.transaction', compact('seller', 'transactions','search','status'));
+            return view('admin-views.seller.view.transaction', compact('seller', 'transactions', 'search', 'status'));
 
         } else if ($tab == 'review') {
             $sellerId = $seller->id;
@@ -190,14 +190,14 @@ class SellerController extends Controller
             $search = $request['search'];
             if ($request->has('search')) {
                 $key = explode(' ', $request['search']);
-                $product_id = Product::where('added_by','seller')->where('user_id',$sellerId)->where(function ($q) use ($key) {
+                $product_id = Product::where('added_by', 'seller')->where('user_id', $sellerId)->where(function ($q) use ($key) {
                     foreach ($key as $value) {
                         $q->where('name', 'like', "%{$value}%");
                     }
                 })->pluck('id')->toArray();
 
                 $reviews = Review::with(['product'])
-                    ->whereIn('product_id',$product_id);
+                    ->whereIn('product_id', $product_id);
 
                 $query_param = ['search' => $request['search']];
             } else {
@@ -210,7 +210,7 @@ class SellerController extends Controller
 
             return view('admin-views.seller.view.review', compact('seller', 'reviews', 'search'));
         }
-        return view('admin-views.seller.view', compact('seller','current_date'));
+        return view('admin-views.seller.view', compact('seller', 'current_date'));
     }
 
     public function updateStatus(Request $request)
@@ -231,9 +231,9 @@ class SellerController extends Controller
 
     public function order_list($seller_id)
     {
-        $orders = Order::where(['seller_id'=> $seller_id, 'seller_is'=> 'seller'])
-                ->latest()
-                ->paginate(Helpers::pagination_limit());
+        $orders = Order::where(['seller_id' => $seller_id, 'seller_is' => 'seller'])
+            ->latest()
+            ->paginate(Helpers::pagination_limit());
 
         $seller = Seller::findOrFail($seller_id);
         return view('admin-views.seller.order-list', compact('orders', 'seller'));
@@ -253,11 +253,11 @@ class SellerController extends Controller
         $countries = $country_restrict_status ? $this->get_delivery_country_array() : COUNTRIES;
         $zip_codes = $zip_restrict_status ? $this->delivery_zip_code->all() : 0;
 
-        $order = Order::with(['shipping','customer'])->where(['id' => $order_id])->first();
+        $order = Order::with(['shipping', 'customer'])->where(['id' => $order_id])->first();
 
         $physical_product = false;
-        foreach($order->details as $product){
-            if(isset($product->product) && $product->product->product_type == 'physical'){
+        foreach ($order->details as $product) {
+            if (isset($product->product) && $product->product->product_type == 'physical') {
                 $physical_product = true;
             }
         }
@@ -280,8 +280,8 @@ class SellerController extends Controller
             ->get();
 
 
-        return view('admin-views.seller.order-details', compact('order', 'seller_id','delivery_men','linked_orders','physical_product',
-            'shipping_address','total_delivered', 'countries','zip_codes','zip_restrict_status','country_restrict_status'));
+        return view('admin-views.seller.order-details', compact('order', 'seller_id', 'delivery_men', 'linked_orders', 'physical_product',
+            'shipping_address', 'total_delivered', 'countries', 'zip_codes', 'zip_restrict_status', 'country_restrict_status'));
     }
 
     public function withdraw()
@@ -311,7 +311,8 @@ class SellerController extends Controller
         return view('admin-views.seller.withdraw', compact('withdraw_req'));
     }
 
-    public function withdraw_list_export_excel(Request $request){
+    public function withdraw_list_export_excel(Request $request)
+    {
         $all = session()->has('withdraw_status_filter') && session('withdraw_status_filter') == 'all' ? 1 : 0;
         $active = session()->has('withdraw_status_filter') && session('withdraw_status_filter') == 'approved' ? 1 : 0;
         $denied = session()->has('withdraw_status_filter') && session('withdraw_status_filter') == 'denied' ? 1 : 0;
@@ -341,19 +342,19 @@ class SellerController extends Controller
             $query->shop_email = isset($query->seller) ? $query->seller->email : '';
 
             $query->withdrawal_amount = BackEndHelper::set_symbol(BackEndHelper::usd_to_currency($query->amount));
-            $query->status = $query->approved == 0 ? 'Pending' : ($query->approved == 1 ? 'Approved':'Denied');
+            $query->status = $query->approved == 0 ? 'Pending' : ($query->approved == 1 ? 'Approved' : 'Denied');
             $query->note = $query->transaction_note;
 
             //method info
             $query->withdraw_method_name = isset($query->withdraw_method) ? $query->withdraw_method->method_name : '';
-            if(!empty($query->withdrawal_method_fields)){
-                foreach (json_decode($query->withdrawal_method_fields) as $key=>$field) {
+            if (!empty($query->withdrawal_method_fields)) {
+                foreach (json_decode($query->withdrawal_method_fields) as $key => $field) {
                     $query[$key] = $field;
                 }
             }
         });
 
-        foreach ($withdraw_requests as $key=>$item) {
+        foreach ($withdraw_requests as $key => $item) {
             unset($item['id']);
             unset($item['seller_id']);
             unset($item['admin_id']);
@@ -416,8 +417,10 @@ class SellerController extends Controller
         Toastr::success(translate('Commission_percentage_for_this_seller_has_been_updated.'));
         return back();
     }
+
     public function add_seller()
     {
-             return view('admin-views.seller.add-new-seller');
+        $countries = Country::where('status',1)->get();
+        return view('admin-views.seller.add-new-seller',compact('countries'));
     }
 }
