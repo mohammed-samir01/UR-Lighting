@@ -608,7 +608,7 @@
                 @if($physical_product)
                     <div class="card">
                         <!-- Body -->
-                        @php($shipping_address=((object)$order['shipping_address_data']))
+                        @php($shipping_address=json_decode($order['shipping_address_data']))
                         @if($shipping_address)
                             <div class="card-body">
                                 <div class="d-flex gap-2 align-items-center justify-content-between mb-4">
@@ -640,7 +640,7 @@
                                     @endif
                                     <div>
                                         <span>{{translate('city')}} :</span>
-                                        <strong>{{$shipping_address->city['name']}}</strong>
+                                        <strong>{{$shipping_address->city->name}}</strong>
                                     </div>
                                     <div>
                                         <span>{{translate('zip_code')}} :</span>
@@ -908,7 +908,7 @@
                                     <div class="form-group">
                                         <label for="city" class="title-color">{{translate('city')}}</label>
                                         <input type="text" name="city" id="city"
-                                               value="{{$shipping_address ? $shipping_address->city['name'] : ''}}"
+                                               value="{{$shipping_address ? $shipping_address->city->name : ''}}"
                                                class="form-control"
                                                placeholder="{{ translate('ex') }}:{{translate('dhaka')}}" required>
                                     </div>

@@ -367,9 +367,11 @@ class UserProfileController extends Controller
 
     public function account_order_details(Request $request)
     {
+
         $order = $this->order->with(['details.product', 'delivery_man_review', 'offline_payments'])
             ->where(['customer_id' => auth('customer')->id(), 'is_guest' => '0'])
             ->find($request->id);
+
 
         $refund_day_limit = \App\CPU\Helpers::get_business_settings('refund_day_limit');
         $current_date = \Carbon\Carbon::now();
