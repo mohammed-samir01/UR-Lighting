@@ -35,9 +35,7 @@ class Order extends Model
 
     public function seller()
     {
-        if ($this->seller_is == 'seller')
-            return $this->belongsTo(Seller::class);
-        return $this->belongsTo(Admin::class, 'seller_id');
+        return $this->belongsTo(Seller::class);
     }
 
     public function sellerName()
