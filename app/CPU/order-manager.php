@@ -54,7 +54,7 @@ class OrderManager
         $total_tax = 0;
         $total_discount_on_product = 0;
         foreach ($order->details as $key => $detail) {
-            $sub_total += $detail->price * $detail->qty;
+            $sub_total += $detail->selling_price * $detail->qty;
             $total_tax += $detail->tax;
             $total_discount_on_product += $detail->discount;
         }
@@ -579,15 +579,15 @@ class OrderManager
             $product = Product::where(['id' => $c['product_id']])->first();
             $totalWeight += $product->weight;
             $totalCount += $c['quantity'];
-            $price = $c['tax_model'] == 'include' ? $c['price'] - $c['tax'] : $c['price'];
             $or_d = [
                 'order_id' => $order_id,
                 'product_id' => $c['product_id'],
                 'seller_id' => $c['seller_id'],
                 'product_details' => $product,
                 'qty' => $c['quantity'],
-                'price' => $price,
+                'price' => $c['price'],
                 'tax' => $c['tax'] * $c['quantity'],
+                'selling_price' => $c['selling_price'],
                 'tax_model' => $c['tax_model'],
                 'discount' => $c['discount'] * $c['quantity'],
                 'discount_type' => 'discount_on_product',
@@ -602,8 +602,8 @@ class OrderManager
             $items[] = [
                 "productId" => $c['product_id'],
                 "name" => $product->name,
-                "price" => $price,
-                "rowTotal" => $price * $c['quantity'],
+                "price" => $c['price'],
+                "rowTotal" => $c['price'] * $c['quantity'],
                 "taxAmount" => $c['tax'] * $c['quantity'],
                 "quantity" => $c['quantity'],
                 "sku" => $product->code,

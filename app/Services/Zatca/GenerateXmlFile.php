@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Zatca;
 
 use App\Services\Zatca\InvoiceHashTag;
@@ -31,29 +32,18 @@ class GenerateXmlFile
         $this->signDate = date('Y-m-d\TH:i:s\Z', strtotime(now()));
     }
 
-    public function loadXmlFile()
+    public function loadXmlFile($invoice)
     {
-        $data = [
-            'uuid' => '8e6000cf-1a98-4174-b3e7-b5d5954bc10d'
-        ];
-        $products = [
-            [
-                'name' => 'tv'
-            ],
-            [
-                'name' => 'lemon'
-            ],
-        ];
-        $invoice = (object)$data;
-        $invoice->pih = null;
         $this->invoice = $invoice;
+        $invoice->pih = null;
         $signDate = $this->signDate;
         $issuerName = $this->getIssuerName();
         $serialNuOfCert = $this->getSerialNuOfCert();
         $hashCertificate = $this->hashCertificate();
         $certificate = $this->getCertificate();
         $this->xml = \View::make('zatca.zatca', compact('signDate', 'issuerName',
-            'serialNuOfCert', 'hashCertificate', 'certificate', 'invoice','products'))->render();
+            'serialNuOfCert', 'hashCertificate', 'certificate', 'invoice'))->render();
+        return $this->createXmlFile();
         return $this->data_to_zatca();
 
         dd($this->xml);

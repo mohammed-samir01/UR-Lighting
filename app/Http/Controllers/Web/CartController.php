@@ -97,6 +97,7 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
+
         $cart = CartManager::add_to_cart($request);
         session()->forget('coupon_code');
         session()->forget('coupon_type');
