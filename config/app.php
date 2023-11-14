@@ -27,6 +27,7 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+    'url_zatca' => 'https://gw-fatoora.zatca.gov.sa/e-invoicing/developer-portal/',
 
     /*
     |--------------------------------------------------------------------------

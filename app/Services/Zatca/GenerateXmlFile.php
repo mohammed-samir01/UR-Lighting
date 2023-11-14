@@ -155,11 +155,11 @@ class GenerateXmlFile
     private function qrCode($hash_invoice_encode, $signature_invoice)
     {
         return GenerateQrCode::fromArray([
-            new Seller('Salla'), // seller name
-            new TaxNumber('1234567891'), // seller tax number
-            new InvoiceDate('2021-07-12T14:25:09Z'), // invoice date as Zulu ISO8601
-            new InvoiceTotalAmount('100.00'), // invoice total amount
-            new InvoiceTaxAmount('15.00'),// invoice tax amount
+            new Seller($this->invoice->seller->company_name), // seller name
+            new TaxNumber($this->invoice->seller->tax_num), // seller tax number
+            new InvoiceDate(date('Y-m-d\TH:i:s\Z', strtotime($this->invoice->created_at))), // invoice date as Zulu ISO8601
+            new InvoiceTotalAmount(number_format($this->invoice->summary->subtotal + $this->invoice->summary->total_tax, 2, '.', '')), // invoice total amount
+            new InvoiceTaxAmount(number_format($this->invoice->summary->total_tax, 2, '.', '')),// invoice tax amount
             new InvoiceHashTag($hash_invoice_encode), // invoice hash
             new InvoiceSignatureTag($signature_invoice), // signature of invoice
             new PublicKeyOfCertTag($this->getPublicKey()), // public key of certificate

@@ -36,12 +36,11 @@ class ApiZatcaController extends Controller
             $order->seller->city_name = City::find($order->seller->city_id)->name_en;
             $order->seller->company_name = $order->seller->name;
         }
-       $order->summary = (object) OrderManager::order_summary($order);
+        $order->summary = (object)OrderManager::order_summary($order);
+        $order->shipping_address_data = (object)json_decode($order->shipping_address_data);
+       return  $data = $xmlFile->loadXmlFile($order);
+        return $response = $this->zatca->reporting_invoice($data);
 
-        return $xmlFile->loadXmlFile($order);
-
-
-        $response = $this->zatca->reporting_invoice(['am' => 'so']);
     }
 
 

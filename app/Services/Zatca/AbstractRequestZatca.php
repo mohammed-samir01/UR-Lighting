@@ -67,9 +67,10 @@ abstract class AbstractRequestZatca
     protected function buildRequest($method = 'POST')
     {
         $url = $this->url . $this->end_point;
-        return Http::withHeaders($this->headers)->send($method, $url, [
+        $res = Http::withHeaders($this->headers)->send($method, $url, [
             'json' => $this->data
         ]);
+        return $res->json();
     }
 
 

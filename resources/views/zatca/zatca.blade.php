@@ -84,7 +84,7 @@
     <cbc:ID>{{$invoice->id}}</cbc:ID>
     <cbc:UUID>{{$invoice->uuid}}</cbc:UUID>
     <cbc:IssueDate>{{$invoice->created_at->format('Y-m-d')}}</cbc:IssueDate>
-    <cbc:IssueTime>{{$invoice->created_at->format('H-i-s')}}</cbc:IssueTime>
+    <cbc:IssueTime>{{$invoice->created_at->format('H:i:s\Z')}}</cbc:IssueTime>
     <cbc:InvoiceTypeCode name="0200000">388</cbc:InvoiceTypeCode>
     <cbc:DocumentCurrencyCode>SAR</cbc:DocumentCurrencyCode>
     <cbc:TaxCurrencyCode>SAR</cbc:TaxCurrencyCode>
@@ -141,8 +141,9 @@
     <cac:AccountingCustomerParty>
         <cac:Party>
             <cac:PostalAddress>
-                <cbc:StreetName/>
+               <cbc:StreetName>{{$invoice->shipping_address_data->address}}</cbc:StreetName>
                 <cbc:CitySubdivisionName/>
+               <cbc:CityName>{{$invoice->shipping_address_data->city->name_en}}</cbc:CityName>
                 <cac:Country>
                     <cbc:IdentificationCode>SA</cbc:IdentificationCode>
                 </cac:Country>
@@ -153,7 +154,7 @@
                 </cac:TaxScheme>
             </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName/>
+                <cbc:RegistrationName>{{$invoice->shipping_address_data->contact_person_name}}</cbc:RegistrationName>
             </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingCustomerParty>
