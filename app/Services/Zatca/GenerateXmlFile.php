@@ -43,7 +43,7 @@ class GenerateXmlFile
         $certificate = $this->getCertificate();
         $this->xml = \View::make('zatca.zatca', compact('signDate', 'issuerName',
             'serialNuOfCert', 'hashCertificate', 'certificate', 'invoice'))->render();
-        return $this->createXmlFile();
+//        return $this->createXmlFile();
         return $this->data_to_zatca();
 
         dd($this->xml);
