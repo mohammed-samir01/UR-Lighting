@@ -702,6 +702,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'], fu
         // zatca route
         Route::group(['namespace' => 'Zatca','prefix' => 'zatca', 'as' => 'zatca.','middleware'=>['module:system_settings']], function () {
             Route::get('/report-invoice', 'ApiZatcaController@reporting_invoice');
+            Route::get('/compliance-invoice', 'ApiZatcaController@compliance_invoice');
+            Route::get('/get-csr', 'ApiZatcaController@get_csr');
+            Route::get('/get-cert', 'ApiZatcaController@requestCert');
 
         });
 

@@ -20,6 +20,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Helpers
@@ -65,6 +66,26 @@ class Helpers
         return $transaction;
     }
 
+    public static function path_zatca()
+    {
+        if (auth('admin')->check())
+            return 'admin';
+        if (auth('seller')->check())
+            return "seller-" . auth('seller')->user()->id;
+    }
+
+    public static function csrOrCert($type, $all = false)
+    {
+        $path = self::path_zatca() . "/{$type}.json";
+        if (Storage::disk('zatca')->exists($path)) {
+            $data = json_decode(Storage::disk('zatca')->get($path));
+            if ($all)
+                return $data;
+            return base64_decode($data->binarySecurityToken);
+        }
+        throw new \Exception('file not found');
+    }
+
     public static function get_customer($request = null)
     {
         $user = null;
@@ -74,13 +95,13 @@ class Helpers
         } elseif (is_object($request) && method_exists($request, 'user')) {
             $user = $request->user() ?? $request->user; //for api
 
-        } elseif (isset($request['payment_request_from']) && in_array($request['payment_request_from'], ['app', 'react']) && !isset($request->user)){
+        } elseif (isset($request['payment_request_from']) && in_array($request['payment_request_from'], ['app', 'react']) && !isset($request->user)) {
             $user = $request['is_guest'] ? 'offline' : User::find($request['customer_id']);
 
         } elseif (session()->has('customer_id') && !session('is_guest')) {
             $user = User::find(session('customer_id'));
 
-        } elseif(isset($request->user)){
+        } elseif (isset($request->user)) {
             $user = $request->user;
         }
 
@@ -146,6 +167,7 @@ class Helpers
         }
         return $lang;
     }
+
     public static function app_lang()
     {
         $lang = self::default_lang();
@@ -1248,5 +1270,7 @@ if (!function_exists('currency_converter')) {
 
         return Helpers::set_symbol(round($amount * $rate, 2));
     }
+
+
 }
 

@@ -4,6 +4,7 @@
 namespace App\Services\Zatca;
 
 
+use App\CPU\Helpers;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,13 +18,13 @@ class GenerateCsr
             'UID' => $request->uid,
             'title' => '1000',
             'registeredAddress' => $request->address,
-            'businessCategory' => $request->business_category,
+            'businessCategory' => 'Industry',
             'emailAddress' => $request->email
         ];
         $dn = [
             "commonName" => $request->organization_name . '-' . $request->uid,
             "organizationName" => $request->organization_name,
-            "organizationalUnitName" => $request->unit_name,
+            "organizationalUnitName" => 'pc-1',
             "countryName" => 'SA',
         ];
         $configFile = tempnam(sys_get_temp_dir(), '_csr');
@@ -44,7 +45,7 @@ class GenerateCsr
                 $lines[] = $value;
         }
         $pem_key = join("", $lines);
-        Storage::disk('zatca')->put('priv_key.pem', $pem_key);
+        Storage::disk('zatca')->put(Helpers::path_zatca().'/priv_key.pem', $pem_key);
         $csr_resources = openssl_csr_new($dn, $privkey, ["digest_alg" => 'sha256'] + $config);
         openssl_csr_export($csr_resources, $csr);
         if (\File::exists($configFile))

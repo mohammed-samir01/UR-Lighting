@@ -54,6 +54,12 @@ return [
             'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
+        'zatca' => [
+            'driver' => 'local',
+            'root' => storage_path('app/zatca'),
+            'url' => env('APP_URL') . '/zatca',
+            'visibility' => 'private',
+        ],
 
         's3' => [
             'driver' => 's3',

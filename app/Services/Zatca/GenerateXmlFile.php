@@ -2,6 +2,7 @@
 
 namespace App\Services\Zatca;
 
+use App\CPU\Helpers;
 use App\Services\Zatca\InvoiceHashTag;
 use App\Services\Zatca\InvoiceSignatureTag;
 use App\Services\Zatca\PublicKeyOfCertTag;
@@ -9,6 +10,7 @@ use App\Services\Zatca\SignOfCertTag;
 use DOMXPath;
 use EllipticCurve\Ecdsa;
 use EllipticCurve\PrivateKey;
+use Illuminate\Support\Facades\Storage;
 use phpseclib3\File\X509;
 use Salla\ZATCA\GenerateQrCode;
 use Salla\ZATCA\Tags\InvoiceDate;
@@ -25,9 +27,11 @@ class GenerateXmlFile
     private $signDate;
     private $invoice;
     private $hashInvoice;
+    private $type;
 
-    public function __construct()
+    public function __construct($type = 'cert')
     {
+        $this->type = $type;
         $this->xCert = $this->x509();
         $this->signDate = date('Y-m-d\TH:i:s\Z', strtotime(now()));
     }
@@ -137,7 +141,7 @@ class GenerateXmlFile
 
     public function getCertificate()
     {
-        return file_get_contents(public_path('cert.pem'));
+        return Helpers::csrOrCert($this->type);
     }
 
     private function hashCertificate()
@@ -174,10 +178,14 @@ class GenerateXmlFile
 
     private function signature_invoice()
     {
-        $private_key = file_get_contents(public_path('ec-secp256k1-priv-key.pem'));
-        $private_key_pem = PrivateKey::fromString($private_key);
-        $signature = Ecdsa::sign($this->hashInvoice, $private_key_pem);
-        return $signature->toBase64();
+        $path = Helpers::path_zatca() . '/priv_key.pem';
+        if (Storage::disk('zatca')->exists($path)) {
+            $private_key = Storage::disk('zatca')->get($path);
+            $private_key_pem = PrivateKey::fromString($private_key);
+            $signature = Ecdsa::sign($this->hashInvoice, $private_key_pem);
+            return $signature->toBase64();
+        }
+        throw new \Exception('private key is not found');
     }
 
     private function toDer($pem)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Zatca;
 
+use App\CPU\Helpers;
 use App\CPU\OrderManager;
 use App\Http\Controllers\Admin\BusinessSettingsController;
 use App\Http\Controllers\Controller;
@@ -25,6 +26,21 @@ class ApiZatcaController extends Controller
 
     public function reporting_invoice(GenerateXmlFile $xmlFile)
     {
+        $order = $this->handleOrder();
+        $data = $xmlFile->loadXmlFile($order);
+        return $this->zatca->reporting_invoice($data);
+    }
+
+    public function compliance_invoice()
+    {
+        $xml = new GenerateXmlFile('csr');
+        $order = $this->handleOrder();
+        $invoice = $xml->loadXmlFile($order);
+        return $this->zatca->compliance_check($invoice);
+    }
+
+    public function handleOrder()
+    {
         $order = Order::with('details', 'customer')->find(request('order_id'));
         if ($order->seller_is == 'admin') {
             $order->seller = (object)BusinessSettingsController::business_setting();
@@ -40,31 +56,33 @@ class ApiZatcaController extends Controller
         }
         $order->summary = (object)OrderManager::order_summary($order);
         $order->shipping_address_data = (object)json_decode($order->shipping_address_data);
-         $data = $xmlFile->loadXmlFile($order);
-        return $response = $this->zatca->reporting_invoice($data);
-
+        return $order;
     }
 
 
-    public function get_csr(Request $request)
+    public function get_csr()
     {
-        $request->validate([
-            'otp' => 'required|numeric',
-            'uid' => 'required',
-            'address' => 'required',
-            'business_category' => 'required',
-            'email' => 'required',
-            'organization_name' => 'required',
-            'unit_name' => 'required',
-        ]);
-        $csr = (new GenerateCsr())->csr($request);
+//        $request->validate([
+//            'otp' => 'required|numeric',
+//            'uid' => 'required',
+//            'address' => 'required',
+//            'email' => 'required',
+//            'organization_name' => 'required',
+//        ]);
+        $request = [
+            'uid' => '311098587100003',
+            'address' => 'Riyadh',
+            'email' => 'amer@gmail.com',
+            'organization_name' => 'lighting',
+        ];
+        $csr = (new GenerateCsr())->csr((object)$request);
         $data = ['csr' => $csr];
-        $response = $this->zatca->request_for_csr($request->otp, $data);
+        $response = $this->zatca->request_for_csr(request('otp'), $data);
         $status_code = $response->status();
         $body = $response->json();
         if ($status_code == 200) {
             $data_encode = json_encode($body);
-            Storage::disk('zatca')->put('csr.json', $data_encode);
+            Storage::disk('zatca')->put(Helpers::path_zatca() . "/csr.json", $data_encode);
             return response()->json([
                 'code' => $status_code,
                 'message' => 'the csr was created Successfully',
@@ -77,6 +95,20 @@ class ApiZatcaController extends Controller
             'data' => $body
         ], 500);
 
+    }
+
+    public function requestCert()
+    {
+        $path = Helpers::path_zatca() . "/csr.json";
+        if (Storage::disk('zatca')->exists($path)) {
+            $data = json_decode(Storage::disk('zatca')->get($path), true);
+            $auth = base64_encode($data['binarySecurityToken'] . ':' . $data['secret']);
+            $res = $this->zatca->get_certificate($data['requestID'], $auth);
+            if ($res->status() == 200) {
+                Storage::disk('zatca')->put(Helpers::path_zatca() . "/cert.json", json_encode($res->json()));
+                return 'ok';
+            }
+        }
     }
 
 

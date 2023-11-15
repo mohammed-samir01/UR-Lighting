@@ -13,6 +13,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+// zatca
+Route::group(['namespace' => 'Admin','prefix' => 'seller/zatca', 'as' => 'zatca.','middleware'=>['seller']], function () {
+    Route::get('/report-invoice', 'Zatca\ApiZatcaController@reporting_invoice');
+    Route::get('/get-csr', 'Zatca\ApiZatcaController@get_csr');
+    Route::get('/get-cert', 'Zatca\ApiZatcaController@requestCert');
+});
 Route::group(['namespace' => 'Seller', 'prefix' => 'seller', 'as' => 'seller.'], function () {
 
     /*authentication*/
@@ -32,6 +38,7 @@ Route::group(['namespace' => 'Seller', 'prefix' => 'seller', 'as' => 'seller.'],
 
     /*authenticated*/
     Route::group(['middleware' => ['seller']], function () {
+
         //dashboard routes
 
         Route::get('/get-order-data', 'SystemController@order_data')->name('get-order-data');
