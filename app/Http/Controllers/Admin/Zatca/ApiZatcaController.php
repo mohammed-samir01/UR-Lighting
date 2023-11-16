@@ -13,6 +13,7 @@ use App\Model\State;
 use App\Services\Zatca\GenerateCsr;
 use App\Services\Zatca\GenerateXmlFile;
 use App\Services\Zatca\Zatca;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ApiZatcaController extends Controller
@@ -60,21 +61,16 @@ class ApiZatcaController extends Controller
     }
 
 
-    public function get_csr()
+    public function get_csr(Request $request)
     {
-//        $request->validate([
-//            'otp' => 'required|numeric',
-//            'uid' => 'required',
-//            'address' => 'required',
-//            'email' => 'required',
-//            'organization_name' => 'required',
-//        ]);
-        $request = [
-            'uid' => '311098587100003',
-            'address' => 'Riyadh',
-            'email' => 'amer@gmail.com',
-            'organization_name' => 'lighting',
-        ];
+        $request->validate([
+            'otp' => 'required|numeric',
+            'uid' => 'required',
+            'address' => 'required',
+            'email' => 'required',
+            'organization_name' => 'required',
+        ]);
+
         $csr = (new GenerateCsr())->csr((object)$request);
         $data = ['csr' => $csr];
         $response = $this->zatca->request_for_csr(request('otp'), $data);

@@ -6395,4 +6395,5 @@
   'tiktok' => 'Tiktok',
   'snapchat' => 'Snapchat',
   'youtube' => 'Youtube',
+  'zatca' => 'Zatca',
 );

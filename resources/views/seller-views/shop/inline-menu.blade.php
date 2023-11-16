@@ -12,6 +12,7 @@
             <a href="{{ route('seller.shop.view') }}?pagetype=order_settings">{{translate('order_settings')}}</a>
         </li>
         @endif
+        <li class="{{ Request::is('seller/shop/zatca') ?'active':'' }}"><a href="{{route('seller.shop.zatca')}}">{{translate('zatca')}}</a></li>
 
     </ul>
 </div>

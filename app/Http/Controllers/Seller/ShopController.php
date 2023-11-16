@@ -6,8 +6,10 @@ use App\CPU\BackEndHelper;
 use App\CPU\Helpers;
 use App\CPU\ImageManager;
 use App\Http\Controllers\Controller;
+use App\Model\BusinessSetting;
 use App\Model\Seller;
 use App\Model\Shop;
+use App\Model\State;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,10 +34,10 @@ class ShopController extends Controller
             $shop = Shop::where(['seller_id' => auth('seller')->id()])->first();
         }
 
-        $minimum_order_amount= Helpers::get_business_settings('minimum_order_amount_status');
-        $minimum_order_amount_by_seller=\App\CPU\Helpers::get_business_settings('minimum_order_amount_by_seller');
-        $free_delivery_status= Helpers::get_business_settings('free_delivery_status');
-        $free_delivery_responsibility= Helpers::get_business_settings('free_delivery_responsibility');
+        $minimum_order_amount = Helpers::get_business_settings('minimum_order_amount_status');
+        $minimum_order_amount_by_seller = \App\CPU\Helpers::get_business_settings('minimum_order_amount_by_seller');
+        $free_delivery_status = Helpers::get_business_settings('free_delivery_status');
+        $free_delivery_responsibility = Helpers::get_business_settings('free_delivery_responsibility');
 
         if ($request->pagetype == 'order_settings' && (($minimum_order_amount && $minimum_order_amount_by_seller) || ($free_delivery_status && $free_delivery_responsibility == 'seller'))) {
             $seller = Seller::find($shop->seller_id);
@@ -47,20 +49,20 @@ class ShopController extends Controller
 
     public function edit($id)
     {
-        $shop = Shop::where(['seller_id' =>  auth('seller')->id()])->first();
+        $shop = Shop::where(['seller_id' => auth('seller')->id()])->first();
         return view('seller-views.shop.edit', compact('shop'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'banner'      => 'mimes:png,jpg,jpeg|max:2048',
-            'image'       => 'mimes:png,jpg,jpeg|max:2048',
+            'banner' => 'mimes:png,jpg,jpeg|max:2048',
+            'image' => 'mimes:png,jpg,jpeg|max:2048',
         ], [
-            'banner.mimes'   => 'Banner image type jpg, jpeg or png',
-            'banner.max'     => 'Banner Maximum size 2MB',
-            'image.mimes'    => 'Image type jpg, jpeg or png',
-            'image.max'      => 'Image Maximum size 2MB',
+            'banner.mimes' => 'Banner image type jpg, jpeg or png',
+            'banner.max' => 'Banner Maximum size 2MB',
+            'image.mimes' => 'Image type jpg, jpeg or png',
+            'image.max' => 'Image Maximum size 2MB',
         ]);
 
         $shop = Shop::find($id);
@@ -86,7 +88,8 @@ class ShopController extends Controller
         return redirect()->route('seller.shop.view');
     }
 
-    public function vacation_add(Request $request, $id){
+    public function vacation_add(Request $request, $id)
+    {
         $shop = Shop::find($id);
         $shop->vacation_status = $request->vacation_status == 'on' ? 1 : 0;
         $shop->vacation_start_date = $request->vacation_start_date;
@@ -98,7 +101,8 @@ class ShopController extends Controller
         return redirect()->back();
     }
 
-    public function temporary_close(Request $request){
+    public function temporary_close(Request $request)
+    {
         $shop = Shop::find($request->id);
 
         $shop->temporary_close = $request->get('status', 0);
@@ -112,23 +116,51 @@ class ShopController extends Controller
 
     public function order_settings(Request $request)
     {
-        if($request->has('minimum_order_amount')){
-            Seller::where('id',auth('seller')->id())->update([
+        if ($request->has('minimum_order_amount')) {
+            Seller::where('id', auth('seller')->id())->update([
                 'minimum_order_amount' => BackEndHelper::currency_to_usd($request->minimum_order_amount),
             ]);
         }
 
-        if($request->has('free_delivery_over_amount')){
-            Seller::where('id',auth('seller')->id())->update([
-                'free_delivery_status' => $request->free_delivery_status == 'on' ? 1:0,
+        if ($request->has('free_delivery_over_amount')) {
+            Seller::where('id', auth('seller')->id())->update([
+                'free_delivery_status' => $request->free_delivery_status == 'on' ? 1 : 0,
             ]);
-            Seller::where('id',auth('seller')->id())->update([
+            Seller::where('id', auth('seller')->id())->update([
                 'free_delivery_over_amount' => BackEndHelper::currency_to_usd($request->free_delivery_over_amount),
             ]);
         }
 
         Toastr::success(translate('updated_successfully'));
         return back();
+    }
+
+    public function zatca()
+    {
+        $business_setting = [];
+        if (\auth('seller')->check()) {
+            $shop = Shop::where('seller_id', \auth('seller')->user()->id)->first();
+            $business_setting['company_name'] = $shop->name;
+            $business_setting['company_email'] = $shop->seller->email;
+            $business_setting['state_id'] = $shop->state_id;
+            $business_setting['shop_address'] = $shop->address;
+            $business_setting['tax_num'] = $shop->tax_num;
+        }
+        if (\auth('admin')->check()) {
+            $web = BusinessSetting::all();
+            $business_setting = [
+                'company_name' => Helpers::get_settings($web, 'company_name')->value ?? '',
+                'company_email' => Helpers::get_settings($web, 'company_email')->value ?? '',
+                'state_id' => Helpers::get_settings($web, 'state_id')->value ?? '',
+                'shop_address' => Helpers::get_settings($web, 'shop_address')->value ?? '',
+                'tax_num' => Helpers::get_settings($web, 'tax_num')->value ?? '',
+            ];
+        }
+        $states = State::where('country_id', 191)->where('status', 1)->get();
+        if (\request()->is('*seller*'))
+            return view('seller-views.shop.zatcaInfo', compact('business_setting', 'states'));
+        if (\request()->is('*admin*'))
+            return view('admin-views.business-settings.zatca-info', compact('business_setting', 'states'));
     }
 
 }

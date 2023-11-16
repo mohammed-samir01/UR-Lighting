@@ -14,10 +14,10 @@
 use Illuminate\Support\Facades\Route;
 
 // zatca
-Route::group(['namespace' => 'Admin','prefix' => 'seller/zatca', 'as' => 'zatca.','middleware'=>['seller']], function () {
+Route::group(['namespace' => 'Admin','prefix' => 'seller/zatca', 'as' => 'seller.zatca.','middleware'=>['seller']], function () {
     Route::get('/report-invoice', 'Zatca\ApiZatcaController@reporting_invoice');
-    Route::get('/get-csr', 'Zatca\ApiZatcaController@get_csr');
-    Route::get('/get-cert', 'Zatca\ApiZatcaController@requestCert');
+    Route::post('/get-csr', 'Zatca\ApiZatcaController@get_csr')->name('get-csr');
+    Route::get('/get-cert', 'Zatca\ApiZatcaController@requestCert')->name('get-cert');
 });
 Route::group(['namespace' => 'Seller', 'prefix' => 'seller', 'as' => 'seller.'], function () {
 
@@ -202,6 +202,7 @@ Route::group(['namespace' => 'Seller', 'prefix' => 'seller', 'as' => 'seller.'],
         });
         Route::group(['prefix' => 'shop', 'as' => 'shop.'], function () {
             Route::get('view', 'ShopController@view')->name('view');
+            Route::get('zatca', 'ShopController@zatca')->name('zatca');
             Route::get('edit/{id}', 'ShopController@edit')->name('edit');
             Route::post('update/{id}', 'ShopController@update')->name('update');
             Route::post('vacation-add/{id}', 'ShopController@vacation_add')->name('vacation-add');

@@ -10,5 +10,6 @@
         <li class="{{ Request::is('admin/social-login/view') ?'active':'' }}"><a href="{{route('admin.social-login.view')}}">{{translate('Social_Media_Login')}}</a></li>
         <li class="{{ Request::is('admin/social-media-chat/view') ?'active':'' }}"><a href="{{route('admin.social-media-chat.view')}}">{{translate('Social_Media_Chat')}}</a></li>
         <li class="{{ Request::is('admin/shipping/view') ?'active':'' }}"><a href="{{route('admin.shipping.view')}}">{{translate('shipping_companies')}}</a></li>
+        <li class="{{ Request::is('admin/shop/zatca') ?'active':'' }}"><a href="{{route('shop.zatca')}}">{{translate('zatca')}}</a></li>
     </ul>
 </div>
