@@ -85,9 +85,16 @@
     <cbc:UUID>{{$invoice->uuid}}</cbc:UUID>
     <cbc:IssueDate>{{$invoice->created_at->format('Y-m-d')}}</cbc:IssueDate>
     <cbc:IssueTime>{{$invoice->created_at->format('H:i:s\Z')}}</cbc:IssueTime>
-    <cbc:InvoiceTypeCode name="0200000">388</cbc:InvoiceTypeCode>
+    <cbc:InvoiceTypeCode name="0200000">{{$invoice->type_invoice}}</cbc:InvoiceTypeCode>
     <cbc:DocumentCurrencyCode>SAR</cbc:DocumentCurrencyCode>
     <cbc:TaxCurrencyCode>SAR</cbc:TaxCurrencyCode>
+    @if($invoice->type_invoice == '383' || $invoice->type_invoice == '381')
+    <cac:BillingReference>
+        <cac:InvoiceDocumentReference>
+            <cbc:ID>Invoice Number: {{$invoice->father_inv}}; Invoice Issue Date: 2023-11-18</cbc:ID>
+        </cac:InvoiceDocumentReference>
+    </cac:BillingReference>
+    @endif
     <cac:AdditionalDocumentReference>
         <cbc:ID>ICV</cbc:ID>
         <cbc:UUID>10</cbc:UUID>
@@ -160,6 +167,9 @@
     </cac:AccountingCustomerParty>
     <cac:PaymentMeans>
         <cbc:PaymentMeansCode>10</cbc:PaymentMeansCode>
+        @if($invoice->type_invoice == '383' || $invoice->type_invoice == '381')
+        <cbc:InstructionNote>Returned items?</cbc:InstructionNote>
+        @endif
     </cac:PaymentMeans>
     <cac:AllowanceCharge>
         <cbc:ChargeIndicator>false</cbc:ChargeIndicator>

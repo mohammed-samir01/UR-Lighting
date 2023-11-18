@@ -16,7 +16,7 @@ class GenerateCsr
         $data = [
             'SN' => $this->generateGuid(),
             'UID' => $request->uid,
-            'title' => '1000',
+            'title' => '0100',
             'registeredAddress' => $request->address,
             'businessCategory' => 'Industry',
             'emailAddress' => $request->email

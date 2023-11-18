@@ -56,8 +56,32 @@ class ApiZatcaController extends Controller
             $order->seller->company_name = $order->seller->name;
         }
         $order->summary = (object)OrderManager::order_summary($order);
+        $order->type_invoice = '388';
         $order->shipping_address_data = (object)json_decode($order->shipping_address_data);
         return $order;
+    }
+
+    public function handleStaticOrder()
+    {
+        $order = \Opis\Closure\unserialize(file_get_contents(public_path('order.text')));
+        if (\request()->boolean('invoice')) {
+            $order->type_invoice = '388';
+            $order->id = Order::count() + 1;
+        }
+        if (\request()->boolean('credit')) {
+            $order->type_invoice = '381';
+            $order->father_inv = '381';
+        }
+        if (\request()->boolean('debit')) {
+            $order->type_invoice = '383';
+        }
+        if (auth('admin')->check()){
+
+        }
+        if (auth('seller')->check()){
+
+        }
+
     }
 
 
@@ -71,7 +95,7 @@ class ApiZatcaController extends Controller
             'organization_name' => 'required',
         ]);
 
-        $csr = (new GenerateCsr())->csr((object)$request);
+        $csr = (new GenerateCsr())->csr($request);
         $data = ['csr' => $csr];
         $response = $this->zatca->request_for_csr(request('otp'), $data);
         $status_code = $response->status();
