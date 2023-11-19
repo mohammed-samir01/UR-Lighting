@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BusinessSettingsController;
 use App\Http\Controllers\Controller;
 use App\Model\City;
 use App\Model\Order;
+use App\Model\ResponseZatca;
 use App\Model\Shop;
 use App\Model\State;
 use App\Services\Zatca\GenerateCsr;
@@ -35,9 +36,40 @@ class ApiZatcaController extends Controller
     public function compliance_invoice()
     {
         $xml = new GenerateXmlFile('csr');
-        $order = $this->handleOrder();
+        $order = $this->handleStaticOrder();
         $invoice = $xml->loadXmlFile($order);
-        return $this->zatca->compliance_check($invoice);
+        $res = $this->zatca->compliance_check($invoice);
+        $message = '';
+        if ($res->successful()) {
+            $message = 'successfully';
+        } else {
+            $message = $res->json();
+        }
+        $data = [];
+        $seller = [];
+        if (\request()->boolean('invoice')) {
+            $data['status_invoice'] = 1;
+            $data['response_invoice'] = $message;
+        }
+        if (\request()->boolean('credit')) {
+            $data['status_credit'] = 1;
+            $data['response_credit'] = $message;
+        }
+        if (\request()->boolean('debit')) {
+            $data['status_debit'] = 1;
+            $data['response_debit'] = $message;
+        }
+        if (auth('admin')->check()) {
+            $seller['seller'] = 'admin';
+        }
+        if (auth('seller')->check()) {
+            $seller['seller'] = 'seller';
+            $seller['seller_id'] = auth('seller')->user()->id;
+        }
+        $array = array_merge($seller, $data);
+
+        ResponseZatca::updateOrCreate($seller,$array);
+        return back();
     }
 
     public function handleOrder()
@@ -64,24 +96,34 @@ class ApiZatcaController extends Controller
     public function handleStaticOrder()
     {
         $order = \Opis\Closure\unserialize(file_get_contents(public_path('order.text')));
-        if (\request()->boolean('invoice')) {
-            $order->type_invoice = '388';
-            $order->id = Order::count() + 1;
-        }
+        $order->type_invoice = '388';
+        $order->id = 100000 + Order::count() + 1;
+
         if (\request()->boolean('credit')) {
             $order->type_invoice = '381';
-            $order->father_inv = '381';
+            $order->father_inv = $order->id;
+            $order->id = $order->id + 1;
         }
         if (\request()->boolean('debit')) {
             $order->type_invoice = '383';
+            $order->father_inv = $order->id;
+            $order->id = $order->id + 2;
         }
-        if (auth('admin')->check()){
-
+        if (auth('admin')->check()) {
+            $order->seller = (object)BusinessSettingsController::business_setting();
+            $order->seller->state_name = State::find($order->seller->state_id)->name_en;
+            $order->seller->city_name = City::find($order->seller->city_id)->name_en;
+            $order->seller->address = $order->seller->shop_address;
         }
-        if (auth('seller')->check()){
-
+        if (auth('seller')->check()) {
+            $order->seller = Shop::where('seller_id', auth('seller')->user()->id)->first();
+            $order->seller->state_name = State::find($order->seller->state_id)->name_en;
+            $order->seller->city_name = City::find($order->seller->city_id)->name_en;
+            $order->seller->company_name = $order->seller->name;
         }
-
+        $order->summary = (object)OrderManager::order_summary($order);
+        $order->shipping_address_data = (object)json_decode($order->shipping_address_data);
+        return $order;
     }
 
 

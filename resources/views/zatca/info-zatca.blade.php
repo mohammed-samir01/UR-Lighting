@@ -50,5 +50,6 @@
         <div class="text-right" style="margin-top: 20px">
             <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
         </div>
+
     </div>
 </div>

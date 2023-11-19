@@ -10,7 +10,7 @@ class Zatca extends AbstractRequestZatca
 {
     public function reporting_invoice($invoice)
     {
-        $cert = Helpers::csrOrCert('cert',true);
+        $cert = Helpers::csrOrCert('cert', true);
         $auth = base64_encode($cert->binarySecurityToken . ':' . $cert->secret);
         $this->setEndPoint('invoices/reporting/single');
         $this->setHeaders([
@@ -25,7 +25,7 @@ class Zatca extends AbstractRequestZatca
 
     public function compliance_check($invoice)
     {
-        $csr = Helpers::csrOrCert('csr',true);
+        $csr = Helpers::csrOrCert('csr', true);
         $auth = base64_encode($csr->binarySecurityToken . ':' . $csr->secret);
         $this->setEndPoint('compliance/invoices');
         $this->setHeaders([
@@ -33,8 +33,8 @@ class Zatca extends AbstractRequestZatca
             'Authorization' => 'Basic ' . $auth
         ]);
         $this->setData($invoice);
-        $res = $this->buildRequest();
-        return $res->json();
+        return $this->buildRequest();
+
     }
 
     public function request_for_csr($otp, $data)
@@ -47,7 +47,7 @@ class Zatca extends AbstractRequestZatca
         return $this->buildRequest();
     }
 
-    public function get_certificate($request_id,$auth)
+    public function get_certificate($request_id, $auth)
     {
         $this->setEndPoint('production/csids');
         $this->setHeaders([

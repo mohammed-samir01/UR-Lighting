@@ -7,6 +7,7 @@ use App\CPU\Helpers;
 use App\CPU\ImageManager;
 use App\Http\Controllers\Controller;
 use App\Model\BusinessSetting;
+use App\Model\ResponseZatca;
 use App\Model\Seller;
 use App\Model\Shop;
 use App\Model\State;
@@ -138,6 +139,7 @@ class ShopController extends Controller
     public function zatca()
     {
         $business_setting = [];
+        $res = (object)[];
         if (\auth('seller')->check()) {
             $shop = Shop::where('seller_id', \auth('seller')->user()->id)->first();
             $business_setting['company_name'] = $shop->name;
@@ -148,6 +150,7 @@ class ShopController extends Controller
         }
         if (\auth('admin')->check()) {
             $web = BusinessSetting::all();
+            $res = ResponseZatca::where('seller','admin')->first();
             $business_setting = [
                 'company_name' => Helpers::get_settings($web, 'company_name')->value ?? '',
                 'company_email' => Helpers::get_settings($web, 'company_email')->value ?? '',
@@ -160,7 +163,7 @@ class ShopController extends Controller
         if (\request()->is('*seller*'))
             return view('seller-views.shop.zatcaInfo', compact('business_setting', 'states'));
         if (\request()->is('*admin*'))
-            return view('admin-views.business-settings.zatca-info', compact('business_setting', 'states'));
+            return view('admin-views.business-settings.zatca-info', compact('business_setting', 'states','res'));
     }
 
 }
