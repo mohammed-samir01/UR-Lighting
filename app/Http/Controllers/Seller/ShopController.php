@@ -147,6 +147,7 @@ class ShopController extends Controller
             $business_setting['state_id'] = $shop->state_id;
             $business_setting['shop_address'] = $shop->address;
             $business_setting['tax_num'] = $shop->tax_num;
+            $res = ResponseZatca::where(['seller'=>'seller','seller_id'=>\auth('seller')->user()->id])->first();
         }
         if (\auth('admin')->check()) {
             $web = BusinessSetting::all();
@@ -161,7 +162,7 @@ class ShopController extends Controller
         }
         $states = State::where('country_id', 191)->where('status', 1)->get();
         if (\request()->is('*seller*'))
-            return view('seller-views.shop.zatcaInfo', compact('business_setting', 'states'));
+            return view('seller-views.shop.zatcaInfo', compact('business_setting', 'states','res'));
         if (\request()->is('*admin*'))
             return view('admin-views.business-settings.zatca-info', compact('business_setting', 'states','res'));
     }

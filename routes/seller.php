@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'Admin','prefix' => 'seller/zatca', 'as' => 'seller.zatca.','middleware'=>['seller']], function () {
     Route::get('/report-invoice', 'Zatca\ApiZatcaController@reporting_invoice');
     Route::post('/get-csr', 'Zatca\ApiZatcaController@get_csr')->name('get-csr');
-    Route::get('/get-cert', 'Zatca\ApiZatcaController@requestCert')->name('get-cert');
+    Route::post('/get-cert', 'Zatca\ApiZatcaController@requestCert')->name('get-cert');
+    Route::post('/compliance-invoice', 'Zatca\ApiZatcaController@compliance_invoice')->name('compliance-invoice');
 });
 Route::group(['namespace' => 'Seller', 'prefix' => 'seller', 'as' => 'seller.'], function () {
 
