@@ -42,3 +42,6 @@ ALTER TABLE `shops` ADD `country_id` INT NOT NULL AFTER `pickup_code`, ADD `stat
 /**** 13 11 *****/
 ALTER TABLE `order_details` ADD `selling_price` DOUBLE NULL AFTER `discount`;
 ALTER TABLE `carts` ADD `selling_price` DOUBLE NULL AFTER `quantity`;
+
+/*** 20 11 ***
+ALTER TABLE `response_zatca` ADD `status_csr` TINYINT NULL DEFAULT NULL AFTER `seller_id`, ADD `response_csr` JSON NULL AFTER `status_csr`;

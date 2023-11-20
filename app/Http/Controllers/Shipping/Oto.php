@@ -45,6 +45,9 @@ class Oto
         Oto::refreshToken();
         $data = [
             'weight' => $itemDetails['weight'],
+            'height' => $itemDetails['height'],
+            'width' => $itemDetails['width'],
+            'length' => $itemDetails['length'],
             'totalDue' => $itemDetails['totalDue'],
             'originCity' => $itemDetails['originCity'],
             'destinationCity' => $itemDetails['destinationCity'],
@@ -78,8 +81,11 @@ class Oto
             "pickupLocationCode" => $orderData['pickupLocationCode'],
             "currency" => config('oto.currency'),
             "packageCount" => $orderData['packageCount'],
-            "createShipment" => true,
+            "createShipment" => false,
             "packageWeight" => $orderData['packageWeight'],
+            "boxWidth" => 10,
+            "boxLength" => 10,
+            "boxHeight" => 10,
             "orderDate" => $orderData['orderDate'],
             "customer" => [
                 "name" => $customeData['name'],
@@ -141,6 +147,18 @@ class Oto
         return json_decode($response->getBody()->getContents(), true);
     }
 
+    public static function PrintAWB($orderId)
+    {
+        Oto::refreshToken();
+        $url = "https://api.tryoto.com/rest/v2/print/${orderId}";
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . config('oto.access_token')
+        ])->post($url);
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
     public static function orderStatus($orderId)
     {
         Oto::refreshToken();
@@ -166,16 +184,14 @@ class Oto
             'orderId' => $orderId,
             'deliveryOptionId' => $deliveryOptionId,
         ];
-
         $url = config('oto.mode') == 'live' ? config('oto.live_urls')['create_shipment'] : config('oto.test_urls')['create_shipment'];
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . config('oto.access_token')
         ])->post($url, $data);
+        return json_decode($response->getBody()->getContents(), true);
 
-        $responseResult = json_decode($response->getBody()->getContents(), true);
-        return json_encode($responseResult);
 
     }
 

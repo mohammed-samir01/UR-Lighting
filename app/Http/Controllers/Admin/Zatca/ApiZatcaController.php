@@ -14,6 +14,7 @@ use App\Model\State;
 use App\Services\Zatca\GenerateCsr;
 use App\Services\Zatca\GenerateXmlFile;
 use App\Services\Zatca\Zatca;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -68,7 +69,7 @@ class ApiZatcaController extends Controller
         }
         $array = array_merge($seller, $data);
 
-        ResponseZatca::updateOrCreate($seller,$array);
+        ResponseZatca::updateOrCreate($seller, $array);
         return back();
     }
 
@@ -139,24 +140,39 @@ class ApiZatcaController extends Controller
 
         $csr = (new GenerateCsr())->csr($request);
         $data = ['csr' => $csr];
-        $response = $this->zatca->request_for_csr(request('otp'), $data);
+        try {
+            $response = $this->zatca->request_for_csr(request('otp'), $data);
+        } catch (\Exception $e) {
+            Toastr::warning('server zatca was crashed');
+            return back();
+        }
         $status_code = $response->status();
         $body = $response->json();
+        $data = [];
+        if (auth('admin')->check()) {
+           ResponseZatca::where('seller', 'admin')->delete();
+            $data['seller'] = 'admin';
+        }
+        if (auth('seller')->check()) {
+            $adm = ResponseZatca::where(['seller' => 'seller', 'seller_id' => auth('seller')->user()->id])->delete();
+            $data['seller'] = 'seller';
+            $data['seller_id'] = auth('seller')->id();
+        }
         if ($status_code == 200) {
             $data_encode = json_encode($body);
             Storage::disk('zatca')->put(Helpers::path_zatca() . "/csr.json", $data_encode);
-            return response()->json([
-                'code' => $status_code,
-                'message' => 'the csr was created Successfully',
-                'data' => $body
-            ]);
+            $data['response_csr'] = 'Successfully';
+            $data['status_csr'] = 1;
+            ResponseZatca::create($data);
+            Toastr::success(translate('Your csr Created Successfully'));
+            return back();
         }
-        return response()->json([
-            'code' => $status_code,
-            'message' => 'worrying',
-            'data' => $body
-        ], 500);
 
+        $data['response_csr'] = isset($body['errors']) ? $body['errors'] : $body;
+        $data['status_csr'] = 0;
+        ResponseZatca::create($data);
+        Toastr::warning(translate('warning'));
+        return back();
     }
 
     public function requestCert()

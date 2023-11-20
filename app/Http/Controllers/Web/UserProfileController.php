@@ -638,7 +638,10 @@ class UserProfileController extends Controller
         $order = Order::where(['id' => $id])->first();
         if ($order['payment_method'] == 'cash_on_delivery' && $order['order_status'] == 'pending') {
             if (isset($order->shipping_company['type']) && $order->shipping_company['type'] == 'oto') {
-
+                $orderStatus = Oto::orderStatus($id);
+                if (isset($orderStatus['shipmentId']) && $orderStatus['shipmentId'] != '') {
+                    Oto::cancelShipment($id, $orderStatus['shipmentId']);
+                }
                 Oto::cancelOrder($id);
             }
             OrderManager::stock_update_on_order_status_change($order, 'canceled');

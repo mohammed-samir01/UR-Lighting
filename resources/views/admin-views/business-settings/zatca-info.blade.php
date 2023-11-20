@@ -23,7 +23,7 @@
         <form action="{{route('admin.zatca.get-csr')}}" method="POST">
             @csrf
             @method('POST')
-            @include('zatca.info-zatca',['business_setting' => $business_setting])
+            @include('zatca.info-zatca',['business_setting' => $business_setting,'res' => $res])
         </form>
         <div class="card mb-3">
             <div class="card-body">
@@ -51,7 +51,8 @@
                                     <button type="submit"
                                             class="btn btn-primary px-5">{{translate('invoice_credit')}}</button>
                                     <label class="title-color d-flex mt-2">{{translate('response_zatca')}}</label>
-                                    <textarea class="d-block mt-2" style="width: 100% ; height: 150px">{{$res->response_credit??''}}</textarea>
+                                    <textarea class="d-block mt-2"
+                                              style="width: 100% ; height: 150px">{{$res->response_credit??''}}</textarea>
                                 </div>
                             </form>
                         </div>
@@ -65,7 +66,8 @@
                                     <button type="submit"
                                             class="btn btn-primary px-5">{{translate('invoice_debit')}}</button>
                                     <label class="title-color d-flex mt-2">{{translate('response_zatca')}}</label>
-                                    <textarea class="d-block mt-2" style="width: 100% ; height: 150px">{{$res->response_debit??''}}</textarea>
+                                    <textarea class="d-block mt-2"
+                                              style="width: 100% ; height: 150px">{{$res->response_debit??''}}</textarea>
                                 </div>
                             </form>
                         </div>
@@ -79,7 +81,8 @@
                                     <button type="submit"
                                             class="btn btn-primary px-5">{{translate('demand_cert')}}</button>
                                     <label class="title-color d-flex mt-2">{{translate('response_cert')}}</label>
-                                    <textarea class="d-block mt-2" style="width: 100% ; height: 150px">{{$res->response_cert??''}}</textarea>
+                                    <textarea class="d-block mt-2"
+                                              style="width: 100% ; height: 150px">{{$res->response_cert??''}}</textarea>
                                 </div>
                             </form>
                         </div>

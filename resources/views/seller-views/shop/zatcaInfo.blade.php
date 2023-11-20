@@ -18,9 +18,9 @@
 
         @include('seller-views.shop.inline-menu')
         <form action="{{route('seller.zatca.get-csr')}}" method="POST">
-        @csrf
-        @method('POST')
-       @include('zatca.info-zatca',['business_setting' => $business_setting])
+            @csrf
+            @method('POST')
+            @include('zatca.info-zatca',['business_setting' => $business_setting,'res' => $res])
 
         </form>
         <div class="card mb-3">
@@ -28,14 +28,15 @@
                 <div class="row">
                     <div class="col-sm-6 col-lg-6">
                         <div class="form-group">
-                            <form action="{{route('seller.zatca.compliance-invoice',['invoice' =>true])}}" method="POST">
+                            <form action="{{route('seller.zatca.compliance-invoice',['invoice' =>true])}}"
+                                  method="POST">
                                 @csrf
                                 @method('POST')
                                 <div class="text-right" style="margin-top: 20px">
                                     <button type="submit" class="btn btn-primary px-5">{{translate('invoice')}}</button>
                                     <label class="title-color d-flex mt-2">{{translate('response_zatca')}}</label>
                                     <textarea class="d-block mt-2"
-                                              style="width: 100% ; height: 150px">{{$res->response_invoice??''}}</textarea>
+                                              style="width: 100% ; height: 150px">{{isset($res->response_invoice)?json_encode($res->response_invoice) : ''}}</textarea>
                                 </div>
                             </form>
                         </div>
@@ -49,7 +50,8 @@
                                     <button type="submit"
                                             class="btn btn-primary px-5">{{translate('invoice_credit')}}</button>
                                     <label class="title-color d-flex mt-2">{{translate('response_zatca')}}</label>
-                                    <textarea class="d-block mt-2" style="width: 100% ; height: 150px">{{$res->response_credit??''}}</textarea>
+                                    <textarea class="d-block mt-2"
+                                              style="width: 100% ; height: 150px">{{isset($res->response_credit)?json_encode($res->response_credit) : ''}}</textarea>
                                 </div>
                             </form>
                         </div>
@@ -63,7 +65,8 @@
                                     <button type="submit"
                                             class="btn btn-primary px-5">{{translate('invoice_debit')}}</button>
                                     <label class="title-color d-flex mt-2">{{translate('response_zatca')}}</label>
-                                    <textarea class="d-block mt-2" style="width: 100% ; height: 150px">{{$res->response_debit??''}}</textarea>
+                                    <textarea class="d-block mt-2"
+                                              style="width: 100% ; height: 150px">{{isset($res->response_debit)?json_encode($res->response_debit) : ''}}</textarea>
                                 </div>
                             </form>
                         </div>
@@ -77,7 +80,8 @@
                                     <button type="submit"
                                             class="btn btn-primary px-5">{{translate('demand_cert')}}</button>
                                     <label class="title-color d-flex mt-2">{{translate('response_cert')}}</label>
-                                    <textarea class="d-block mt-2" style="width: 100% ; height: 150px">{{$res->response_cert??''}}</textarea>
+                                    <textarea class="d-block mt-2"
+                                              style="width: 100% ; height: 150px">{{isset($res->response_cert)?json_encode($res->response_cert) : ''}}</textarea>
                                 </div>
                             </form>
                         </div>

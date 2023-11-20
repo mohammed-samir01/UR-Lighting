@@ -458,11 +458,15 @@ class WebController extends Controller
         if ($shippingMethodManual) {
             SystemController::insert_into_cart_shipping_array(['id' => $shippingMethodManual->id, 'cost' => $shippingMethodManual->cost], false);
         }
+
         if (!$shippingMethodManual) {
             $oto = $this->payment_config('oto', 'shipping');
             if ($oto->is_active) {
                 $dataForOto = [
                     'weight' => $totalWeight,
+                    'height' => 0,
+                    'width' => 0,
+                    'length' => 0,
                     'totalDue' => 0,
                     'originCity' => "Riyadh",
                     'destinationCity' => $address->state->name_en,

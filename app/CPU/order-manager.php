@@ -735,8 +735,12 @@ class OrderManager
             $customeData = ['name' => $user->f_name . ' ' . $user->l_name, 'email' => $user->email, 'mobile' => $user->phone];
             $addressData = ['address' => $shippingAddress->address, 'city' => $shippingAddress->city->name_en, 'country' => 'SA', 'lat' => $shippingAddress->latitude, 'lng' => $shippingAddress->longitude];
             $response = Oto::createOrder($orderData, $customeData, $addressData, $items);
-            if ($response['success'])
+
+            if ($response['success'] == true){
                 Order::where('id', $order_id)->update(['order_shipping' => $response['otoId']]);
+                Oto::createShipment($order_id,$shipping_method->extra['deliveryOptionId']);
+            }
+
         }
 
         return $order_id;

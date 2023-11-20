@@ -13,7 +13,8 @@ class ResponseZatca extends Model
      'response_invoice' => 'array',
      'response_credit' => 'array',
      'response_debit' => 'array',
-     'response_cert' => 'array'
+     'response_cert' => 'array',
+     'response_csr' => 'array'
    ];
 
 }

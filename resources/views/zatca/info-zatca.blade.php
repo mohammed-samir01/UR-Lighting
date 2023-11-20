@@ -50,6 +50,9 @@
         <div class="text-right" style="margin-top: 20px">
             <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
         </div>
+    <label class="title-color d-flex mt-2">{{translate('response_csr')}}</label>
+    <textarea class="d-block mt-2"
+              style="width: 100% ; height: 150px">{{isset($res->response_csr) ? json_encode($res->response_csr):''}}</textarea>
 
     </div>
 </div>
