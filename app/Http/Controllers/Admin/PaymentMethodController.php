@@ -78,6 +78,7 @@ class PaymentMethodController extends Controller
      */
     public function payment_config_set(Request $request)
     {
+
         collect(['status'])->each(fn($item, $key) => $request[$item] = $request->has($item) ? (int)$request[$item] : 0);
         $validation = [
             'gateway' => 'required|in:ssl_commerz,sixcash,worldpay,payfast,swish,esewa,maxicash,hubtel,viva_wallet,tap,thawani,moncash,pvit,ccavenue,foloosi,iyzi_pay,xendit,fatoorah,hyper_pay,amazon_pay,paypal,stripe,razor_pay,senang_pay,paytabs,paystack,paymob_accept,paytm,flutterwave,liqpay,bkash,mercadopago,cash_after_service,digital_payment,momo',
@@ -314,6 +315,7 @@ class PaymentMethodController extends Controller
 
         $settings = Setting::where('key_name', $request['gateway'])->where('settings_type', 'payment_config')->first();
 
+
         $additional_data_image = $settings['additional_data'] != null ? json_decode($settings['additional_data']) : null;
 
         if( !$additional_data_image || !isset($additional_data_image->gateway_image) || (isset($additional_data_image->gateway_image) && $additional_data_image->gateway_image == '') || (isset($additional_data_image->gateway_image) && !file_exists(base_path("storage/app/public/payment_modules/gateway_image/".$additional_data_image->gateway_image)))){
@@ -333,7 +335,33 @@ class PaymentMethodController extends Controller
             'gateway_title' => $request['gateway_title'],
             'gateway_image' => $gateway_image,
         ];
-
+        if ($request['gateway'] == 'paytabs')
+            $payment_additional_data['options'] = [
+                [
+                    'name_ar' => 'فيزا',
+                    'name_en' => 'credit',
+                    'key' => 'credit',
+                    'active' => request()->boolean('credit')
+                ],
+                [
+                    'name_ar' => 'مدى',
+                    'name_en' => 'mada',
+                    'key' => 'mada',
+                    'active' => request()->boolean('mada')
+                ],
+                [
+                    'name_ar' => 'stcpay',
+                    'name_en' => 'stcpay',
+                    'key' => 'stcpay',
+                    'active' => request()->boolean('stcpay')
+                ],
+                [
+                    'name_ar' => 'تابى',
+                    'name_en' => 'tabby',
+                    'key' => 'tabby',
+                    'active' => request()->boolean('tabby')
+                ],
+            ];
         $validator = Validator::make($request->all(), array_merge($validation, $additional_data));
 
         Setting::updateOrCreate(['key_name' => $request['gateway'], 'settings_type' => 'payment_config'], [

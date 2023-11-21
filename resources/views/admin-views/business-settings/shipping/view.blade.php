@@ -1,6 +1,6 @@
 @extends('layouts.back-end.app')
 
-@section('title', translate('SMS_Module_Setup'))
+@section('title', translate('shipping_companies'))
 
 @push('css_or_js')
 

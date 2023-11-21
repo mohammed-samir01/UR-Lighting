@@ -24,96 +24,108 @@
         <div class="card mb-4">
             <div class="card-body">
                 <form action="{{route('admin.business-settings.payment-method.update')}}"
-                        style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
-                        method="post">
+                      style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
+                      method="post">
                     @csrf
                     <h5 class="mb-4 text-uppercase d-flex text-capitalize">{{translate('payment_methods')}}</h5>
 
                     <div class="row">
                         @php($cash_on_delivery=\App\CPU\Helpers::get_business_settings('cash_on_delivery'))
                         @isset($cash_on_delivery)
-                        <div class="col-xl-4 col-sm-6">
-                            <div class="form-group">
-                                <div class="d-flex justify-content-between align-items-center gap-10 form-control">
+                            <div class="col-xl-4 col-sm-6">
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-between align-items-center gap-10 form-control">
                                     <span class="title-color">
                                         {{translate('cash_on_delivery')}}
-                                        <span class="input-label-secondary cursor-pointer" data-toggle="tooltip" data-placement="top" title="{{translate('if_enabled,_the_cash_on_delivery_option_will_be_available_on_the_system._Customers_can_use_COD_as_a_payment_option')}}.">
-                                            <img width="16" src="{{asset('/public/assets/back-end/img/info-circle.svg')}}" alt="">
+                                        <span class="input-label-secondary cursor-pointer" data-toggle="tooltip"
+                                              data-placement="top"
+                                              title="{{translate('if_enabled,_the_cash_on_delivery_option_will_be_available_on_the_system._Customers_can_use_COD_as_a_payment_option')}}.">
+                                            <img width="16"
+                                                 src="{{asset('/public/assets/back-end/img/info-circle.svg')}}" alt="">
                                         </span>
                                     </span>
 
-                                    <label class="switcher" for="cash_on_delivery">
-                                        <input type="checkbox" class="switcher_input" name="cash_on_delivery"
-                                        onclick="toogleStatusModal(event,'cash_on_delivery','cod-on.png','cod-on.png',
+                                        <label class="switcher" for="cash_on_delivery">
+                                            <input type="checkbox" class="switcher_input" name="cash_on_delivery"
+                                                   onclick="toogleStatusModal(event,'cash_on_delivery','cod-on.png','cod-on.png',
                                         '{{translate('want_to_Turn_ON_the_Cash_On_Delivery_option')}}?','{{translate('want_to_Turn_OFF_the_Cash_On_Delivery_option')}}?',
                                         `<p>{{translate('if_enabled_customers_can_select_Cash_on_Delivery_as_a_payment_method_during_checkout')}}</p>`,
                                         `<p>{{translate('if_disabled_the Cash_on_Delivery_payment_method_will_be_hidden_from_the_checkout_page')}}</p>`)"
-                                         id="cash_on_delivery" value="1" {{$cash_on_delivery['status']==1?'checked':''}}>
-                                        <span class="switcher_control"></span>
-                                    </label>
+                                                   id="cash_on_delivery"
+                                                   value="1" {{$cash_on_delivery['status']==1?'checked':''}}>
+                                            <span class="switcher_control"></span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         @endisset
 
                         @php($digital_payment=\App\CPU\Helpers::get_business_settings('digital_payment'))
                         @isset($digital_payment)
 
-                        <div class="col-xl-4 col-sm-6">
-                            <div class="form-group">
-                                <div class="d-flex justify-content-between align-items-center gap-10 form-control">
+                            <div class="col-xl-4 col-sm-6">
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-between align-items-center gap-10 form-control">
                                     <span class="title-color">
                                         {{translate('digital_payment')}}
-                                        <span class="input-label-secondary cursor-pointer" data-toggle="tooltip" data-placement="top" title="{{translate('if_enabled,_customers_can_choose_digital_payment_options_during_the_checkout_process')}}">
-                                            <img width="16" src="{{asset('/public/assets/back-end/img/info-circle.svg')}}" alt="">
+                                        <span class="input-label-secondary cursor-pointer" data-toggle="tooltip"
+                                              data-placement="top"
+                                              title="{{translate('if_enabled,_customers_can_choose_digital_payment_options_during_the_checkout_process')}}">
+                                            <img width="16"
+                                                 src="{{asset('/public/assets/back-end/img/info-circle.svg')}}" alt="">
                                         </span>
                                     </span>
 
-                                    <label class="switcher" for="digital_payment">
-                                        <input type="checkbox" class="switcher_input" name="digital_payment"
-                                        onclick="toogleStatusModal(event,'digital_payment','digital-paymet-on.png','digital-payment-off.png',
+                                        <label class="switcher" for="digital_payment">
+                                            <input type="checkbox" class="switcher_input" name="digital_payment"
+                                                   onclick="toogleStatusModal(event,'digital_payment','digital-paymet-on.png','digital-payment-off.png',
                                         '{{translate('want_to_Turn_ON_the_Digital_Payment_option')}}?','{{translate('want_to_Turn_OFF_the_Digital_Payment_option')}}?',
                                         `<p>{{translate('if_enabled_customers_can_select_Digital_Payment_during_checkout')}}</p>`,
                                         `<p>{{translate('if_disabled_Digital_Payment_options_will_be_hidden_from_the_checkout_page')}}</p>`)"
-                                        id="digital_payment" value="1" {{$digital_payment['status']==1?'checked':''}}>
-                                        <span class="switcher_control"></span>
-                                    </label>
+                                                   id="digital_payment"
+                                                   value="1" {{$digital_payment['status']==1?'checked':''}}>
+                                            <span class="switcher_control"></span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         @endisset
 
                         @php($offline_payment=\App\CPU\Helpers::get_business_settings('offline_payment'))
                         @isset($offline_payment)
 
-                        <div class="col-xl-4 col-sm-6">
-                            <div class="form-group">
-                                <div class="d-flex justify-content-between align-items-center gap-10 form-control">
+                            <div class="col-xl-4 col-sm-6">
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-between align-items-center gap-10 form-control">
                                     <span class="title-color">
                                         {{translate('offline_payment')}}
-                                        <span class="input-label-secondary cursor-pointer" data-toggle="tooltip" data-placement="top" title="{{translate('offline_Payment_allows_customers_to_use_external_payment_methods._They_must_share_payment_details_with_the_seller_afterward._Admin_can_set_whether_customers_can_make_offline_payments_by_enabling/disabling_this_button.
+                                        <span class="input-label-secondary cursor-pointer" data-toggle="tooltip"
+                                              data-placement="top" title="{{translate('offline_Payment_allows_customers_to_use_external_payment_methods._They_must_share_payment_details_with_the_seller_afterward._Admin_can_set_whether_customers_can_make_offline_payments_by_enabling/disabling_this_button.
                                         ')}}">
-                                            <img width="16" src="{{asset('/public/assets/back-end/img/info-circle.svg')}}" alt="">
+                                            <img width="16"
+                                                 src="{{asset('/public/assets/back-end/img/info-circle.svg')}}" alt="">
                                         </span>
                                     </span>
 
-                                    <label class="switcher" for="offline_payment">
-                                        <input type="checkbox" class="switcher_input" name="offline_payment"
-                                        onclick="toogleStatusModal(event,'offline_payment','digital-paymet-on.png','digital-payment-off.png',
+                                        <label class="switcher" for="offline_payment">
+                                            <input type="checkbox" class="switcher_input" name="offline_payment"
+                                                   onclick="toogleStatusModal(event,'offline_payment','digital-paymet-on.png','digital-payment-off.png',
                                         '{{translate('want_to_Turn_ON_the_Offline_Payment_option')}}?','{{translate('want_to_Turn_OFF_the_Offline_Payment_option')}}?',
                                         `<p>{{translate('if_enabled_customers_can_pay_through_external_payment_methods')}}</p>`,
                                         `<p>{{translate('if_disabled_customers_have_to_use_the_system-added_payment_gateways')}}</p>`)"
-                                         id="offline_payment" value="1" {{$offline_payment['status']==1?'checked':''}}>
-                                        <span class="switcher_control"></span>
-                                    </label>
+                                                   id="offline_payment"
+                                                   value="1" {{$offline_payment['status']==1?'checked':''}}>
+                                            <span class="switcher_control"></span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         @endisset
 
                         <div class="col-12">
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn--primary px-5 text-uppercase">{{translate('save')}}</button>
+                                <button type="submit"
+                                        class="btn btn--primary px-5 text-uppercase">{{translate('save')}}</button>
                             </div>
                         </div>
                     </div>
@@ -132,7 +144,8 @@
                             the link.') }}
                         </h4>
                         <span>
-                            <a href="{{!empty($payment_url) ? $payment_url : ''}}" class="btn btn-outline-primary"><i class="tio-settings mr-1"></i>{{translate('settings')}}</a>
+                            <a href="{{!empty($payment_url) ? $payment_url : ''}}" class="btn btn-outline-primary"><i
+                                    class="tio-settings mr-1"></i>{{translate('settings')}}</a>
                         </span>
                     </div>
                 </div>
@@ -144,7 +157,8 @@
             @foreach($payment_gateways as $key=>$payment)
                 <div class="col-md-6">
                     <div class="card">
-                        <form action="{{route('admin.business-settings.payment-method.addon-payment-set')}}" method="POST"
+                        <form action="{{route('admin.business-settings.payment-method.addon-payment-set')}}"
+                              method="POST"
                               id="{{$payment->key_name}}-form" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -155,23 +169,24 @@
 
                                 @php($additional_data = $payment['additional_data'] != null ? json_decode($payment['additional_data']) : [])
 
-                                <?php
-                                    if ($additional_data != null){
-                                        $img_path = asset('storage/app/public/payment_modules/gateway_image/'. $additional_data->gateway_image ?? '');
-                                    }else{
-                                        $img_path = asset('/public/assets/back-end/img/modal/payment-methods/'.$payment->key_name.'.png');
+                                    <?php
+                                    if ($additional_data != null) {
+                                        $img_path = asset('storage/app/public/payment_modules/gateway_image/' . $additional_data->gateway_image ?? '');
+                                    } else {
+                                        $img_path = asset('/public/assets/back-end/img/modal/payment-methods/' . $payment->key_name . '.png');
                                     }
-                                ?>
+                                    ?>
 
                                 <label class="switcher show-status-text">
                                     <input class="switcher_input" type="checkbox" name="status" value="1"
-                                    onclick="paymentMethodStatusModal(event,'{{$payment->key_name}}','{{ $img_path }}',
+                                           onclick="paymentMethodStatusModal(event,'{{$payment->key_name}}','{{ $img_path }}',
                                     '{{translate('want_to_Turn_ON_')}}{{str_replace('_',' ',$payment->key_name)}}{{translate('_as_the_Digital_Payment_method')}}?','{{translate('want_to_Turn_OFF_')}}{{str_replace('_',' ',$payment->key_name)}}{{translate('_as_the_Digital_Payment_method')}}??',
                                     `<p>{{translate('if_enabled_customers_can_use_this_payment_method')}}</p>`,
                                     `<p>{{translate('if_disabled_this_payment_method_will_be_hidden_from_the_checkout_page')}}</p>`)"
-                                        id="{{$payment->key_name}}" {{$payment['is_active']==1?'checked':''}}>
+                                           id="{{$payment->key_name}}" {{$payment['is_active']==1?'checked':''}}>
 
-                                    <span class="switcher_control" data-ontitle="{{ translate('on') }}" data-offtitle="{{ translate('off') }}"></span>
+                                    <span class="switcher_control" data-ontitle="{{ translate('on') }}"
+                                          data-offtitle="{{ translate('off') }}"></span>
                                 </label>
                             </div>
 
@@ -189,8 +204,10 @@
                                 @php($mode=$payment->live_values['mode'])
                                 <div class="form-group" style="margin-bottom: 10px">
                                     <select class="js-example-responsive form-control" name="mode">
-                                        <option value="live" {{$mode=='live'?'selected':''}}>{{translate('live')}}</option>
-                                        <option value="test" {{$mode=='test'?'selected':''}}>{{translate('test')}}</option>
+                                        <option
+                                            value="live" {{$mode=='live'?'selected':''}}>{{translate('live')}}</option>
+                                        <option
+                                            value="test" {{$mode=='test'?'selected':''}}>{{translate('test')}}</option>
                                     </select>
                                 </div>
 
@@ -205,7 +222,7 @@
                                         <div class="form-group" style="margin-bottom: 10px">
                                             <label for="exampleFormControlInput1"
                                                    class="form-label">{{ucwords(str_replace('_',' ',$key))}}
-                                                   <span class="text-danger">*</span></label>
+                                                <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control"
                                                    name="{{$key}}"
                                                    placeholder="{{ucwords(str_replace('_',' ',$key))}} *"
@@ -216,20 +233,52 @@
 
                                 <div class="form-group" style="margin-bottom: 10px">
                                     <label for="exampleFormControlInput1"
-                                           class="form-label">{{translate('payment_gateway_title')}} <span class="text-danger">*</span></label>
+                                           class="form-label">{{translate('payment_gateway_title')}} <span
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control"
                                            name="gateway_title"
                                            placeholder="{{translate('payment_gateway_title')}}"
-                                           value="{{$additional_data != null ? $additional_data->gateway_title : ''}}" required>
+                                           value="{{$additional_data != null ? $additional_data->gateway_title : ''}}"
+                                           required>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom: 10px">
                                     <label for="exampleFormControlInput1"
                                            class="form-label">{{translate('Choose_Logo')}} </label>
-                                    <input type="file" class="form-control" name="gateway_image" accept=".jpg, .png, .jpeg|image/*"
-                                    onchange="document.getElementById('gateway_img{{$payment->key_name}}').src = window.URL.createObjectURL(this.files[0])">
+                                    <input type="file" class="form-control" name="gateway_image"
+                                           accept=".jpg, .png, .jpeg|image/*"
+                                           onchange="document.getElementById('gateway_img{{$payment->key_name}}').src = window.URL.createObjectURL(this.files[0])">
                                 </div>
+                                @if(isset($additional_data->options))
+                                    <div class="row">
+                                        @foreach($additional_data->options as $option)
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div
+                                                        class="d-flex justify-content-between align-items-center gap-10 form-control">
+                                    <span class="title-color">
+                                        {{$option->key}}
+{{--                                        <span class="input-label-secondary cursor-pointer" data-toggle="tooltip"--}}
+{{--                                              data-placement="top"--}}
+{{--                                              title="{{translate('if_enabled,_the_cash_on_delivery_option_will_be_available_on_the_system._Customers_can_use_COD_as_a_payment_option')}}.">--}}
+{{--                                            <img width="16"--}}
+{{--                                                 src="{{asset('/public/assets/back-end/img/info-circle.svg')}}" alt="">--}}
+{{--                                        </span>--}}
+                                    </span>
+                                                        <label class="switcher" for="{{$option->key}}">
+                                                            <input type="checkbox" class="switcher_input"
+                                                                   name="{{$option->key}}"
+                                                                   id="{{$option->key}}"
+                                                                   value="1" {{$option->active==1?'checked':''}}>
+                                                            <span class="switcher_control"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
+                                        @endforeach
+                                    </div>
+                                @endif
                                 <div class="text-right" style="margin-top: 20px">
                                     <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
                                 </div>
@@ -260,7 +309,7 @@
             e.preventDefault();
 
             $('#toggle-status-image').attr('src', image);
-            if ($('#'+toggle_id).is(':checked')) {
+            if ($('#' + toggle_id).is(':checked')) {
                 $('#toggle-status-title').empty().append(on_title);
                 $('#toggle-status-message').empty().append(on_message);
                 $('#toggle-status-ok-button').attr('toggle-ok-button', toggle_id);
@@ -277,18 +326,18 @@
 
     <script>
         @if($payment_gateway_published_status)
-            $('#payment-gatway-cards').find('input').each(function(){
-                $(this).attr('disabled', true);
-            });
-            $('#payment-gatway-cards').find('select').each(function(){
-                $(this).attr('disabled', true);
-            });
-            $('#payment-gatway-cards').find('.switcher_input').each(function(){
-                $(this).removeAttr('checked', true);
-            });
-            $('#payment-gatway-cards').find('button').each(function(){
-                $(this).attr('disabled', true);
-            });
+        $('#payment-gatway-cards').find('input').each(function () {
+            $(this).attr('disabled', true);
+        });
+        $('#payment-gatway-cards').find('select').each(function () {
+            $(this).attr('disabled', true);
+        });
+        $('#payment-gatway-cards').find('.switcher_input').each(function () {
+            $(this).removeAttr('checked', true);
+        });
+        $('#payment-gatway-cards').find('button').each(function () {
+            $(this).attr('disabled', true);
+        });
         @endif
     </script>
 @endpush

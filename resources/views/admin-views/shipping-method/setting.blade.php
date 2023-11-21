@@ -263,7 +263,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-4 col-md-6">
+                            <div class="col-xl-4 col-md-6 state" style="display: none">
                                 <div class="form-group">
                                     <div class="row justify-content-center">
                                         <div class="col-md-12">
@@ -311,34 +311,33 @@
                         </thead>
                         <tbody>
                         @foreach($shipping_methods as $k=>$method)
-                            <tr>
-                                <th>{{$k+1}}</th>
-                                <td>{{$method['title']}}</td>
-                                <td>
-                                    {{$method['duration']}}
-                                </td>
-                                @if($method['title'] != 'oto')
+                            @if($method['title'] != 'oto')
+                                <tr>
+                                    <th>{{$k+1}}</th>
+                                    <td>{{$method['title']}}</td>
+                                    <td>
+                                        {{$method['duration']}}
+                                    </td>
+
                                     <td>
                                         {{\App\CPU\BackEndHelper::set_symbol(\App\CPU\BackEndHelper::usd_to_currency($method['cost']))}}
                                     </td>
-                                @else
-                                    <td></td>
-                                @endif
-                                <td>
-                                    <form action="{{route('admin.business-settings.shipping-method.status-update')}}"
-                                          method="post" id="shipping_methods{{$method['id']}}_form"
-                                          class="shipping_methods_form">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{$method['id']}}">
-                                        <label class="switcher mx-auto">
-                                            <input type="checkbox" class="switcher_input"
-                                                   id="shipping_methods{{$method['id']}}" name="status" value="1"
-                                                   {{ $method['status'] == 1 ? 'checked':'' }} onclick="toogleStatusModal(event,'shipping_methods{{$method['id']}}','category-status-on.png','category-status-off.png','{{translate('want_to_Turn_ON_This_Shipping_Method')}}','{{translate('want_to_Turn_OFF_This_Shipping_Method')}}',`<p>{{translate('if_you_enable_this_shipping_method_will_be_shown_in_the_user_app_and_website_for_customer_checkout')}}</p>`,`<p>{{translate('if_you_disable_this_shipping_method_will_not_be_shown_in_the_user_app_and_website_for_customer_checkout')}}</p>`)">
-                                            <span class="switcher_control"></span>
-                                        </label>
-                                    </form>
-                                </td>
-                                @if($method['title'] != 'oto')
+                                    <td>
+                                        <form
+                                            action="{{route('admin.business-settings.shipping-method.status-update')}}"
+                                            method="post" id="shipping_methods{{$method['id']}}_form"
+                                            class="shipping_methods_form">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{$method['id']}}">
+                                            <label class="switcher mx-auto">
+                                                <input type="checkbox" class="switcher_input"
+                                                       id="shipping_methods{{$method['id']}}" name="status" value="1"
+                                                       {{ $method['status'] == 1 ? 'checked':'' }} onclick="toogleStatusModal(event,'shipping_methods{{$method['id']}}','category-status-on.png','category-status-off.png','{{translate('want_to_Turn_ON_This_Shipping_Method')}}','{{translate('want_to_Turn_OFF_This_Shipping_Method')}}',`<p>{{translate('if_you_enable_this_shipping_method_will_be_shown_in_the_user_app_and_website_for_customer_checkout')}}</p>`,`<p>{{translate('if_you_disable_this_shipping_method_will_not_be_shown_in_the_user_app_and_website_for_customer_checkout')}}</p>`)">
+                                                <span class="switcher_control"></span>
+                                            </label>
+                                        </form>
+                                    </td>
+
                                     <td>
                                         <div class="d-flex flex-wrap justify-content-center gap-10">
                                             <a class="btn btn-outline--primary btn-sm edit"
@@ -353,8 +352,9 @@
                                             </a>
                                         </div>
                                     </td>
-                                @endif
-                            </tr>
+
+                                </tr>
+                            @endif
                         @endforeach
                         </tbody>
                     </table>
@@ -485,6 +485,9 @@
                 }
             });
         });
+        // $(document).ready(function () {
+        //     $('.state').hide();
+        // });
 
         $(document).on('click', '.delete', function () {
             var id = $(this).attr("id");
@@ -523,6 +526,9 @@
             var country_id = $(this).val();
             if (country_id)
                 get_states(country_id);
+            else
+                $('.state').hide();
+
         });
 
         function get_states(country_id) {
@@ -539,6 +545,7 @@
                 success: function (response) {
                     var obj = JSON.parse(response);
                     if (obj != '') {
+                        $('.state').show();
                         $('[name="states[]"]').html(obj);
                         AIZ.plugins.bootstrapSelect('refresh');
                     }
