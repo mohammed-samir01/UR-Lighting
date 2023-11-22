@@ -284,6 +284,7 @@ function slider_thumb_img_preview(key) {
 
 // Product Add To Wishlist || Start
 function addWishlist(product_id, action_url) {
+
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="_token"]').attr("content"),

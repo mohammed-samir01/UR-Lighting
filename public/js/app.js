@@ -18683,6 +18683,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "PaymentMethods",
+  props: ['data'],
   components: {
     Tabby: _Tabby_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     PayTabs: _PayTabs_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -18690,7 +18691,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      selectedButton: 1,
+      selectedButton: '',
       options: [{
         id: 1,
         icon: "/public/payments/credit.svg"
@@ -18703,11 +18704,28 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         id: 4,
         icon: "/public/payments/tabby.png"
-      }, {
-        id: 5,
-        icon: "/public/payments/tamara.svg"
-      }]
+      }
+      // {
+      //     id: 5,
+      //     icon: "/public/payments/tamara.svg",
+      // },
+      ]
     };
+  },
+
+  computed: {
+    paytabs: function paytabs() {
+      return this.data && this.data.some(function (pay) {
+        return pay.key_name == 'paytabs';
+      });
+    },
+    optionPaytabs: function optionPaytabs() {
+      var paytabs = [];
+      if (this.paytabs) paytabs = JSON.parse(this.data.find(function (payment) {
+        return payment.key_name == 'paytabs';
+      }).additional_data).options;
+      return paytabs;
+    }
   }
 });
 
@@ -18766,7 +18784,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     updateActivePlan: function updateActivePlan(e) {
-      this.$emit("update:modelValue", Number(e.target.value));
+      this.$emit("update:modelValue", e.target.value);
     },
     isActive: function isActive(id) {
       return this.$parent.selectedButton == id;
@@ -18830,14 +18848,12 @@ __webpack_require__.r(__webpack_exports__);
 var _hoisted_1 = ["src"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VueRadioButton = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("VueRadioButton");
-  var _component_PayTabs = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PayTabs");
-  var _component_Tabby = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Tabby");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueRadioButton, {
     modelValue: $data.selectedButton,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $data.selectedButton = $event;
     }),
-    options: $data.options
+    options: $options.optionPaytabs
   }, {
     label: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref) {
       var props = _ref.props;
@@ -18848,12 +18864,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }
       }, null, 8 /* PROPS */, _hoisted_1)];
     }),
-    _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["modelValue", "options"]), [1, 2, 3].includes($data.selectedButton) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_PayTabs, {
-    key: 0
-  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.selectedButton === 4 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Tabby, {
-    key: 1
-  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+    pay: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default")];
+    }),
+    _: 3 /* FORWARDED */
+  }, 8 /* PROPS */, ["modelValue", "options"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <PayTabs v-if=\"[1,2,3].includes(selectedButton)\"/>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <Tabby v-if=\"selectedButton === 4\"/>")]);
 }
 
 /***/ }),
@@ -18896,27 +18911,33 @@ var _withScopeId = function _withScopeId(n) {
 var _hoisted_1 = {
   "class": "v-radio-container row justify-content-center"
 };
-var _hoisted_2 = ["id", "value", "checked"];
-var _hoisted_3 = ["for"];
+var _hoisted_2 = {
+  key: 0,
+  "class": "col-md-4 mt-2",
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_3 = ["id", "value", "checked"];
+var _hoisted_4 = ["for"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.options, function (option, idx) {
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-      key: idx,
-      "class": "col-md-4"
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "pay", {}, undefined, true), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.options, function (option, idx) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+      key: idx
+    }, [option.active ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       id: "input-".concat(idx),
       type: "radio",
       name: "iman",
-      value: option.id,
-      checked: $options.isActive(option.id),
+      value: option.key,
+      checked: $options.isActive(option.key),
       onInput: _cache[0] || (_cache[0] = function () {
         return $options.updateActivePlan && $options.updateActivePlan.apply($options, arguments);
       })
-    }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_2), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_3), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
       "for": "input-".concat(idx),
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
         'v-radio-label': true,
-        'v-radio-active': $options.isActive(option.id)
+        'v-radio-active': $options.isActive(option.key)
       }),
       style: {
         "width": "130px",
@@ -18926,7 +18947,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       props: option
     }, function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(option.title), 1 /* TEXT */)];
-    }, true)], 10 /* CLASS, PROPS */, _hoisted_3)]);
+    }, true)], 10 /* CLASS, PROPS */, _hoisted_4)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 64 /* STABLE_FRAGMENT */);
   }), 128 /* KEYED_FRAGMENT */))]);
 }
 

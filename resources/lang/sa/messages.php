@@ -6142,4 +6142,5 @@
   'Your csr Created Successfully' => 'Your csr Created Successfully',
   'Delivery_unavailable_in_this_country!' => 'Delivery unavailable in this country!',
   'order_Info' => 'Order Info',
+  'my_Wishlists' => 'My Wishlists',
 );

@@ -257,7 +257,8 @@
                                                     <div
                                                         class="d-flex justify-content-between align-items-center gap-10 form-control">
                                     <span class="title-color">
-                                        {{$option->key}}
+                                        @php($lang = 'name_' . \App\CPU\Helpers::app_lang())
+                                        {{$option->{$lang} }}
 {{--                                        <span class="input-label-secondary cursor-pointer" data-toggle="tooltip"--}}
 {{--                                              data-placement="top"--}}
 {{--                                              title="{{translate('if_enabled,_the_cash_on_delivery_option_will_be_available_on_the_system._Customers_can_use_COD_as_a_payment_option')}}.">--}}

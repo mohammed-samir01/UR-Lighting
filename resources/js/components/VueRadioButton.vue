@@ -1,20 +1,21 @@
 <template>
     <div class="v-radio-container row justify-content-center">
-        <template v-for="(option, idx) in options" :key="idx">
-            <div class="col-md-4">
+        <slot name="pay"></slot>
+        <template v-for="(option, idx) in options" :key="idx" >
+            <div v-if="option.active" class="col-md-4 mt-2" style="text-align: center">
                 <input
                     :id="`input-${idx}`"
                     type="radio"
                     name="iman"
-                    :value="option.id"
-                    :checked="isActive(option.id)"
+                    :value="option.key"
+                    :checked="isActive(option.key)"
                     @input="updateActivePlan"
                 />
                 <label
                     :for="`input-${idx}`"
                     :class="{
           'v-radio-label': true,
-          'v-radio-active': isActive(option.id),
+          'v-radio-active': isActive(option.key),
         }" style="width: 130px; height: 65px;
 "
                 >
@@ -50,7 +51,7 @@ export default {
     },
     methods: {
         updateActivePlan(e) {
-            this.$emit("update:modelValue", Number(e.target.value));
+            this.$emit("update:modelValue",e.target.value);
         },
         isActive(id) {
             return this.$parent.selectedButton == id

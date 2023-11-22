@@ -338,28 +338,32 @@ class PaymentMethodController extends Controller
         if ($request['gateway'] == 'paytabs')
             $payment_additional_data['options'] = [
                 [
-                    'name_ar' => 'فيزا',
-                    'name_en' => 'credit',
+                    'name_ar' => 'فيزا وماستر كارد',
+                    'name_en' => 'Visa & Master Card',
                     'key' => 'credit',
-                    'active' => request()->boolean('credit')
+                    'active' => request()->boolean('credit'),
+                    'icon' => '/public/payments/credit.svg'
                 ],
                 [
                     'name_ar' => 'مدى',
-                    'name_en' => 'mada',
+                    'name_en' => 'Mada',
                     'key' => 'mada',
-                    'active' => request()->boolean('mada')
+                    'active' => request()->boolean('mada'),
+                    'icon' => '/public/payments/mada.svg'
                 ],
                 [
-                    'name_ar' => 'stcpay',
-                    'name_en' => 'stcpay',
+                    'name_ar' => 'اس تي سي باى',
+                    'name_en' => 'Stcpay',
                     'key' => 'stcpay',
-                    'active' => request()->boolean('stcpay')
+                    'active' => request()->boolean('stcpay'),
+                    'icon' => '/public/payments/stcpay.svg'
                 ],
                 [
                     'name_ar' => 'تابى',
-                    'name_en' => 'tabby',
+                    'name_en' => 'Tabby',
                     'key' => 'tabby',
-                    'active' => request()->boolean('tabby')
+                    'active' => request()->boolean('tabby'),
+                    'icon' => '/public/payments/tabby.png'
                 ],
             ];
         $validator = Validator::make($request->all(), array_merge($validation, $additional_data));
