@@ -4,7 +4,6 @@ namespace App\CPU;
 
 use App\Model\BusinessSetting;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Nexmo\Laravel\Facade\Nexmo;
 use Twilio\Rest\Client;
 
@@ -12,32 +11,39 @@ class SMS_module
 {
     public static function send($receiver, $otp)
     {
-        $config = self::get_settings('twilio');
+        $config = self::get_settings('twilio_sms');
         if (isset($config) && $config['status'] == 1) {
-            return self::twilio($receiver, $otp);
+            $response = self::twilio($receiver, $otp);
+            return $response;
         }
 
-        $config = self::get_settings('nexmo');
+        $config = self::get_settings('nexmo_sms');
         if (isset($config) && $config['status'] == 1) {
             $response = self::nexmo($receiver, $otp);
             return $response;
         }
 
-        $config = self::get_settings('2factor');
+        $config = self::get_settings('2factor_sms');
         if (isset($config) && $config['status'] == 1) {
             $response = self::two_factor($receiver, $otp);
             return $response;
         }
 
-        $config = self::get_settings('msg91');
+        $config = self::get_settings('msg91_sms');
         if (isset($config) && $config['status'] == 1) {
             $response = self::msg_91($receiver, $otp);
             return $response;
         }
 
-        $config = self::get_settings('releans');
+        $config = self::get_settings('releans_sms');
         if (isset($config) && $config['status'] == 1) {
             $response = self::releans($receiver, $otp);
+            return $response;
+        }
+
+        $config = self::get_settings('zender_gateway');
+        if (isset($config) && $config['status'] == 1) {
+            $response = self::zender_gateway($receiver, $otp);
             return $response;
         }
 
@@ -46,7 +52,7 @@ class SMS_module
 
     public static function twilio($receiver, $otp)
     {
-        $config = self::get_settings('twilio');
+        $config = self::get_settings('twilio_sms');
         $response = 'error';
         if (isset($config) && $config['status'] == 1) {
             $message = str_replace("#OTP#", $otp, $config['otp_template']);
@@ -71,7 +77,7 @@ class SMS_module
 
     public static function nexmo($receiver, $otp)
     {
-        $sms_nexmo = self::get_settings('nexmo');
+        $sms_nexmo = self::get_settings('nexmo_sms');
         $response = 'error';
         if (isset($sms_nexmo) && $sms_nexmo['status'] == 1) {
             $message = str_replace("#OTP#", $otp, $sms_nexmo['otp_template']);
@@ -101,7 +107,7 @@ class SMS_module
 
     public static function two_factor($receiver, $otp)
     {
-        $config = self::get_settings('2factor');
+        $config = self::get_settings('2factor_sms');
         $response = 'error';
         if (isset($config) && $config['status'] == 1) {
             $api_key = $config['api_key'];
@@ -130,7 +136,7 @@ class SMS_module
 
     public static function msg_91($receiver, $otp)
     {
-        $config = self::get_settings('msg91');
+        $config = self::get_settings('msg91_sms');
         $response = 'error';
         if (isset($config) && $config['status'] == 1) {
             $receiver = str_replace("+", "", $receiver);
@@ -162,7 +168,7 @@ class SMS_module
 
     public static function releans($receiver, $otp)
     {
-        $config = self::get_settings('releans');
+        $config = self::get_settings('releans_sms');
         $response = 'error';
         if (isset($config) && $config['status'] == 1) {
             $curl = curl_init();
@@ -196,15 +202,88 @@ class SMS_module
         return $response;
     }
 
+    public static function zender_gateway($receiver, $otp)
+    {
+        $config = self::get_settings('zender_gateway');
+        $response = 'error';
+        if (isset($config) && $config['status'] == 1) {
+            $message = str_replace("#OTP#", $otp, $config['otp_template']);
+
+            try {
+                if(empty($config["service"]) || $config["service"] < 2):
+                    if(!empty($config["device"])):
+                        $mode = "devices";
+                    else:
+                        $mode = "credits";
+                    endif;
+
+                    if($mode == "devices"):
+                        $params = [
+                            "secret" => $config["api_key"],
+                            "mode" => "devices",
+                            "device" => $config["device"],
+                            "phone" => $receiver,
+                            "message" => $message,
+                            "sim" => $config["slot"] < 2 ? 1 : 2
+                        ];
+                    else:
+                        $params = [
+                            "secret" => $config["api_key"],
+                            "mode" => "credits",
+                            "gateway" => $config["gateway"],
+                            "phone" => $receiver,
+                            "message" => $message
+                        ];
+                    endif;
+
+                    $apiurl = "{$config["site_url"]}/api/send/sms";
+                else:
+                    $params = [
+                        "secret" => $config["api_key"],
+                        "account" => $config["whatsapp"],
+                        "type" => "text",
+                        "recipient" => $receiver,
+                        "message" => $message
+                    ];
+
+                    $apiurl = "{$config["site_url"]}/api/send/whatsapp";
+                endif;
+
+                $rest_request = curl_init();
+
+                $query_string = '';
+                foreach ($params as $parameter_name => $parameter_value) {
+                    $query_string .= '&'.$parameter_name.'='.urlencode($parameter_value);
+                }
+                $query_string = substr($query_string, 1);
+
+                curl_setopt($rest_request, CURLOPT_URL, $apiurl . '?' . $query_string);
+                curl_setopt($rest_request, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($rest_request, CURLOPT_SSL_VERIFYPEER, false);
+                $response = curl_exec($rest_request);
+                $err = curl_error($rest_request);
+                curl_close($rest_request);
+
+                if (!$err) {
+                    $response = 'success';
+                }
+            } catch(\Exception $e){
+                // Ignore
+            }
+        }
+        return $response;
+    }
+
     public static function get_settings($name)
     {
-        try {
-            $config = DB::table('addon_settings')->where('key_name', $name)
-                ->where('settings_type', 'sms_config')->first();
-        } catch (\Exception $exception) {
-            return null;
+        $config = null;
+        $data = BusinessSetting::where(['type' => $name])->first();
+        if (isset($data)) {
+            $config = json_decode($data['value'], true);
+            if (is_null($config)) {
+                $config = $data['value'];
+            }
         }
-
-        return (isset($config)) ? json_decode($config->live_values, true) : null;
+        return $config;
     }
 }
