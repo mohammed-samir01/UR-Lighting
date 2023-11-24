@@ -44,6 +44,7 @@
     <link rel="stylesheet" href="{{asset('public/assets/front-end')}}/css/style.css">
     {{--dont touch this--}}
     <meta name="csrf-token" content="{{csrf_token()}}">
+    <meta name="_token" content="{{csrf_token()}}">
     <meta name="app-url" content="//ur-lighting-test.com/">
     <meta name="file-base-url" content="//ur-lighting-test.com/public/">
     {{--dont touch this--}}
@@ -327,7 +328,13 @@
 </div>
 
 {{--<script src="{{asset('public/assets/front-end')}}/vendor/jquery/dist/jquery.slim.min.js"></script>--}}
-<script src="{{asset('public/assets/front-end')}}/vendor/jquery/dist/jquery-2.2.4.min.js"></script>
+{{--<script src="{{asset('public/assets/front-end')}}/vendor/jquery/dist/jquery-2.2.4.min.js"></script>--}}
+@production
+    <script src="{{ asset('public/js/app.js?56') }}"></script>
+    @else
+        <script>console.log('div')</script>
+        <script src="{{ mix('js/app.js') }}"></script>
+@endproduction
 <script src="{{asset('public/assets/front-end')}}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script
     src="{{asset('public/assets/front-end')}}/vendor/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
@@ -372,11 +379,8 @@
 </script>
 <script src="{{asset('public/assets/front-end/js/aiz-core.js')}}"></script>
 <script src="{{asset('public/assets/front-end')}}/js/sweet_alert.js"></script>
-@production
-    <script src="{{ asset('js/app.js?56') }}"></script>
-    @else
-        <script src="{{ mix('js/app.js') }}"></script>
-@endproduction
+
+
         {{--Toastr--}}
         <script src={{asset("public/assets/back-end/js/toastr.js")}}></script>
         {!! Toastr::message() !!}

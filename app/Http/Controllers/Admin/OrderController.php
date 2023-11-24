@@ -537,6 +537,7 @@ class OrderController extends Controller
         $mpdf_view = View::make('admin-views.order.invoice',
             compact('order', 'seller', 'company_phone', 'company_name', 'company_email', 'company_web_logo')
         );
+
         Helpers::gen_mpdf($mpdf_view, 'order_invoice_', $order->id);
     }
 

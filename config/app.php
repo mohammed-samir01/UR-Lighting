@@ -70,6 +70,7 @@ return [
     */
 
     'timezone' => 'Asia/Riyadh',
+    'mix_url' => 'https://ur-lighting-test.com/public',
 
     /*
     |--------------------------------------------------------------------------

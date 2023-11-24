@@ -721,6 +721,7 @@ class UserProfileController extends Controller
 
     public function generate_invoice($id)
     {
+
         $order = Order::with('seller')->with('shipping')->where('id', $id)->first();
         $data["email"] = $order->customer["email"];
         $data["order"] = $order;

@@ -6396,4 +6396,8 @@
   'snapchat' => 'Snapchat',
   'youtube' => 'Youtube',
   'zatca' => 'Zatca',
+  'my_Wishlists' => 'My Wishlists',
+  'product_has_been_remove_from_wishlist' => 'Product has been remove from wishlist',
+  'flash_Deal_Update' => 'Flash Deal Update',
+  'upload_Image' => 'Upload Image',
 );

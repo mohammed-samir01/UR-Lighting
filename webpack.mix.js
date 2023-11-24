@@ -15,20 +15,20 @@ const fs = require("fs");
 
 mix.js('resources/js/app.js', 'public/js').version().vue();
 mix.sass('resources/sass/app.scss', 'public/css').version();
-mix.then(() => {
-    const mixManifest = require(path.resolve(__dirname, 'public/mix-manifest.json'));
-
-    const modifiedMixManifest = {};
-
-    for (const key in mixManifest) {
-        modifiedMixManifest[key] = `public${mixManifest[key]}`;
-    }
-
-    fs.writeFileSync(path.resolve(__dirname, 'public/mix-manifest.json'), JSON.stringify(modifiedMixManifest, null, 2));
-}) .options({
-    hmrOptions: {
-        host: 'candle-store.candlee.net',
-    },
-    https: true, // Make sure this is set to true if HTTPS is required.
-});
+// mix.then(() => {
+//     const mixManifest = require(path.resolve(__dirname, 'public/mix-manifest.json'));
+//
+//     const modifiedMixManifest = {};
+//
+//     for (const key in mixManifest) {
+//         modifiedMixManifest[key] = `public${mixManifest[key]}`;
+//     }
+//
+//     fs.writeFileSync(path.resolve(__dirname, 'public/mix-manifest.json'), JSON.stringify(modifiedMixManifest, null, 2));
+// }) .options({
+//     hmrOptions: {
+//         host: 'ur-lighting-test.com/',
+//     },
+//     https: true, // Make sure this is set to true if HTTPS is required.
+// });
 

@@ -288,7 +288,7 @@
                                             @endif
                                             <p style=" margin-top: 6px; margin-bottom:0px;">{{$shipping_address->phone}}</p>
                                             <p style=" margin-top: 6px; margin-bottom:0px;">{{$shipping_address->address}}</p>
-                                            <p style=" margin-top: 6px; margin-bottom:0px;">{{ $shipping_address->city }} {{ $shipping_address->zip }} </p>
+                                            <p style=" margin-top: 6px; margin-bottom:0px;">{{ $shipping_address->city->name }} {{ $shipping_address->zip }} </p>
                                         </div>
                                     @else
                                         <span class="h2" style="margin: 0px;">{{ ucwords('customer info')}} </span>
@@ -321,7 +321,7 @@
                                             <p class="font-weight-normal" style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['contact_person_name'] : ""}}</p>
                                             <p class="font-weight-normal" style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['phone'] : ""}}</p>
                                             <p class="font-weight-normal" style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['address'] : ""}}</p>
-                                            <p class="font-weight-normal" style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['city'] : ""}} {{$order->billingAddress ? $order->billingAddress['zip'] : ""}}</p>
+                                            <p class="font-weight-normal" style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress->city->name : ""}} {{$order->billingAddress ? $order->billingAddress['zip'] : ""}}</p>
                                         </div>
                                     @endif
                                 </td>

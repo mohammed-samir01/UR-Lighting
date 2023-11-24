@@ -28,6 +28,7 @@ class ShopViewController extends Controller
     //for seller Shop
     public function seller_shop(Request $request, $id)
     {
+
         $theme_name = theme_root_path();
 
         return match ($theme_name){

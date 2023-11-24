@@ -268,7 +268,7 @@
                                         @endif
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$shipping_address->phone}}</p>
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$shipping_address->address}}</p>
-                                        <p style=" margin-top: 6px; margin-bottom:0px;">{{ $shipping_address->city }} {{ $shipping_address->zip }} </p>
+                                        <p style=" margin-top: 6px; margin-bottom:0px;">{{ $shipping_address->city->name }} {{ $shipping_address->zip }} </p>
                                     </div>
                                 @else
                                     <span class="h2" style="margin: 0px;">Customer Info</span>
@@ -304,7 +304,7 @@
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$billingAddress->email}}</p>
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$billingAddress->phone}}</p>
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$billingAddress->address}}</p>
-                                        <p style=" margin-top: 6px; margin-bottom:0px;">{{$billingAddress->city}} {{$billingAddress->zip}}</p>
+                                        <p style=" margin-top: 6px; margin-bottom:0px;">{{$billingAddress->city->name}} {{$billingAddress->zip}}</p>
                                     </div>
                                 @elseif($order->billingAddress)
                                     <span class="h2" >Billing Address </span>
@@ -312,7 +312,7 @@
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['contact_person_name'] : ""}}</p>
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['phone'] : ""}}</p>
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['address'] : ""}}</p>
-                                        <p style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['city'] : ""}} {{$order->billingAddress ? $order->billingAddress['zip'] : ""}}</p>
+                                        <p style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['city']['name'] : ""}} {{$order->billingAddress ? $order->billingAddress['zip'] : ""}}</p>
                                     </div>
                                 @endif
                             </td>
