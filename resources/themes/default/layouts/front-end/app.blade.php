@@ -208,6 +208,10 @@
         .dropdown-menu {
             margin- {{Session::get('direction') === "rtl" ? 'right' : 'left'}}: -8px !important;
         }
+        .swal2-popup {
+            font-size: 12px !important;
+
+        }
     </style>
 
     @php($google_tag_manager_id = \App\CPU\Helpers::get_business_settings('google_tag_manager_id'))
@@ -424,9 +428,10 @@
                             Swal.fire({
                                 position: 'top-end',
                                 type: 'success',
-                                title: data.success,
+                                text: data.success,
                                 showConfirmButton: false,
-                                timer: 1500
+                                width:300,
+                                timer: 1500,
                             });
                             $('.countWishlist').html(data.count);
                             $('.countWishlist-' + product_id).text(data.product_count);
@@ -436,7 +441,7 @@
                             Swal.fire({
                                 type: 'info',
                                 title: 'WishList',
-                                text: data.error
+                                text: data.error,
                             });
                             $('.countWishlist').html(data.count);
                             $('.countWishlist-' + product_id).text(data.product_count);
@@ -472,7 +477,7 @@
                             type: 'success',
                             title: '{{translate('Wishlist')}}',
                             confirmButtonText: '{{ translate("OK")}}',
-                            text: data.success
+                            text: data.success,
                         });
                         $('.countWishlist').html(data.count);
                         $('#set-wish-list').html(data.wishlist);

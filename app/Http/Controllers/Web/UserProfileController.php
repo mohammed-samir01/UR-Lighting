@@ -74,6 +74,7 @@ class UserProfileController extends Controller
     {
         $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');
         $customerDetail = User::where('id', auth('customer')->id())->first();
+
         return view(VIEW_FILE_NAMES['user_account'], compact('customerDetail'));
 
     }

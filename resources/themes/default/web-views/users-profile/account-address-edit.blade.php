@@ -9,7 +9,7 @@
 
     <style>
         .cz-sidebar-body h3:hover + .divider-role {
-            border-bottom: 3px solid {{$web_config['primary_color']}}   !important;
+            border-bottom: 3px solid {{$web_config['primary_color']}}     !important;
         }
 
         .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -230,7 +230,10 @@
                     };
 
                     const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
-                        center: {lat: {{$shipping_latitude? $shipping_latitude:'-33.8688'}}, lng: {{$shipping_longitude? $shipping_longitude:'151.2195'}}},
+                        center: {
+                            lat: {{$shipping_latitude? $shipping_latitude:'-33.8688'}},
+                            lng: {{$shipping_longitude? $shipping_longitude:'151.2195'}}
+                        },
                         zoom: 13,
                         mapTypeId: "roadmap",
                     });
@@ -325,8 +328,14 @@
                 });
                 $(document).on('change', '[name=country_id]', function () {
                     var country_id = $(this).val();
-                    if (country_id)
+                    if (country_id) {
                         get_states(country_id);
+                    } else {
+                        $('[name="state_id"]').html("<option value=\"\">Select State<\/option>");
+                        $('[name="city_id"]').html("<option value=\"\">Select city<\/option>");
+
+                    }
+
                 });
 
                 $(document).on('change', '[name=state_id]', function () {
@@ -362,22 +371,20 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         url: "{{route('get-city')}}",
-            type: 'GET',
-            data: {
-                state_id: state_id
-            },
-            success: function (response) {
-                var obj = JSON.parse(response);
-                if (obj != '') {
-                    $('[name="city_id"]').html(obj);
-                    AIZ.plugins.bootstrapSelect('refresh');
+                        type: 'GET',
+                        data: {
+                            state_id: state_id
+                        },
+                        success: function (response) {
+                            var obj = JSON.parse(response);
+                            if (obj != '') {
+                                $('[name="city_id"]').html(obj);
+                                AIZ.plugins.bootstrapSelect('refresh');
+                            }
+                        }
+                    });
                 }
-            }
-        });
-    }
 
 
-
-
-</script>
-@endpush
+            </script>
+    @endpush

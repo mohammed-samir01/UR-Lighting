@@ -9,7 +9,7 @@
 
     <style>
         .cz-sidebar-body h3:hover + .divider-role {
-            border-bottom: 3px solid {{$web_config['primary_color']}}      !important;
+            border-bottom: 3px solid {{$web_config['primary_color']}}       !important;
         }
 
         .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -142,7 +142,8 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>{{translate('state')}}</label>
-                                            <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" required>
+                                            <select class="form-control mb-3 aiz-selectpicker" data-live-search="true"
+                                                    name="state_id" required>
 
                                             </select>
                                         </div>
@@ -152,7 +153,8 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label for="address-city">{{translate('city')}}</label>
-                                            <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city_id" required>
+                                            <select class="form-control mb-3 aiz-selectpicker" data-live-search="true"
+                                                    name="city_id" required>
 
                                             </select>
 
@@ -409,9 +411,9 @@
                             </section>
                         @endforeach
                     </div>
-            </section>
+                </section>
+            </div>
         </div>
-    </div>
     </div>
 @endsection
 
@@ -588,10 +590,16 @@
         $(document).on("keydown", "input", function (e) {
             if (e.which == 13) e.preventDefault();
         });
-        $(document).on('change', '[name=country_id]', function () {
+        $('.__account-address').on('change', '[name=country_id]', function () {
             var country_id = $(this).val();
-            if (country_id)
+            if (country_id) {
                 get_states(country_id);
+            } else {
+                console.log('asdsadsa')
+                $('[name="state_id"]').html("<option value=\"\">Select State<\/option>");
+                $('[name="city_id"]').html("<option value=\"\">Select city<\/option>");
+                AIZ.plugins.bootstrapSelect('refresh');
+            }
         });
 
         $(document).on('change', '[name=state_id]', function () {

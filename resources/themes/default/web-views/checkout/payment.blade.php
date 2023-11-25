@@ -37,7 +37,7 @@
                     <payment-methods :data='@json($payment_gateways_list)'>
                         @if(!$cod_not_show && $cash_on_delivery['status'])
                             <div class="col-md-4" id="cod-for-cart">
-                                <div class="card cursor-pointer">
+                                <div class="cursor-pointer">
                                     <div class="card-body __h-100px">
                                         <form action="{{route('checkout-complete')}}" method="get"
                                               class="needs-validation">
@@ -56,7 +56,7 @@
                         @if ($digital_payment['status']==1)
                             @if(auth('customer')->check() && $wallet_status==1)
                                 <div class="col-sm-6">
-                                    <div class="card cursor-pointer">
+                                    <div class="cursor-pointer">
                                         <div class="card-body __h-100px">
                                             <button class="btn btn-block click-if-alone" type="submit"
                                                     data-toggle="modal" data-target="#wallet_submit_button">
@@ -71,7 +71,7 @@
                             @foreach ($payment_gateways_list as $payment_gateway)
                                 @if($payment_gateway->key_name != 'paytabs')
                                     <div class="col-md-4">
-                                        <div class="card cursor-pointer">
+                                        <div class="cursor-pointer">
                                             <div
                                                 class="card-body __h-100px overflow-hidden d-flex justify-content-center align-items-center">
                                                 <form method="post"
@@ -113,7 +113,7 @@
 
                             @if(isset($offline_payment) && $offline_payment['status'])
                                 <div class="col-md-4" id="cod-for-cart">
-                                    <div class="card cursor-pointer">
+                                    <div class="cursor-pointer">
                                         <div
                                             class="card-body __h-100px overflow-hidden d-flex justify-content-center align-items-center">
                                             <form action="{{route('offline-payment-checkout-complete')}}" method="get"

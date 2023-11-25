@@ -40,7 +40,7 @@
                                     <div class="swiper mySwiper pb-3">
                                         <div class="swiper-wrapper">
                                             <div class="swiper-slide">
-                                                <img src="{{asset('public/assets/back-end/img/slider-1.png')}}"
+                                                <img src="#"
                                                      loading="lazy"
                                                      alt="" class="dark-support rounded">
                                             </div>

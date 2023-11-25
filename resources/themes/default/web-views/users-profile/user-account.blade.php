@@ -65,7 +65,7 @@
                                         <div class="form-group col-md-6 mb-0">
                                             <label for="phone">{{translate('phone_number')}} </label>
                                             <small class="text-primary">(
-                                                * {{translate('country_code_is_must_like_for_BD')}} 880
+                                                * {{translate('country_code_is_must_like_for_BD')}} +966
                                                 )</small></label>
                                             <input type="number" class="form-control" type="text" id="phone"
                                                    name="phone"

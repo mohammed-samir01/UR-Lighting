@@ -53,7 +53,7 @@
                     <div class="col-sm-6 mt-4">
                         <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email" value="{{old('email')}}" placeholder="{{translate('email_address')}}" required>
                     </div>
-                    <div class="col-sm-6"><small class="text-danger">( * {{translate('country_code_is_must_like_for_BD')}} 880 )</small>
+                    <div class="col-sm-6"><small class="text-danger">( * {{translate('country_code_is_must_like_for_BD')}} +966 )</small>
                         <input type="number" class="form-control form-control-user" id="exampleInputPhone" name="phone" value="{{old('phone')}}" placeholder="{{translate('phone_number')}}" required>
                     </div>
                     <div class="col-sm-6">
