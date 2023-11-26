@@ -220,6 +220,7 @@ class PaymentController extends Controller
 
     public function customer_add_to_fund_request(Request $request)
     {
+
         if(Helpers::get_business_settings('add_funds_to_wallet') != 1)
         {
             if(in_array($request->payment_request_from, ['app', 'react'])){

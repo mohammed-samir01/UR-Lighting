@@ -6243,4 +6243,7 @@
   'Ex: 5' => 'Ex: 5',
   'search_by_bonus_title' => 'Search by bonus title',
   'minimum_amount_can_not_be_greater_than_bonus_amount' => 'Minimum amount can not be greater than bonus amount',
+  'you_do_not_have_any' => 'You do not have any',
+  'transaction_yet' => 'Transaction yet',
+  'cannot_input_minus_value' => 'Cannot input minus value',
 );
