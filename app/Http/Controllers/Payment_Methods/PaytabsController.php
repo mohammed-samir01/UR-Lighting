@@ -93,16 +93,15 @@ class PaytabsController extends Controller
             return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
         }
         $payer = json_decode($payment_data['payer_information']);
-
+        $type = $payment_data->type_payment ??'all';
         $plugin = new Paytabs();
         $request_url = 'payment/request';
         $data = [
             "tran_type" => "sale",
             "tran_class" => "ecom",
             "cart_id" => $payment_data->id,
-//            "cart_currency" => $payment_data->currency_code,
-            "payment_methods"=> ["stcpay"],
-            "cart_currency" => 'SAR',
+            "cart_currency" => $payment_data->currency_code,
+            "payment_methods" => [$type],
             "cart_amount" => round($payment_data->payment_amount, 2),
             "cart_description" => "products",
             "paypage_lang" => "en",
@@ -115,8 +114,9 @@ class PaytabsController extends Controller
                 "street1" => "N/A",
                 "city" => "N/A",
                 "state" => "N/A",
-                "country" => "N/A",
-                "zip" => "00000"
+                "country" => "SA",
+                "zip" => "00000",
+                "ip" => "142.154.127.255"
             ],
             "shipping_details" => [
                 "name" => "N/A",
@@ -125,7 +125,7 @@ class PaytabsController extends Controller
                 "street1" => "N/A",
                 "city" => "N/A",
                 "state" => "N/A",
-                "country" => "N/A",
+                "country" => "SA",
                 "zip" => "0000"
             ],
             "user_defined" => [
@@ -133,10 +133,18 @@ class PaytabsController extends Controller
                 "udf3" => "UDF3"
             ]
         ];
+        if (request()->has('token_paytabs') && request('token_paytabs') != '')
+            $data['payment_token'] = \request('token_paytabs');
+
 
         $page = $plugin->send_api_request($request_url, $data);
+
         if (!isset($page['redirect_url'])) {
             return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
+        }
+
+        if (in_array($request->payment_request_from, ['app', 'react'])) {
+            return response()->json(['redirect_link' => $page['redirect_url']], 200);
         }
         header('Location:' . $page['redirect_url']); /* Redirect browser */
         exit();
@@ -173,13 +181,13 @@ class PaytabsController extends Controller
             if (isset($payment_data) && function_exists($payment_data->success_hook)) {
                 call_user_func($payment_data->success_hook, $payment_data);
             }
-            return $this->payment_response($payment_data,'success');
+            return $this->payment_response($payment_data, 'success');
         }
         $payment_data = $this->payment::where(['id' => $request['payment_id']])->first();
         if (isset($payment_data) && function_exists($payment_data->failure_hook)) {
             call_user_func($payment_data->failure_hook, $payment_data);
         }
-        return $this->payment_response($payment_data,'fail');
+        return $this->payment_response($payment_data, 'fail');
     }
 
     public function response(Request $request)

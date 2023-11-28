@@ -27,7 +27,6 @@ class PaymentController extends Controller
 {
     public function payment(Request $request)
     {
-
         $user = Helpers::get_customer($request);
         $validator = Validator::make($request->all(), [
             'payment_method' => 'required',
@@ -208,7 +207,7 @@ class PaymentController extends Controller
             payment_amount: $payment_amount,
             external_redirect_link: $request->payment_platform == 'web' ? $request->external_redirect_link : null,
             attribute: 'order',
-            attribute_id: '10001'
+            attribute_id: '10001',type_payment: $request->type_payment ?? null
         );
 
         $receiver_info = new Receiver('receiver_name','example.png');

@@ -105,6 +105,8 @@
             @if(request()->is('checkout-payment'))
             <div class="d-flex justify-content-between">
                 <span class="cart_title">{{translate('total')}}</span>
+                <input type="hidden" name="total_amount" value="{{$sub_total+$total_tax+$total_shipping_cost-$coupon_dis-$total_discount_on_product-$order_wise_shipping_discount}}">
+                <input type="hidden" name="lang" value="{{\App\CPU\Helpers::app_lang()}}">
                 <span class="cart_value">
                 {{\App\CPU\Helpers::currency_converter($sub_total+$total_tax+$total_shipping_cost-$coupon_dis-$total_discount_on_product-$order_wise_shipping_discount)}}
                 </span>

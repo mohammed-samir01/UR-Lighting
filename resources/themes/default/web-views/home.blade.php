@@ -745,7 +745,7 @@
                                                             {{round($bestSell->product->discount)}}%
                                                         @elseif($bestSell->product->discount_type =='flat')
                                                             {{\App\CPU\Helpers::currency_converter($bestSell->product->discount)}}
-                                                        @endif {{translate('off')}}
+                                                        @endif {{translate('the_discount')}}
                                                     </span>
                                                 </div>
                                             @endif
@@ -827,7 +827,7 @@
                                                             {{round($top->product->discount)}}%
                                                         @elseif($top->product->discount_type =='flat')
                                                             {{\App\CPU\Helpers::currency_converter($top->product->discount)}}
-                                                        @endif {{translate('off')}}
+                                                        @endif {{translate('the_discount')}}
                                                     </span>
                                                 </div>
                                             @endif

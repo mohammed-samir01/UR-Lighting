@@ -8,19 +8,22 @@
                 <slot></slot>
             </template>
         </VueRadioButton>
-<!--        <PayTabs v-if="[1,2,3].includes(selectedButton)"/>-->
-<!--        <Tabby v-if="selectedButton === 4"/>-->
+        <Credit v-show="selectedButton == 'credit'"/>
+        <Tabby v-show="selectedButton == 'tabby'" :method="completeOrder"/>
+        <MadaAndStc v-show="selectedButton == 'mada' || selectedButton == 'stcpay'" :method="completeOrder"/>
     </div>
 </template>
 <script>
 import VueRadioButton from './VueRadioButton.vue'
 import PayTabs from "./PayTabs.vue";
 import Tabby from "./Tabby.vue";
+import Credit from "./Credit.vue";
+import MadaAndStc from "./MadaAndStc.vue";
 
 export default {
     name: "PaymentMethods",
-    props: ['data'],
-    components: {Tabby, PayTabs, VueRadioButton},
+    props: ['data', 'customer_id'],
+    components: {MadaAndStc, Credit, Tabby, PayTabs, VueRadioButton},
     data() {
         return {
             selectedButton: '',
@@ -59,6 +62,26 @@ export default {
                 paytabs = JSON.parse(this.data.find((payment) => payment.key_name == 'paytabs').additional_data).options
             return paytabs
 
+        }
+    },
+    methods: {
+        completeOrder() {
+            axios.post(`customer/web-payment-request`, {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'payment_method': 'paytabs',
+                'payment_platform': 'web',
+                'payment_request_from': 'app',
+                'customer_id': this.customer_id,
+                'is_guest': false,
+                'type_payment': this.selectedButton
+            }).then((res) => {
+                axios.post(res.data.redirect_link, {
+                    'payment_request_from': 'app',
+                }).then((res) => {
+                    if (res.data && res.data.redirect_link)
+                        window.location.href = res.data.redirect_link;
+                })
+            })
         }
     }
 }

@@ -12,7 +12,7 @@
                             @elseif($product->discount_type =='flat')
                                 {{\App\CPU\Helpers::currency_converter($product->discount)}}
                             @endif
-                            {{translate('off')}}
+                            {{translate('the_discount')}}
                         </span>
             @else
                 <span class="for-discoutn-value-null"></span>

@@ -40,6 +40,7 @@ trait Payment
         $payment->attribute = $payment_info->getAttribute();
         $payment->attribute_id = $payment_info->getAttributeId();
         $payment->payment_platform = $payment_info->getPaymentPlatForm();
+        $payment->type_payment = $payment_info->getTypePayment();
         $payment->save();
 
         if ($payment->payment_method == 'ssl_commerz') {

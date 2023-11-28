@@ -45,3 +45,7 @@ ALTER TABLE `carts` ADD `selling_price` DOUBLE NULL AFTER `quantity`;
 
 /*** 20 11 ***
 ALTER TABLE `response_zatca` ADD `status_csr` TINYINT NULL DEFAULT NULL AFTER `seller_id`, ADD `response_csr` JSON NULL AFTER `status_csr`;
+
+
+/** 28 11 **
+ALTER TABLE `payment_requests` ADD `type_payment` VARCHAR(191) NULL AFTER `payment_platform`;

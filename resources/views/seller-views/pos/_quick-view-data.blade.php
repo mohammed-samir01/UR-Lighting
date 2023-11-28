@@ -57,7 +57,7 @@
                     @if ($product->discount > 0)
                     <div class="d-flex gap-2 align-items-center text-info rounded-pill bg-info-light px-2 py-1">
                         @if ($product->discount > 0 && $product->discount_type === "percent")
-                            {{$product->discount}}% {{translate('OFF')}}
+                            {{$product->discount}}% {{translate('the_discount')}}
                         @else
                             @if ($product->discount > 0)
                                 {{translate('save')}} {{\App\CPU\Helpers::currency_converter($product->discount)}}

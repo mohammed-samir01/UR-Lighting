@@ -34,7 +34,7 @@
                     @include('web-views.partials._checkout-steps',['step'=>3])
                     <!-- Payment methods accordion-->
                     <h2 class="h6 pb-3 mb-2 mt-5">{{ translate('choose_payment')}}</h2>
-                    <payment-methods :data='@json($payment_gateways_list)'>
+                    <payment-methods :data='@json($payment_gateways_list)' :customer_id='@json(auth('customer')->user()->id)'>
                         @if(!$cod_not_show && $cash_on_delivery['status'])
                             <div class="col-md-4" id="cod-for-cart">
                                 <div class="cursor-pointer">
@@ -133,7 +133,7 @@
                     </payment-methods>
 
 
-                    <div class="row justify-content-center">
+                    <div class="row justify-content-end">
                         <div class="col-md-6 text-center mt-5">
                             <a class="btn btn-secondary btn-block" href="{{route('checkout-details')}}">
                                 <span class="d-none d-sm-inline">{{ translate('back_to_shipping')}}</span>

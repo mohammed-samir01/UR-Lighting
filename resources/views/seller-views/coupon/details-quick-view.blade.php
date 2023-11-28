@@ -46,7 +46,7 @@
                     </h4>
                 </div>
 
-                <span>{{translate('off')}}</span>
+                <span>{{translate('the_discount')}}</span>
             @endif
         </div>
     </div>

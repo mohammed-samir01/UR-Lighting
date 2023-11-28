@@ -16,8 +16,9 @@ class Payment
     private $attribute;
     private $attribute_id;
     private $payment_platform;
+    private $type_payment;
 
-    public function __construct($success_hook, $failure_hook, $currency_code, $payment_method, $payment_platform, $payer_id = null, $receiver_id = null, $additional_data = [], $payment_amount = 0, $external_redirect_link = null, $attribute = null, $attribute_id = null)
+    public function __construct($success_hook, $failure_hook, $currency_code, $payment_method, $payment_platform, $payer_id = null, $receiver_id = null, $additional_data = [], $payment_amount = 0, $external_redirect_link = null, $attribute = null, $attribute_id = null,$type_payment = null)
     {
         $this->success_hook = $success_hook;
         $this->failure_hook = $failure_hook;
@@ -31,6 +32,7 @@ class Payment
         $this->attribute = $attribute;
         $this->attribute_id = $attribute_id;
         $this->payment_platform = $payment_platform;
+        $this->type_payment = $type_payment;
     }
 
     public function getSuccessHook()
@@ -92,4 +94,10 @@ class Payment
     {
         return $this->payment_platform;
     }
+
+    public function getTypePayment()
+    {
+        return $this->type_payment;
+    }
+
 }

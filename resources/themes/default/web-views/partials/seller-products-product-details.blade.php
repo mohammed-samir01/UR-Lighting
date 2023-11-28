@@ -9,7 +9,7 @@
                     {{round($product->discount,(!empty($decimal_point_settings) ? $decimal_point_settings: 0))}}%
                 @elseif($product->discount_type =='flat')
                     {{\App\CPU\Helpers::currency_converter($product->discount)}}
-                @endif {{ translate('off')}}
+                @endif {{ translate('the_discount')}}
             </span>
         </div>
         @endif
