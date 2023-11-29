@@ -24,19 +24,5 @@ export default {
 }
 </script>
 <style scoped>
-///* Style the submit button */
-//button[name="complete"] {
-//    background-color: #3498db;
-//    color: #fff;
-//    padding: 12px;
-//    border: none;
-//    border-radius: 5px;
-//    font-size: 18px;
-//    cursor: pointer;
-//    width: 350px;
-//}
-//
-//button[name="complete"]:hover {
-//    background-color: #2980b9;
-//}
+
 </style>

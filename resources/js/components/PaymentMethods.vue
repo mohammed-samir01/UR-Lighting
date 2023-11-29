@@ -8,7 +8,7 @@
                 <slot></slot>
             </template>
         </VueRadioButton>
-        <Credit v-show="selectedButton == 'credit'"/>
+        <Credit v-show="selectedButton == 'creditcard'"/>
         <Tabby v-show="selectedButton == 'tabby'" :method="completeOrder"/>
         <MadaAndStc v-show="selectedButton == 'mada' || selectedButton == 'stcpay'" :method="completeOrder"/>
     </div>

@@ -229,6 +229,7 @@ Route::group(['prefix' => 'coupon', 'as' => 'coupon.', 'namespace' => 'Web'], fu
 $is_published = 0;
 try {
     $full_data = include('Modules/Gateways/Addon/info.php');
+
     $is_published = $full_data['is_published'] == 1 ? 1 : 0;
 } catch (\Exception $exception) {
 }

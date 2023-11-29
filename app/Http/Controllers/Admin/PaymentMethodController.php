@@ -340,7 +340,7 @@ class PaymentMethodController extends Controller
                 [
                     'name_ar' => 'فيزا وماستر كارد',
                     'name_en' => 'Visa & Master Card',
-                    'key' => 'credit',
+                    'key' => 'creditcard',
                     'active' => request()->boolean('credit'),
                     'icon' => '/public/payments/credit.svg'
                 ],

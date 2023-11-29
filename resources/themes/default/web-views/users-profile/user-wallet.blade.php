@@ -173,11 +173,6 @@
                                                                             <input type="radio"
                                                                                    class="form-check-input d-none"
                                                                                    name="payment_method"
-                                                                                   value="{{ $gateway->key_name }}"
-                                                                                   required>
-                                                                            <input type="text"
-                                                                                   class="form-check-input d-none"
-                                                                                   name="type"
                                                                                    value="{{ $op->key }}"
                                                                                    required>
                                                                             <div class="check-icon">
@@ -192,16 +187,14 @@
                                                                                         fill="white"/>
                                                                                 </svg>
                                                                             </div>
-                                                                            @php($lang = 'name_' . \App\CPU\Helpers::app_lang())
-                                                                            <div
-                                                                                class="form-check-label d-flex align-items-center">
+
+                                                                            <div class="form-check-label d-flex align-items-center">
                                                                                 <img width="65"
                                                                                      src="{{ $op->icon }}"
                                                                                      onerror="this.src='{{ asset('public/assets/front-end/img/image-place-holder.png') }}'"
                                                                                      alt="img">
 
-                                                                                <span
-                                                                                    class="ml-3">{{ $op->{$lang} }}</span>
+
                                                                             </div>
                                                                         </label>
                                                                     @endif

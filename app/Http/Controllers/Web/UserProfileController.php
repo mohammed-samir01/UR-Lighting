@@ -726,8 +726,9 @@ class UserProfileController extends Controller
         $order = Order::with('seller')->with('shipping')->where('id', $id)->first();
         $data["email"] = $order->customer["email"];
         $data["order"] = $order;
-
         $mpdf_view = \View::make(VIEW_FILE_NAMES['order_invoice'], compact('order'));
+        if (Helpers::app_lang() == 'ar')
+            $mpdf_view = \View::make(VIEW_FILE_NAMES['order_ar_invoice'], compact('order'));
         Helpers::gen_mpdf($mpdf_view, 'order_invoice_', $order->id);
     }
 

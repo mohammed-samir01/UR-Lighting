@@ -14,6 +14,7 @@ return [
     'account_address_edit' => 'web-views.users-profile.account-address-edit',
     'account_orders' => 'web-views.users-profile.account-orders',
     'order_invoice' => 'web-views.order.invoice',
+    'order_ar_invoice' => 'web-views.order.ar-invoice',
     'account_order_details' => 'web-views.users-profile.account-order-details',
     'refund_details' => 'web-views.users-profile.refund-details',
     'seller_info' => '',

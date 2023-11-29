@@ -6421,5 +6421,10 @@
   'The payment method field is required.' => 'The payment method field is required.',
   'The payment platform field is required.' => 'The payment platform field is required.',
   'Payment_failed' => 'Payment failed',
-    'the_discount' => 'discount'
+  'the_discount' => 'discount',
+  'Payment_success' => 'Payment success',
+  'oto' => 'Oto',
+  'order_status_shipping' => 'Order status shipping',
+  'name_shipping' => 'Name shipping',
+  'order_shipment' => 'Order shipment',
 );

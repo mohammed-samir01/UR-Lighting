@@ -5,6 +5,7 @@ use App\CPU\CartManager;
 use App\CPU\CustomerManager;
 use App\CPU\OrderManager;
 use App\Model\Cart;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -60,14 +61,15 @@ if(!function_exists('digital_payment_success')) {
             }else{
                 CartManager::cart_clean();
             }
-
+            return redirect('web-payment?flag=success');
         }
     }
 }
 
 if(!function_exists('digital_payment_fail')) {
     function digital_payment_fail($payment_data){
-
+        Toastr::error('لم يتم عملية الدفع بنجاح');
+        return redirect()->route('checkout-payment');
     }
 }
 
@@ -89,6 +91,8 @@ if(!function_exists('add_fund_to_wallet_success')) {
                     info($ex);
                 }
             }
+            Toastr::success('تم اضافة المبلغ بنجاح');
+            return redirect()->route('wallet');
         }
     }
 }
@@ -96,6 +100,7 @@ if(!function_exists('add_fund_to_wallet_success')) {
 // Add Fund To Wallet - Fail
 if(!function_exists('add_fund_to_wallet_fail')) {
     function add_fund_to_wallet_fail($payment_data){
-
+        Toastr::error('فشلة عميلة الدفع');
+        return redirect()->route('wallet');
     }
 }

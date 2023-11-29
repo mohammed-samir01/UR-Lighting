@@ -6246,5 +6246,7 @@
   'you_do_not_have_any' => 'You do not have any',
   'transaction_yet' => 'Transaction yet',
   'cannot_input_minus_value' => 'Cannot input minus value',
-    'the_discount' => 'خصم'
+  'the_discount' => 'خصم',
+  'Payment_success' => 'Payment success',
+  'No_country_to_deliver' => 'No country to deliver',
 );

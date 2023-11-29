@@ -152,6 +152,7 @@ class PaytabsController extends Controller
 
     public function callback(Request $request)
     {
+
         $plugin = new Paytabs();
         $response_data = $_POST;
         $transRef = filter_input(INPUT_POST, 'tranRef');
@@ -179,13 +180,14 @@ class PaytabsController extends Controller
             ]);
             $payment_data = $this->payment::where(['id' => $request['payment_id']])->first();
             if (isset($payment_data) && function_exists($payment_data->success_hook)) {
-                call_user_func($payment_data->success_hook, $payment_data);
+             return  call_user_func($payment_data->success_hook, $payment_data);
             }
             return $this->payment_response($payment_data, 'success');
         }
         $payment_data = $this->payment::where(['id' => $request['payment_id']])->first();
+
         if (isset($payment_data) && function_exists($payment_data->failure_hook)) {
-            call_user_func($payment_data->failure_hook, $payment_data);
+          return  call_user_func($payment_data->failure_hook, $payment_data);
         }
         return $this->payment_response($payment_data, 'fail');
     }
