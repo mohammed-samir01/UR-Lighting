@@ -1227,8 +1227,12 @@
 
         $(document).on('change', '[name=country_id]', function () {
             var country_id = $(this).val();
-            if (country_id)
+            if (country_id) {
                 get_states(country_id);
+            } else {
+                $('[name="state_id"]').html("<option value=\"\">Select State<\/option>");
+                $('[name="city_id"]').html("<option value=\"\">Select city<\/option>");
+            }
         });
 
         $(document).on('change', '[name=state_id]', function () {

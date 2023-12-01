@@ -21,11 +21,11 @@
                     @foreach($cart as  $cartItem)
                     @php($product=\App\Model\Product::find($cartItem['product_id']))
                         <div class="widget-cart-item pb-2">
-                            <button class="close text-danger " type="button" onclick="removeFromCart({{ $cartItem['id'] }})"
-                                    aria-label="Remove"><span
-                                    aria-hidden="true">&times;</span>
+                            <button class="close text-danger" type="button" onclick="removeFromCart({{ $cartItem['id'] }})"
+                                    aria-label="Remove">
+                                <span aria-hidden="true" class="mr-2">&times;</span>
                             </button>
-                            <div class="media">
+                            <div class="media" style="text-align: {{Session::get('direction') === 'rtl' ? 'right' : 'left'}}">
                                 <a class="d-block {{Session::get('direction') === "rtl" ? 'ml-2' : 'mr-2'}} position-relative overflow-hidden"
                                    href="{{route('product',$cartItem['slug'])}}">
                                     <img width="64" class="{{ $product->status == 0?'blur-section':'' }}"

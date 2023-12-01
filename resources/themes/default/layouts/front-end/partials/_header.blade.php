@@ -264,6 +264,7 @@
                     </div>
 
                     @php($categories=\App\Model\Category::with(['childes.childes'])->where('position', 0)->priority()->paginate(11))
+
                     <ul class="navbar-nav mega-nav pr-2 pl-2 {{Session::get('direction') === "rtl" ? 'mr-2' : 'mr-2'}} d-none d-xl-block __mega-nav">
                         <li class="nav-item {{!request()->is('/')?'dropdown':''}}">
                             <a class="nav-link dropdown-toggle {{Session::get('direction') === "rtl" ? 'pr-0' : 'pl-0'}}"
@@ -547,6 +548,7 @@
                             @endif
                         @endif
                     </ul>
+
                 </div>
             </div>
         </div>

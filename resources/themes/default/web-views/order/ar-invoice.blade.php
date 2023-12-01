@@ -390,9 +390,9 @@
                             {{ ucwords('variation')}} : {{$details['variant']}}
                         @endif
                     </td>
-                    <td>{{\App\CPU\BackEndHelper::set_symbol(\App\CPU\BackEndHelper::usd_to_currency($details['price']))}}</td>
+                    <td>{{(\App\CPU\BackEndHelper::usd_to_currency($details['price'])) . ' '.'ريال'}}</td>
                     <td>{{$details->qty}}</td>
-                    <td class="text-right">{{\App\CPU\BackEndHelper::set_symbol(\App\CPU\BackEndHelper::usd_to_currency($subtotal))}}</td>
+                    <td class="text-right">{{(\App\CPU\BackEndHelper::usd_to_currency($subtotal)) . ' '.'ريال'}}</td>
                 </tr>
 
                 @php

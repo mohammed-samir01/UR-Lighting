@@ -64,11 +64,17 @@ class BackEndHelper
     {
         $decimal_point_settings = Helpers::get_business_settings('decimal_point_settings');
         $position = Helpers::get_business_settings('currency_symbol_position');
-        if (!is_null($position) && $position == 'left') {
-            $string = currency_symbol() . ' ' . number_format($amount, (!empty($decimal_point_settings) ? $decimal_point_settings: 0));
+//        if (!is_null($position) && $position == 'left') {
+//            $string = currency_symbol() . ' ' . number_format($amount, (!empty($decimal_point_settings) ? $decimal_point_settings: 0));
+//        } else {
+//        }
+
+        if (Helpers::app_lang() == 'ar') {
+            $string =  currency_symbol() . ' '.number_format($amount, !empty($decimal_point_settings) ? $decimal_point_settings : 0);
         } else {
-            $string = number_format($amount, !empty($decimal_point_settings) ? $decimal_point_settings: 0) . ' ' . currency_symbol();
+            $string = number_format($amount, !empty($decimal_point_settings) ? $decimal_point_settings : 0) . ' ' . currency_symbol();
         }
+
         return $string;
     }
 
@@ -86,7 +92,7 @@ class BackEndHelper
 
         $data = Order::where([
             'seller_is' => 'admin',
-            'order_status'=>'delivered'
+            'order_status' => 'delivered'
         ])->select(
             DB::raw('IFNULL(sum(order_amount),0) as sums'),
             DB::raw('YEAR(created_at) year, MONTH(created_at) month')
@@ -112,7 +118,7 @@ class BackEndHelper
         $to = Carbon::now()->endOfYear()->format('Y-m-d');
 
         $data = Order::where([
-            'order_type'=>'default_type'
+            'order_type' => 'default_type'
         ])->select(
             DB::raw('COUNT(id) as count'),
             DB::raw('YEAR(created_at) year, MONTH(created_at) month')
@@ -128,7 +134,8 @@ class BackEndHelper
         return $max;
     }
 
-    public static function order_status($status){
+    public static function order_status($status)
+    {
         switch ($status) {
             case "pending":
                 return "Pending";
@@ -149,12 +156,13 @@ class BackEndHelper
         }
     }
 
-    public static function format_currency($value){
+    public static function format_currency($value)
+    {
         $suffixes = ["1t+" => 1000000000000, "B+" => 1000000000, "M+" => 1000000, "K+" => 1000];
         foreach ($suffixes as $suffix => $factor) {
             if ($value >= $factor) {
                 $div = $value / $factor;
-                $formatted_value = number_format($div,1 ) . $suffix;
+                $formatted_value = number_format($div, 1) . $suffix;
                 break;
             }
         }

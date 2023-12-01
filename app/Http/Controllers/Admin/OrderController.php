@@ -524,6 +524,7 @@ class OrderController extends Controller
 
     public function generate_invoice($id)
     {
+
         $company_phone = BusinessSetting::where('type', 'company_phone')->first()->value;
         $company_email = BusinessSetting::where('type', 'company_email')->first()->value;
         $company_name = BusinessSetting::where('type', 'company_name')->first()->value;
@@ -534,9 +535,14 @@ class OrderController extends Controller
         $data["email"] = $order->customer != null ? $order->customer["email"] : json_decode($order->billing_address_data)->contact_person_name ?? translate('email_not_found');
         $data["client_name"] = $order->customer != null ? $order->customer["f_name"] . ' ' . $order->customer["l_name"] : json_decode($order->billing_address_data)->email ?? translate('customer_not_found');
         $data["order"] = $order;
-        $mpdf_view = View::make('admin-views.order.invoice',
-            compact('order', 'seller', 'company_phone', 'company_name', 'company_email', 'company_web_logo')
-        );
+        if (Helpers::app_lang() == 'ar')
+            $mpdf_view = View::make('admin-views.order.ar-invoice',
+                compact('order', 'seller', 'company_phone', 'company_name', 'company_email', 'company_web_logo')
+            );
+        else
+            $mpdf_view = View::make('admin-views.order.invoice',
+                compact('order', 'seller', 'company_phone', 'company_name', 'company_email', 'company_web_logo')
+            );
 
         Helpers::gen_mpdf($mpdf_view, 'order_invoice_', $order->id);
     }

@@ -173,6 +173,7 @@ class WebController extends Controller
 
     public function all_sellers(Request $request)
     {
+
         $business_mode = Helpers::get_business_settings('business_mode');
         if (isset($business_mode) && $business_mode == 'single') {
             Toastr::warning(translate('access_denied!!'));

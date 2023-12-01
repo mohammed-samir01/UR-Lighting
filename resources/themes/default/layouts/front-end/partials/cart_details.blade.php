@@ -66,7 +66,7 @@
                     <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table __cart-table">
                         <thead class="thead-light">
                             <tr class="">
-                                <th class="font-weight-bold __w-5p">{{translate('SL#')}}</th>
+                                <th class="font-weight-bold __w-5p" style="width: 14%">{{translate('SL#')}}</th>
                                 @if ( $shipping_type != 'order_wise')
                                 <th class="font-weight-bold __w-30p">{{translate('product_details')}}</th>
                                 @else
