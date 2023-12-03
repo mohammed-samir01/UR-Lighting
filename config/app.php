@@ -70,7 +70,7 @@ return [
     */
 
     'timezone' => 'Asia/Riyadh',
-    'mix_url' => 'https://candle-store.candlee.net/public',
+    'mix_url' => 'https://ur-lighting-test.com/public',
 
     /*
     |--------------------------------------------------------------------------

@@ -4,6 +4,12 @@
 
 @push('css_or_js')
     <style>
+
+
+
+
+
+
         .stripe-button-el {
             display: none !important;
         }
@@ -131,6 +137,7 @@
                         @endif
 
                     </payment-methods>
+
 
 
                     <div class="row justify-content-end">

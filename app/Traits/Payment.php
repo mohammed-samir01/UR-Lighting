@@ -109,6 +109,8 @@ trait Payment
             return url("payment/worldpay/pay/?payment_id={$payment->id}");
         }else if($payment->payment_method == 'sixcash'){
             return url("payment/sixcash/pay/?payment_id={$payment->id}");
+        } else if($payment->payment_method == 'tamara'){
+            return url("payment/tamara/pay/?payment_id={$payment->id}");
         }
 
         return false;

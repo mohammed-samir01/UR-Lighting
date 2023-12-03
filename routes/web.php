@@ -12,6 +12,7 @@
  */
 
 use App\CPU\Helpers;
+use App\Http\Controllers\Payment_Methods\TamaraController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
@@ -328,6 +329,12 @@ if (!$is_published) {
             Route::any('pay', [PaytabsController::class, 'payment'])->name('pay');
             Route::any('callback', [PaytabsController::class, 'callback'])->name('callback');
             Route::any('response', [PaytabsController::class, 'response'])->name('response');
+        });
+        //TAMARA
+        Route::group(['prefix' => 'tamara', 'as' => 'tamara.'], function () {
+            Route::any('pay', [TamaraController::class, 'payment'])->name('pay');
+            Route::any('callback', [TamaraController::class, 'callback'])->name('callback');
+            Route::any('response', [TamaraController::class, 'response'])->name('response');
         });
 
         //Pay Fast

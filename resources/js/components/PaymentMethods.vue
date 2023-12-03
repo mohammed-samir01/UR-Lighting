@@ -11,6 +11,7 @@
         <Credit v-show="selectedButton == 'creditcard'"/>
         <Tabby v-show="selectedButton == 'tabby'" :method="completeOrder"/>
         <MadaAndStc v-show="selectedButton == 'mada' || selectedButton == 'stcpay'" :method="completeOrder"/>
+        <Tamara/>
     </div>
 </template>
 <script>
@@ -19,11 +20,12 @@ import PayTabs from "./PayTabs.vue";
 import Tabby from "./Tabby.vue";
 import Credit from "./Credit.vue";
 import MadaAndStc from "./MadaAndStc.vue";
+import Tamara from "./Tamara.vue";
 
 export default {
     name: "PaymentMethods",
     props: ['data', 'customer_id'],
-    components: {MadaAndStc, Credit, Tabby, PayTabs, VueRadioButton},
+    components: {Tamara, MadaAndStc, Credit, Tabby, PayTabs, VueRadioButton},
     data() {
         return {
             selectedButton: '',

@@ -27,6 +27,7 @@ class PaymentController extends Controller
 {
     public function payment(Request $request)
     {
+
         $user = Helpers::get_customer($request);
         $validator = Validator::make($request->all(), [
             'payment_method' => 'required',
