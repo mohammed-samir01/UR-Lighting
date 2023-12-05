@@ -336,9 +336,17 @@
 @production
     <script src="{{ asset('public/js/app.js?56') }}"></script>
     @else
-        <script>console.log('div')</script>
         <script src="{{ mix('js/app.js') }}"></script>
 @endproduction
+<script>
+    var tamaraWidgetConfig = {
+        lang: "ar", // Language. Default is Arabic. We support [ar|en]
+        country: "SA",
+        // publicKey: [''],
+    }
+</script>
+
+<script defer src="https://cdn.tamara.co/widget-v2/tamara-widget.js"></script>
 <script src="{{asset('public/assets/front-end')}}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script
     src="{{asset('public/assets/front-end')}}/vendor/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>

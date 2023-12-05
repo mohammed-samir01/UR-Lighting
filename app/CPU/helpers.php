@@ -311,7 +311,8 @@ class Helpers
             'paytabs',
             'liqpay',
             'mercadopago',
-            'bkash'
+            'bkash',
+            'tamara'
         ];
         return $methods;
     }

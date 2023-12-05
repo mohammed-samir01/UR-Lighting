@@ -527,6 +527,7 @@ const GATEWAYS_PAYMENT_METHODS = [
     ['key' => 'ssl_commerz', 'value' => 'SSLCOMMERZ'],
     ['key' => 'stripe', 'value' => 'Stripe'],
     ['key' => 'paypal', 'value' => 'PayPal'],
+    ['key' => 'tamara', 'value' => 'Tamara'],
     ['key' => 'razor_pay', 'value' => 'Razor Pay'],
     ['key' => 'paystack', 'value' => 'Paystack'],
     ['key' => 'senang_pay', 'value' => 'Senang Pay'],

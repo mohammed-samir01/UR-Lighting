@@ -18746,6 +18746,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Tabby_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Tabby.vue */ "./resources/js/components/Tabby.vue");
 /* harmony import */ var _Credit_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Credit.vue */ "./resources/js/components/Credit.vue");
 /* harmony import */ var _MadaAndStc_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MadaAndStc.vue */ "./resources/js/components/MadaAndStc.vue");
+/* harmony import */ var _Tamara_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Tamara.vue */ "./resources/js/components/Tamara.vue");
+
 
 
 
@@ -18755,6 +18757,7 @@ __webpack_require__.r(__webpack_exports__);
   name: "PaymentMethods",
   props: ['data', 'customer_id'],
   components: {
+    Tamara: _Tamara_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
     MadaAndStc: _MadaAndStc_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
     Credit: _Credit_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     Tabby: _Tabby_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -18763,40 +18766,35 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      selectedButton: '',
-      options: [{
-        id: 1,
-        icon: "/public/payments/credit.svg"
-      }, {
-        id: 2,
-        icon: "/public/payments/mada.svg"
-      }, {
-        id: 3,
-        icon: "/public/payments/stcpay.svg"
-      }, {
-        id: 4,
-        icon: "/public/payments/tabby.png"
-      }
-      // {
-      //     id: 5,
-      //     icon: "/public/payments/tamara.svg",
-      // },
-      ]
+      selectedButton: ''
     };
   },
-
   computed: {
     paytabs: function paytabs() {
       return this.data && this.data.some(function (pay) {
         return pay.key_name == 'paytabs';
       });
     },
-    optionPaytabs: function optionPaytabs() {
-      var paytabs = [];
-      if (this.paytabs) paytabs = JSON.parse(this.data.find(function (payment) {
+    optionsPay: function optionsPay() {
+      var optionsPay = [];
+      if (this.paytabs) optionsPay = JSON.parse(this.data.find(function (payment) {
         return payment.key_name == 'paytabs';
       }).additional_data).options;
-      return paytabs;
+      if (this.data.some(function (pay) {
+        return pay.key_name == 'tamara' && pay.is_active;
+      })) optionsPay.push({
+        "key": "tamara",
+        "active": true,
+        "icon": "/public/payments/tamara.svg"
+      });
+      return optionsPay;
+    },
+    optionTamara: function optionTamara() {
+      var tamara = [];
+      if (this.paytabs) tamara = JSON.parse(this.data.find(function (payment) {
+        return payment.key_name == 'paytabs';
+      }).additional_data).options;
+      return tamara;
     }
   },
   methods: {
@@ -18873,6 +18871,42 @@ __webpack_require__.r(__webpack_exports__);
       script2.onload = function () {};
       document.body.appendChild(script);
       document.body.appendChild(script2);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=script&lang=js":
+/*!************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=script&lang=js ***!
+  \************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "Tamara",
+  methods: {
+    completeOrder: function completeOrder() {
+      axios.post("customer/web-payment-request", {
+        '_token': $('meta[name="csrf-token"]').attr('content'),
+        'payment_method': 'tamara',
+        'payment_platform': 'web',
+        'payment_request_from': 'app',
+        'customer_id': this.$parent.customer_id,
+        'is_guest': false
+      }).then(function (res) {
+        console.log(res);
+        axios.post(res.data.redirect_link, {
+          'payment_request_from': 'app'
+        }).then(function (res) {
+          if (res.data && res.data.redirect_link) window.location.href = res.data.redirect_link;
+        });
+      });
     }
   }
 });
@@ -19029,7 +19063,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function () {
       return $props.method && $props.method.apply($props, arguments);
     })
-  }, "اكمال الطلب")])]);
+  }, "اكمال الدفع")])]);
 }
 
 /***/ }),
@@ -19078,12 +19112,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Credit = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Credit");
   var _component_Tabby = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Tabby");
   var _component_MadaAndStc = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("MadaAndStc");
+  var _component_Tamara = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Tamara");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueRadioButton, {
     modelValue: $data.selectedButton,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $data.selectedButton = $event;
     }),
-    options: $options.optionPaytabs
+    options: $options.optionsPay
   }, {
     label: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref) {
       var props = _ref.props;
@@ -19102,7 +19137,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     method: $options.completeOrder
   }, null, 8 /* PROPS */, ["method"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.selectedButton == 'tabby']]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_MadaAndStc, {
     method: $options.completeOrder
-  }, null, 8 /* PROPS */, ["method"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.selectedButton == 'mada' || $data.selectedButton == 'stcpay']])]);
+  }, null, 8 /* PROPS */, ["method"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.selectedButton == 'mada' || $data.selectedButton == 'stcpay']]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Tamara, null, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.selectedButton == 'tamara']])]);
 }
 
 /***/ }),
@@ -19143,6 +19178,43 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $props.method && $props.method.apply($props, arguments);
     })
   }, "اكمال الطلب")])]);
+}
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=template&id=67d8ecdb&scoped=true":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=template&id=67d8ecdb&scoped=true ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _withScopeId = function _withScopeId(n) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-67d8ecdb"), n = n(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)(), n;
+};
+var _hoisted_1 = {
+  "class": "mt-5 row",
+  style: {
+    "justify-content": "center"
+  }
+};
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"tamara-summary-widget__container tamara-summary-widget__bundle-ui tamara-summary-widget--inline-text tamara-summary-widget__inline-template-6\" dir=\"rtl\" style=\"box-sizing:border-box;border-radius:10px;border-color:rgb(229, 229, 229);border-style:solid;border-width:1px;box-shadow:rgba(210, 210, 210, 0.4) 0px 0px 20px;text-decoration:none;padding:10px;\" data-v-67d8ecdb><div class=\"tamara-summary-widget__content\" data-v-67d8ecdb><img class=\"tamara-inline-badge tamara-badge\" src=\"https://cdn-sandbox.tamara.co/widget-v2/assets/tamara-grad-ar.a20a9a81.svg\" alt=\"Tamara\" data-v-67d8ecdb><span class=\"tamara-summary-widget__inline__text\" data-v-67d8ecdb>قسمها حتى</span><span class=\"tamara-widget__number-of-installments-node\" data-v-67d8ecdb> 4 </span><span class=\"tamara-summary-widget__inline__text\" data-v-67d8ecdb>دفعات</span></div><div class=\"tamara-summary-widget__extra-content\" data-v-67d8ecdb><div class=\"popup-content__extra-content__body\" data-v-67d8ecdb><div class=\"popup-content__extra-content__item\" data-v-67d8ecdb><div class=\"item-status-icon\" data-v-67d8ecdb><svg width=\"22\" height=\"22\" viewBox=\"0 0 22 22\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" data-v-67d8ecdb><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M17.6459 5.90434C17.9289 6.15752 17.9531 6.59215 17.6999 6.87512L9.90821 15.5835C9.77384 15.7336 9.58034 15.8173 9.37888 15.8123C9.17743 15.8073 8.9883 15.7142 8.8615 15.5576L4.96567 10.7451C4.72676 10.45 4.77233 10.0171 5.06745 9.77817C5.36257 9.53927 5.79547 9.58484 6.03438 9.87996L9.42204 14.0647L16.6752 5.95828C16.9283 5.67531 17.363 5.65116 17.6459 5.90434Z\" fill=\"#8267DB\" data-v-67d8ecdb></path></svg></div><div class=\"item-label\" data-v-67d8ecdb> قسم فاتورتك حتى 4 دفعات، بدون فوائد</div><div class=\"item-arrow-navigation\" data-v-67d8ecdb><svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" data-v-67d8ecdb><path d=\"M7.50011 15.625C7.34178 15.625 7.18345 15.5667 7.05845 15.4417C6.81678 15.2 6.81678 14.8 7.05845 14.5584L11.6168 10L7.05845 5.4417C6.81678 5.20003 6.81678 4.80003 7.05845 4.55836C7.30011 4.3167 7.70011 4.3167 7.94178 4.55836L12.9418 9.55836C13.1834 9.80003 13.1834 10.2 12.9418 10.4417L7.94178 15.4417C7.81678 15.5667 7.65845 15.625 7.50011 15.625Z\" fill=\"#CCCCCC\" data-v-67d8ecdb></path></svg></div></div><div class=\"divider\" data-v-67d8ecdb></div><div class=\"popup-content__extra-content__item\" data-v-67d8ecdb><div class=\"item-status-icon\" data-v-67d8ecdb><svg width=\"22\" height=\"22\" viewBox=\"0 0 22 22\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" data-v-67d8ecdb><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M17.6459 5.90434C17.9289 6.15752 17.9531 6.59215 17.6999 6.87512L9.90821 15.5835C9.77384 15.7336 9.58034 15.8173 9.37888 15.8123C9.17743 15.8073 8.9883 15.7142 8.8615 15.5576L4.96567 10.7451C4.72676 10.45 4.77233 10.0171 5.06745 9.77817C5.36257 9.53927 5.79547 9.58484 6.03438 9.87996L9.42204 14.0647L16.6752 5.95828C16.9283 5.67531 17.363 5.65116 17.6459 5.90434Z\" fill=\"#8267DB\" data-v-67d8ecdb></path></svg></div><div class=\"item-label\" data-v-67d8ecdb> ادفعها قيمة طلبك كاملة</div><div class=\"item-arrow-navigation\" data-v-67d8ecdb><svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" data-v-67d8ecdb><path d=\"M7.50011 15.625C7.34178 15.625 7.18345 15.5667 7.05845 15.4417C6.81678 15.2 6.81678 14.8 7.05845 14.5584L11.6168 10L7.05845 5.4417C6.81678 5.20003 6.81678 4.80003 7.05845 4.55836C7.30011 4.3167 7.70011 4.3167 7.94178 4.55836L12.9418 9.55836C13.1834 9.80003 13.1834 10.2 12.9418 10.4417L7.94178 15.4417C7.81678 15.5667 7.65845 15.625 7.50011 15.625Z\" fill=\"#CCCCCC\" data-v-67d8ecdb></path></svg></div></div></div><div class=\"popup-content__extra-content__footer\" data-v-67d8ecdb><div class=\"footer-item\" data-v-67d8ecdb><div class=\"footer-item__icon\" data-v-67d8ecdb><svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" data-v-67d8ecdb><path d=\"M3.8741 4.30993L3.59165 4.62041L3.68718 4.99839C3.78666 5.37243 3.78666 5.37243 3.78666 7.61684L3.78666 9.86521L3.5877 10.0523C3.31709 10.319 2.97089 10.4264 2.39395 10.4264C2.0357 10.4264 1.94432 10.4104 1.76529 10.3308C1.35948 10.1477 1.12065 9.72585 1.12065 9.20063C1.12065 9.03739 1.16447 8.72711 1.22013 8.47644C1.27579 8.23366 1.33145 7.98299 1.34349 7.91923L1.36343 7.79981L1.27184 7.91134C1.16447 8.0347 0.842148 8.82264 0.738515 9.21267C0.658973 9.5271 0.639036 10.3111 0.710686 10.5458C0.85004 10.9915 1.20808 11.3655 1.63383 11.5088C1.96799 11.6162 2.60869 11.6083 2.95905 11.4889C3.64751 11.25 4.26038 10.6372 4.46329 9.97673C4.53888 9.7379 4.54283 9.6027 4.54283 7.73232L4.54283 5.74667L4.66225 5.46422C4.72995 5.31303 4.78166 5.16973 4.78166 5.14585C4.78166 5.12591 4.72995 5.03432 4.66619 4.94294C4.52684 4.74004 4.33183 4.35001 4.26828 4.1471C4.24045 4.06756 4.20452 3.99986 4.18479 3.99986C4.16859 3.99944 4.02529 4.1388 3.8741 4.30993Z\" fill=\"#8267DB\" data-v-67d8ecdb></path><path d=\"M8.45832 4.80732C8.26725 5.10576 8.25936 5.12965 8.28719 5.30472C8.347 5.68665 8.37088 7.04364 8.32706 7.50532C8.24752 8.35287 8.02073 9.0214 7.63465 9.53873C7.54306 9.66209 7.46352 9.75763 7.45563 9.74974C7.44774 9.74184 7.46352 9.5946 7.49135 9.42347C7.51918 9.25234 7.54306 8.84258 7.53912 8.51611C7.53912 7.81975 7.46747 7.48144 7.2089 6.96015C6.79105 6.1045 5.83592 5.10182 5.58919 5.25696C5.47787 5.32466 5.35036 5.58322 5.27476 5.88166C5.16344 6.33524 5.24299 6.61395 5.59314 7.00792C5.76032 7.19899 5.7921 7.21893 6.04277 7.26254C6.52023 7.35018 6.59998 7.40584 6.85854 7.79587C7.13705 8.22556 7.27245 8.90613 7.22074 9.62637C7.19291 10.0322 7.19686 10.0282 6.69946 10.3545C6.2895 10.6251 5.82408 10.8401 5.24693 11.0309C5.00415 11.1105 4.78526 11.1861 4.76947 11.2021C4.70571 11.2577 5.28681 11.3375 5.75638 11.3333C6.52833 11.3294 6.99395 11.194 7.47557 10.828C7.82572 10.5614 8.1362 10.1713 8.36694 9.70986C8.60183 9.2324 8.71709 8.81454 8.75302 8.27727L8.78479 7.87935L8.83651 8.17779C8.92809 8.69118 9.11501 9.29595 9.30213 9.68598C9.44937 9.98442 9.54096 10.1157 9.78769 10.3624C10.321 10.8955 10.8303 11.1582 11.4909 11.2459C11.873 11.2936 12.0003 11.2816 12.9791 11.0669C13.6159 10.9275 14.2288 10.844 14.5829 10.844L14.8813 10.844L15.0881 10.3188C15.2115 10.0004 15.2753 9.78566 15.2472 9.77757C15.0722 9.71796 14.6065 9.32793 14.0097 8.74684C13.0068 7.77177 12.6487 7.55703 12.0437 7.58881C11.5623 7.61664 11.2518 7.81165 10.9335 8.28911C10.667 8.69513 10.6629 8.71112 10.8859 8.61559C11.5781 8.32109 12.0437 8.35681 12.5889 8.74684C12.9947 9.03739 13.6275 9.73374 13.5519 9.80539C13.4404 9.90882 12.3343 10.0959 11.8248 10.0959C11.5185 10.0999 11.387 10.0799 11.1285 9.99252C10.9534 9.93291 10.7466 9.84527 10.6708 9.7975C10.0141 9.40353 9.48489 8.71112 9.24211 7.92712C9.06703 7.35018 8.84025 6.07668 8.70899 4.93463L8.66122 4.49684L8.45832 4.80732Z\" fill=\"#8267DB\" data-v-67d8ecdb></path></svg></div><div class=\"footer-item__label\" data-v-67d8ecdb> خدماتنا مطابقة للشريعة الإسلامية.</div></div><div class=\"footer-item\" data-v-67d8ecdb><div class=\"footer-item__icon\" data-v-67d8ecdb><svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" data-v-67d8ecdb><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M10.6667 3.50005L13.2267 3.50005C13.9267 3.50005 14.5 4.07339 14.5 4.77339V5.72005V7.33339V8.66672V11.2267C14.5 11.9267 13.9333 12.5001 13.2267 12.5001H12.6667H10.6667H5.33333H2.77333C2.07333 12.5001 1.5 11.9334 1.5 11.2267L1.5 9.33339V8.66672L1.5 7.33339V6.00005V4.77339C1.5 4.07339 2.06667 3.50005 2.77333 3.50005H5.33333L10.6667 3.50005ZM13.5 6.50005H2.5V7.16672H13.5V6.50005ZM5.33333 4.50005H2.77333C2.62667 4.50005 2.5 4.62672 2.5 4.77339V5.50005H13.5V4.77339C13.5 4.62672 13.38 4.50005 13.2267 4.50005H10.6667H5.33333ZM13.2267 11.5001C13.3733 11.5001 13.5 11.3801 13.5 11.2267V8.66672V8.16672H2.5V8.66672V9.33339V11.2267C2.5 11.3734 2.62 11.5001 2.77333 11.5001H5.33333H10.6667H12.6667H13.2267ZM3.66671 9.33339H8.00004C8.27337 9.33339 8.50004 9.56005 8.50004 9.83339C8.50004 10.1067 8.27337 10.3334 8.00004 10.3334H3.66671C3.39337 10.3334 3.16671 10.1067 3.16671 9.83339C3.16671 9.56005 3.39337 9.33339 3.66671 9.33339Z\" fill=\"#8267DB\" data-v-67d8ecdb></path></svg></div><div class=\"footer-item__label\" data-v-67d8ecdb> سجلك الائتماني قد يؤثر على خطط الدفع المتاحة.</div></div><div class=\"footer-item\" data-v-67d8ecdb><div class=\"footer-item__icon\" data-v-67d8ecdb><svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" data-v-67d8ecdb><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M12.5335 9.84005C12.6201 9.58005 12.9068 9.43339 13.1668 9.52672C13.4268 9.61339 13.5668 9.90005 13.4801 10.1667C13.2135 10.9467 12.8135 11.6534 12.3068 12.2667C12.303 12.2743 12.2993 12.2819 12.2955 12.2897C12.2723 12.3368 12.2478 12.3867 12.2135 12.4267C11.1935 13.6001 9.79348 14.3601 8.28015 14.6134C8.22015 14.6267 8.15348 14.6401 8.08681 14.6467C8.05289 14.651 8.01897 14.6559 7.98484 14.6608C7.91163 14.6714 7.83744 14.6822 7.76015 14.6867C7.54681 14.7067 7.33348 14.7201 7.12015 14.7201C3.41348 14.7201 0.400146 11.7067 0.400146 8.00005C0.400146 4.29339 3.41348 1.28005 7.12015 1.28005C9.43348 1.28005 11.5535 2.44005 12.7935 4.39339C12.9401 4.62672 12.8735 4.94005 12.6401 5.08672C12.4068 5.23339 12.0935 5.16672 11.9468 4.93339C10.8868 3.27339 9.08681 2.28005 7.12015 2.28005C3.96681 2.28005 1.40015 4.84672 1.40015 8.00005C1.40015 9.21339 1.78015 10.3401 2.43348 11.2667C3.38681 9.69339 5.19348 8.66672 7.17348 8.66672C9.02681 8.66672 10.8201 9.64005 11.8668 11.1601C12.1401 10.7534 12.3735 10.3201 12.5335 9.84005ZM11.2068 11.9801C10.3868 10.6001 8.78015 9.66005 7.17348 9.66005C5.45348 9.66005 3.88015 10.5934 3.12681 12.0467C4.19348 13.1067 5.64015 13.7067 7.15348 13.7134C7.44015 13.7134 7.72015 13.6867 8.00015 13.6467C8.00681 13.6467 8.01348 13.6451 8.02015 13.6434C8.02681 13.6417 8.03348 13.6401 8.04015 13.6401C9.26015 13.4401 10.3601 12.8467 11.2068 11.9801ZM4.83354 5.47992C4.83354 6.76659 5.88021 7.81326 7.16688 7.81326C8.45354 7.81326 9.50021 6.76659 9.50021 5.47992C9.50021 4.19326 8.45354 3.14659 7.16688 3.14659C5.88021 3.14659 4.83354 4.19326 4.83354 5.47992ZM8.49355 5.47992C8.49355 6.21326 7.89354 6.81326 7.16021 6.81326C6.42688 6.81326 5.82688 6.21326 5.82688 5.47992C5.82688 4.74659 6.42688 4.14659 7.16021 4.14659C7.89354 4.14659 8.49355 4.74659 8.49355 5.47992ZM15.1734 4.82675C14.98 4.63341 14.66 4.63341 14.4667 4.82675L11.4067 7.88675L10.58 6.64675C10.4267 6.42008 10.12 6.35341 9.88671 6.50675C9.66004 6.66008 9.59338 6.97341 9.74671 7.20008L10.9067 8.94675C10.9867 9.07341 11.1267 9.15341 11.2734 9.16675H11.32C11.4534 9.16675 11.58 9.11341 11.6734 9.02008L15.16 5.53341C15.3734 5.33341 15.3734 5.02008 15.1734 4.82675Z\" fill=\"#8267DB\" data-v-67d8ecdb></path></svg></div><div class=\"footer-item__label\" data-v-67d8ecdb> خدمات تمارا متاحة للعملاء الأكبر من 18 سنة.</div></div></div></div></div>", 1);
+var _hoisted_3 = {
+  "class": "mt-2"
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    name: "tamara",
+    onClick: _cache[0] || (_cache[0] = function () {
+      return $options.completeOrder && $options.completeOrder.apply($options, arguments);
+    })
+  }, "اكمال الدفع")])]);
 }
 
 /***/ }),
@@ -23792,6 +23864,31 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "\r\n/* Style the submit button */\nbutton[name=\"complete\"][data-v-4bd97d51] {\r\n    background-color: #3498db;\r\n    color: #fff;\r\n    padding: 12px;\r\n    border: none;\r\n    border-radius: 5px;\r\n    font-size: 18px;\r\n    cursor: pointer;\r\n    width: 350px;\n}\nbutton[name=\"complete\"][data-v-4bd97d51]:hover {\r\n    background-color: #2980b9;\n}\r\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700&display=swap);"]);
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\nbutton[name=\"tamara\"][data-v-67d8ecdb] {\n    background-color: #3498db;\n    color: #fff;\n    padding: 12px;\n    border: none;\n    border-radius: 5px;\n    font-size: 18px;\n    cursor: pointer;\n    width: 350px;\n}\nbutton[name=\"tamara\"][data-v-67d8ecdb]:hover {\n    background-color: #2980b9;\n}\n[data-v-67d8ecdb]:host {\n    --font-size-base: 18px;\n    --inline-outline-space-x: 16px;\n    --inline-outline-space-y: 16px;\n    --inline-outlined-background-color-hover: #F2F2F2;\n    --inline-contained-space-x: 16px;\n    --inline-contained-space-y: 16px;\n    --inline-border-color: #E5E5E5;\n    --inline-contained-background-color: #F2F2F2;\n    --badge-scaling-ratio: 1;\n    --badge-size: 64px;\n    --badge-height-max: 20px;\n}\n@media (min-width: 487px) {\n[data-v-67d8ecdb]:host {\n        --font-size-base: 18px;\n        --badge-size: 115px;\n}\n}\n@font-face {\n    font-display: swap;\n    font-family: Helvetica Neue;\n    font-style: normal;\n    font-weight: 400;\n    src: url(https://cdn.tamara.co/fonts/HelveticaNeue.ttf) format(\"truetype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: Helvetica Neue;\n    font-style: normal;\n    font-weight: 600;\n    src: url(https://cdn.tamara.co/fonts/HelveticaNeue-Medium.ttf) format(\"truetype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: Helvetica Neue;\n    font-style: normal;\n    font-weight: 700;\n    src: url(https://cdn.tamara.co/fonts/HelveticaNeue-Bold.ttf) format(\"truetype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: Space Grotesk;\n    font-style: normal;\n    font-weight: 400;\n    src: url(https://cdn.tamara.co/fonts/SpaceGrotesk-Regular.otf) format(\"opentype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: Space Grotesk;\n    font-style: normal;\n    font-weight: 600;\n    src: url(https://cdn.tamara.co/fonts/SpaceGrotesk-SemiBold.otf) format(\"opentype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: Space Grotesk;\n    font-style: normal;\n    font-weight: 700;\n    src: url(https://cdn.tamara.co/fonts/SpaceGrotesk-Bold.otf) format(\"opentype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: IBM Plex Sans Arabic;\n    font-style: normal;\n    font-weight: 400;\n    src: url(https://cdn.tamara.co/fonts/IBMPlexSansArabic-Regular.ttf) format(\"truetype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: IBM Plex Sans Arabic;\n    font-style: normal;\n    font-weight: 600;\n    src: url(https://cdn.tamara.co/fonts/IBMPlexSansArabic-SemiBold.ttf) format(\"truetype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: IBM Plex Sans Arabic;\n    font-style: normal;\n    font-weight: 700;\n    src: url(https://cdn.tamara.co/fonts/IBMPlexSansArabic-Bold.ttf) format(\"truetype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: Noto Sans Arabic;\n    font-style: normal;\n    font-weight: 400;\n    src: url(https://cdn.tamara.co/fonts/NotoSansArabic-Regular.ttf) format(\"truetype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: Noto Sans Arabic;\n    font-style: normal;\n    font-weight: 600;\n    src: url(https://cdn.tamara.co/fonts/NotoSansArabic-SemiBold.ttf) format(\"truetype\")\n}\n@font-face {\n    font-display: swap;\n    font-family: Noto Sans Arabic;\n    font-style: normal;\n    font-weight: 700;\n    src: url(https://cdn.tamara.co/fonts/NotoSansArabic-Bold.ttf) format(\"truetype\")\n}\n[data-v-67d8ecdb]:host {\n    --font-primary: \"Space Grotesk\", sans-serif;\n    --font-secondary: \"Helvetica Neue\", sans-serif\n}\n:host [dir=rtl][data-v-67d8ecdb] {\n    --font-primary: \"IBM Plex Sans Arabic\", sans-serif;\n    --font-secondary: \"Noto Sans Arabic\", sans-serif\n}\n[data-v-67d8ecdb]:root {\n    -moz-osx-font-smoothing: grayscale;\n    -webkit-font-smoothing: antialiased;\n    text-rendering: optimizeLegibility;\n    -webkit-text-size-adjust: 100%;\n    -ms-overflow-style: none;\n    scrollbar-width: none\n}\n[data-v-67d8ecdb]:host {\n    -moz-osx-font-smoothing: grayscale;\n    -webkit-font-smoothing: antialiased;\n    text-rendering: optimizeLegibility;\n    -webkit-text-size-adjust: 100%;\n    -ms-overflow-style: none;\n    scrollbar-width: none\n}\n[data-v-67d8ecdb]::-webkit-scrollbar {\n    display: none\n}\n.relative[data-v-67d8ecdb] {\n    position: relative\n}\n.tamara-inline-badge[data-v-67d8ecdb] {\n    vertical-align: middle\n}\n.tamara-inline-learn-more-link[data-v-67d8ecdb] {\n    display: inline;\n    font-weight: 500;\n    text-decoration: underline\n}\n[dir=rtl] .tamara-inline-learn-more-link[data-v-67d8ecdb] {\n    font-weight: 700\n}\n.tamara-summary-widget__container[data-v-67d8ecdb] {\n    display: block;\n    font-family: var(--font-secondary);\n    font-size: var(--font-size-base);\n    font-weight: 400;\n    line-height: calc(var(--font-size-base) * 1.5);\n    white-space: normal\n}\n.tamara-summary-widget__container .tamara-badge[data-v-67d8ecdb] {\n    max-height: var(--badge-height-max);\n    transform: scale(var(--badge-scaling-ratio))\n}\n.tamara-summary-widget__container.badge-position--is-right[data-v-67d8ecdb] {\n    display: flex;\n    justify-content: space-between;\n    min-height: 24px;\n    position: relative\n}\n.tamara-summary-widget__container.badge-position--is-right .tamara-badge[data-v-67d8ecdb] {\n    margin-left: 16px;\n    transform: scale(var(--badge-scaling-ratio));\n    transform-origin: right\n}\n.tamara-summary-widget__inline__text[data-v-67d8ecdb] {\n    display: inline\n}\n.tamara-summary-widget__amount[data-v-67d8ecdb] {\n    font-weight: 700\n}\n.tamara-summary-widget__bundle-ui[data-v-67d8ecdb] {\n    align-items: center;\n    display: flex;\n    justify-content: flex-start\n}\n.tamara-summary-widget__bundle-ui .tamara-badge[data-v-67d8ecdb] {\n    margin-left: 16px\n}\n.tamara-summary-widget__bundle-ui .tamara-inline-learn-more-link[data-v-67d8ecdb],\n.tamara-summary-widget__bundle-ui .tamara-summary-widget__amount[data-v-67d8ecdb] {\n    font-weight: 400\n}\n.tamara-summary-widget__bundle-ui.badge-position--is-end-line[data-v-67d8ecdb] {\n    justify-content: flex-start\n}\n.tamara-summary-widget__bundle-ui.badge-position--is-right[data-v-67d8ecdb] {\n    justify-content: space-between\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6[data-v-67d8ecdb] {\n    align-items: flex-start;\n    display: flex;\n    flex-direction: column;\n    font-size: 18px;\n    font-weight: 400;\n    line-height: 22px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6.badge-position--is-right[data-v-67d8ecdb] {\n    flex-direction: row\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6.badge-position--is-right .tamara-badge[data-v-67d8ecdb] {\n    margin-left: 0;\n    margin-right: 0\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-badge[data-v-67d8ecdb] {\n    margin-left: 0;\n    margin-right: 12px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content[data-v-67d8ecdb] {\n    border: .5px solid hsla(0, 0%, 80%, .7);\n    border-radius: 14px;\n    margin-top: 20px;\n    width: 100%\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__body[data-v-67d8ecdb] {\n    padding: 16px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__body .divider[data-v-67d8ecdb] {\n    border-top: .5px solid #e5e5e5;\n    margin-bottom: 14px;\n    margin-top: 14px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__body .popup-content__extra-content__item[data-v-67d8ecdb] {\n    align-items: center;\n    display: flex\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__body .popup-content__extra-content__item .item-status-icon[data-v-67d8ecdb] {\n    flex: 0 0 22px;\n    height: 22px;\n    width: 22px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__body .popup-content__extra-content__item .item-status-icon svg[data-v-67d8ecdb] {\n    height: 22px;\n    width: 22px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__body .popup-content__extra-content__item .item-label[data-v-67d8ecdb] {\n    flex: 1 1;\n    font-family: var(--font-secondary);\n    font-size: 18px;\n    font-weight: 400;\n    line-height: 21px;\n    margin-left: 8px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__body .popup-content__extra-content__item .item-arrow-navigation[data-v-67d8ecdb] {\n    flex: 0 0 20px;\n    height: 20px;\n    width: 20px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__body .popup-content__extra-content__item .item-arrow-navigation svg[data-v-67d8ecdb] {\n    height: 20px;\n    width: 20px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer[data-v-67d8ecdb] {\n    align-items: flex-start;\n    border-top: .5px solid #e5e5e5;\n    display: flex;\n    flex-direction: column;\n    padding: 16px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer[data-v-67d8ecdb] > :not(template) ~ :not(template) {\n    margin-top: 12px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer .footer-item[data-v-67d8ecdb] {\n    align-items: center;\n    display: flex;\n    width: 100%\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer .footer-item .footer-item__icon[data-v-67d8ecdb] {\n    align-items: center;\n    background-color: rgba(225, 209, 255, .25);\n    border-radius: 50%;\n    display: flex;\n    flex: 0 0 32px;\n    height: 32px;\n    justify-content: center\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer .footer-item .footer-item__icon svg[data-v-67d8ecdb] {\n    height: 16px;\n    width: 16px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer .footer-item .footer-item__label[data-v-67d8ecdb] {\n    color: #666;\n    font-size: 18px;\n    font-weight: 400;\n    line-height: 21px;\n    margin-left: 12px\n}\n.tamara-summary-widget--inline-outlined[data-v-67d8ecdb] {\n    border: 1px solid var(--inline-border-color);\n    border-radius: 12px;\n    padding: var(--inline-outline-space-y) var(--inline-outline-space-x);\n    transition: background-color .3s linear\n}\n.tamara-summary-widget--inline-outlined[data-v-67d8ecdb]:hover {\n    background-color: var(--inline-outlined-background-color-hover);\n    transition: background-color .3s linear\n}\n.tamara-summary-widget--inline-contained[data-v-67d8ecdb] {\n    background-color: var(--inline-contained-background-color);\n    border: 1px solid var(--inline-border-color);\n    border-radius: 12px;\n    padding: var(--inline-contained-space-y) var(--inline-contained-space-x)\n}\n.tamara-summary-widget__container[dir=rtl].tamara-summary-widget__bundle-ui .tamara-badge[data-v-67d8ecdb] {\n    margin-left: 0;\n    margin-right: 16px\n}\n.tamara-summary-widget__container[dir=rtl].tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-badge[data-v-67d8ecdb] {\n    margin-left: 12px;\n    margin-right: 0\n}\n.tamara-summary-widget__container[dir=rtl].tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6.badge-position--is-right .tamara-badge[data-v-67d8ecdb] {\n    margin-left: 0;\n    margin-right: 0\n}\n@media (min-width: 768px) {\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content[data-v-67d8ecdb] {\n        border-radius: 12px;\n        margin-top: 16px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer[data-v-67d8ecdb] {\n        align-items: flex-start;\n        flex-direction: row;\n        justify-content: flex-start\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer[data-v-67d8ecdb] > :not(template) ~ :not(template) {\n        margin-left: 12px;\n        margin-top: 0\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer .footer-item[data-v-67d8ecdb] {\n        align-content: center;\n        align-items: flex-start;\n        display: flex;\n        flex-direction: column\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer .footer-item .footer-item__icon[data-v-67d8ecdb] {\n        width: 32px\n}\n.tamara-summary-widget__bundle-ui.tamara-summary-widget__inline-template-6 .tamara-summary-widget__extra-content .popup-content__extra-content__footer .footer-item .footer-item__label[data-v-67d8ecdb] {\n        margin-left: 0;\n        margin-top: 12px\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -54795,6 +54892,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tamara_vue_vue_type_style_index_0_id_67d8ecdb_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tamara_vue_vue_type_style_index_0_id_67d8ecdb_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tamara_vue_vue_type_style_index_0_id_67d8ecdb_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/VueRadioButton.vue?vue&type=style&index=0&id=69c50d52&scoped=true&lang=css":
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/VueRadioButton.vue?vue&type=style&index=0&id=69c50d52&scoped=true&lang=css ***!
@@ -55306,6 +55433,37 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/components/Tamara.vue":
+/*!********************************************!*\
+  !*** ./resources/js/components/Tamara.vue ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Tamara_vue_vue_type_template_id_67d8ecdb_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Tamara.vue?vue&type=template&id=67d8ecdb&scoped=true */ "./resources/js/components/Tamara.vue?vue&type=template&id=67d8ecdb&scoped=true");
+/* harmony import */ var _Tamara_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Tamara.vue?vue&type=script&lang=js */ "./resources/js/components/Tamara.vue?vue&type=script&lang=js");
+/* harmony import */ var _Tamara_vue_vue_type_style_index_0_id_67d8ecdb_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css */ "./resources/js/components/Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css");
+/* harmony import */ var _node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+
+
+const __exports__ = /*#__PURE__*/(0,_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Tamara_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Tamara_vue_vue_type_template_id_67d8ecdb_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render],['__scopeId',"data-v-67d8ecdb"],['__file',"resources/js/components/Tamara.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/components/VueRadioButton.vue":
 /*!****************************************************!*\
   !*** ./resources/js/components/VueRadioButton.vue ***!
@@ -55433,6 +55591,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Tamara.vue?vue&type=script&lang=js":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/Tamara.vue?vue&type=script&lang=js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tamara_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tamara_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Tamara.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./resources/js/components/VueRadioButton.vue?vue&type=script&lang=js":
 /*!****************************************************************************!*\
   !*** ./resources/js/components/VueRadioButton.vue?vue&type=script&lang=js ***!
@@ -55545,6 +55719,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Tamara.vue?vue&type=template&id=67d8ecdb&scoped=true":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/Tamara.vue?vue&type=template&id=67d8ecdb&scoped=true ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tamara_vue_vue_type_template_id_67d8ecdb_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tamara_vue_vue_type_template_id_67d8ecdb_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Tamara.vue?vue&type=template&id=67d8ecdb&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=template&id=67d8ecdb&scoped=true");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/VueRadioButton.vue?vue&type=template&id=69c50d52&scoped=true":
 /*!**********************************************************************************************!*\
   !*** ./resources/js/components/VueRadioButton.vue?vue&type=template&id=69c50d52&scoped=true ***!
@@ -55609,6 +55799,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tabby_vue_vue_type_style_index_0_id_4bd97d51_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Tabby.vue?vue&type=style&index=0&id=4bd97d51&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tabby.vue?vue&type=style&index=0&id=4bd97d51&scoped=true&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/components/Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tamara_vue_vue_type_style_index_0_id_67d8ecdb_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Tamara.vue?vue&type=style&index=0&id=67d8ecdb&scoped=true&lang=css");
 
 
 /***/ }),

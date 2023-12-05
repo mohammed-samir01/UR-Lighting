@@ -48,9 +48,9 @@ class CartManager
         }
 
         if ($group_id == null) {
-            $cart = Cart::whereIn('cart_group_id', CartManager::get_cart_group_ids())->get();
+            $cart = Cart::with('product')->whereIn('cart_group_id', CartManager::get_cart_group_ids())->get();
         } else {
-            $cart = Cart::where('cart_group_id', $group_id)->get();
+            $cart = Cart::with('product')->where('cart_group_id', $group_id)->get();
         }
 
         return $cart;
@@ -75,6 +75,18 @@ class CartManager
             $cart_ids = Cart::where(['customer_id' => session('guest_id') ?? ($request->guest_id ?? 0), 'is_guest' => 1])->groupBy('cart_group_id')->pluck('cart_group_id')->toArray();
         } else {
             $cart_ids = Cart::where(['customer_id' => $user->id, 'is_guest' => '0'])->groupBy('cart_group_id')->pluck('cart_group_id')->toArray();
+        }
+
+        return $cart_ids;
+    }
+    public static function get_cart_ids($request = null)
+    {
+        $user = Helpers::get_customer($request);
+
+        if ($user == 'offline') {
+            $cart_ids = Cart::where(['customer_id' => session('guest_id') ?? ($request->guest_id ?? 0), 'is_guest' => 1])->get();
+        } else {
+            $cart_ids = Cart::where(['customer_id' => $user->id, 'is_guest' => '0'])->groupBy('cart_group_id')->get();
         }
 
         return $cart_ids;

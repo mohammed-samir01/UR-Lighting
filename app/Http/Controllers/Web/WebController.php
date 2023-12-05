@@ -419,8 +419,8 @@ class WebController extends Controller
 
     public function checkout_payment(Request $request)
     {
-
         $cart_group_ids = CartManager::get_cart_group_ids();
+
         $shippingMethod = Helpers::get_business_settings('shipping_method');
 
         $verify_status = OrderManager::minimum_order_amount_verify($request);

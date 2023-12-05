@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Payment_Methods;
 
 use App\CPU\CartManager;
+use App\CPU\Helpers;
 use App\Model\PaymentRequest;
+use App\Model\ShippingAddress;
 use App\Models\User;
 use App\Traits\Processor;
 use Illuminate\Http\Request;
@@ -81,78 +83,123 @@ class TamaraController extends Controller
 
     public function payment(Request $request)
     {
-        $discount = session()->has('coupon_discount') ? session('coupon_discount') : 0;
-        $order_wise_shipping_discount = CartManager::order_wise_shipping_discount();
-        $shipping_cost_saved = CartManager::get_shipping_cost_saved_for_free_delivery();
-        $payment_amount = CartManager::cart_grand_total() - $discount - $order_wise_shipping_discount - $shipping_cost_saved;
-
-        dd(CartManager::get_cart_ids($request));
-
-
-
-
         $validator = Validator::make($request->all(), [
             'payment_id' => 'required|uuid'
         ]);
-
         if ($validator->fails()) {
             return response()->json($this->response_formatter(GATEWAYS_DEFAULT_400, null, $this->error_processor($validator)), 400);
         }
-
         $payment_data = $this->payment::where(['id' => $request['payment_id']])->where(['is_paid' => 0])->first();
         if (!isset($payment_data)) {
             return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
         }
-        $payer = json_decode($payment_data['payer_information']);
-        $type = $payment_data->type_payment ??'all';
-        $plugin = new Paytabs();
-        $request_url = 'payment/request';
+        $discount = session()->has('coupon_discount') ? session('coupon_discount') : 0;
+        $order_wise_shipping_discount = CartManager::order_wise_shipping_discount();
+        $shipping_cost_saved = CartManager::get_shipping_cost_saved_for_free_delivery();
+        $payment_amount = CartManager::cart_grand_total() - $discount - $order_wise_shipping_discount - $shipping_cost_saved;
+        $cart = CartManager::get_cart();
+        $user = Helpers::get_customer($request);
+        $address_id = session('address_id') ? session('address_id') : null;
+        $billing_address_id = session('billing_address_id') ? session('billing_address_id') : null;
+        $billing_address = ShippingAddress::with('country', 'state', 'city')->find($billing_address_id);
+        $shipping_address = ShippingAddress::with('country', 'state', 'city')->find($address_id);
+        $items = [];
+        $total_tax = 0;
+        foreach ($cart as $product) {
+            $total_tax += $product['tax'] * $product['quantity'];
+            $items[] = [
+                'reference_id' => $product['product_id'],
+                'type' => $product['product_type'],
+                'name' => $product['name'],
+                'sku' => $product['product']['code'],
+                'image_url' => $product['thumbnail'],
+                'quantity' => $product['quantity'],
+                'unit_price' => [
+                    'amount' => $product['price'],
+                    'currency' => 'SAR',
+                ],
+                'discount_amount' => [
+                    'amount' => $product['discount'],
+                    'currency' => 'SAR',
+                ],
+                'tax_amount' => [
+                    'amount' => $product['tax'] * $product['quantity'],
+                    'currency' => 'SAR',
+                ],
+                'total_amount' => [
+                    'amount' => $product['price'] * $product['quantity'],
+                    'currency' => 'SAR',
+                ],
+            ];
+
+        }
         $data = [
-            "tran_type" => "sale",
-            "tran_class" => "ecom",
-            "cart_id" => $payment_data->id,
-            "cart_currency" => $payment_data->currency_code,
-            "payment_methods" => [$type],
-            "cart_amount" => round($payment_data->payment_amount, 2),
-            "cart_description" => "products",
-            "paypage_lang" => "en",
-            "callback" => route('paytabs.callback', ['payment_id' => $payment_data->id]), // Nullable - Must be HTTPS, otherwise no post data from paytabs
-            "return" => route('paytabs.callback', ['payment_id' => $payment_data->id]), // Must be HTTPS, otherwise no post data from paytabs , must be relative to your site URL
-            "customer_details" => [
-                "name" => $payer->name,
-                "email" => $payer->email,
-                "phone" => $payer->phone ?? "000000",
-                "street1" => "N/A",
-                "city" => "N/A",
-                "state" => "N/A",
-                "country" => "SA",
-                "zip" => "00000",
-                "ip" => "142.154.127.255"
+            'order_reference_id' => $payment_data->id,
+            'order_number' => $payment_data->id,
+            'total_amount' =>
+                [
+                    'amount' => $payment_amount,
+                    'currency' => 'SAR',
+                ],
+            'description' => '',
+            'country_code' => 'SA',
+            'payment_type' => 'PAY_BY_INSTALMENTS',
+            'instalments' => NULL,
+            'locale' => 'en_US',
+            'items' => $items,
+            'consumer' => [
+                'first_name' => $user['f_name'],
+                'last_name' => $user['l_name'],
+                'phone_number' => $user['phone'],
+                'email' => $user['email'],
             ],
-            "shipping_details" => [
-                "name" => "N/A",
-                "email" => "N/A",
-                "phone" => "N/A",
-                "street1" => "N/A",
-                "city" => "N/A",
-                "state" => "N/A",
-                "country" => "SA",
-                "zip" => "0000"
+            'billing_address' => [
+                'first_name' => $user['f_name'],
+                'last_name' => $user['l_name'],
+                'line1' => $billing_address['address'],
+                'city' => $billing_address['city']['name_en'],
+                'country_code' => 'SA',
+                'phone_number' => $billing_address['phone'],
             ],
-            "user_defined" => [
-                "udf9" => "UDF9",
-                "udf3" => "UDF3"
+            'shipping_address' => [
+                'first_name' => $user['f_name'],
+                'last_name' => $user['l_name'],
+                'line1' => $shipping_address['address'],
+                'city' => $shipping_address['city']['name_en'],
+                'country_code' => 'SA',
+                'phone_number' => $shipping_address['phone'],
+            ],
+            'discount' => [
+                'name' => $order['discount_name'] ?? "",
+                'amount' => [
+                    'amount' => $order['discount_amount'] ?? 0,
+                    'currency' => 'SAR',
+                ],
+            ],
+            'tax_amount' => [
+                'amount' => $total_tax,
+                'currency' => 'SAR',
+            ],
+            'shipping_amount' => [
+                'amount' => CartManager::get_shipping_cost(),
+                'currency' => 'SAR',
+            ],
+            'merchant_url' => [
+                'success' => route('tamara.callback', ['payment_id' => $payment_data->id]),
+                'failure' => route('tamara.callback', ['payment_id' => $payment_data->id]),
+                'cancel' => route('tamara.callback', ['payment_id' => $payment_data->id]),
+                'notification' => route('tamara.callback', ['payment_id' => $payment_data->id]),
             ]
         ];
-        if (request()->has('token_paytabs') && request('token_paytabs') != '')
-            $data['payment_token'] = \request('token_paytabs');
+        dd($data);
+
+        $plugin = new Paytabs();
+        $request_url = 'payment/request';
 
 
         $page = $plugin->send_api_request($request_url, $data);
 
-        if (!isset($page['redirect_url'])) {
-            return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
-        }
+
 
         if (in_array($request->payment_request_from, ['app', 'react'])) {
             return response()->json(['redirect_link' => $page['redirect_url']], 200);
@@ -191,14 +238,14 @@ class TamaraController extends Controller
             ]);
             $payment_data = $this->payment::where(['id' => $request['payment_id']])->first();
             if (isset($payment_data) && function_exists($payment_data->success_hook)) {
-             return  call_user_func($payment_data->success_hook, $payment_data);
+                return call_user_func($payment_data->success_hook, $payment_data);
             }
             return $this->payment_response($payment_data, 'success');
         }
         $payment_data = $this->payment::where(['id' => $request['payment_id']])->first();
 
         if (isset($payment_data) && function_exists($payment_data->failure_hook)) {
-          return  call_user_func($payment_data->failure_hook, $payment_data);
+            return call_user_func($payment_data->failure_hook, $payment_data);
         }
         return $this->payment_response($payment_data, 'fail');
     }

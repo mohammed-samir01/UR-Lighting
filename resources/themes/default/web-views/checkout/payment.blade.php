@@ -75,7 +75,7 @@
                             @endif
 
                             @foreach ($payment_gateways_list as $payment_gateway)
-                                @if($payment_gateway->key_name != 'paytabs')
+                                @if($payment_gateway->key_name != 'paytabs' && $payment_gateway->key_name != 'tamara')
                                     <div class="col-md-4">
                                         <div class="cursor-pointer">
                                             <div

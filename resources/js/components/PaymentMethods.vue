@@ -1,6 +1,6 @@
 <template>
     <div>
-        <VueRadioButton v-model="selectedButton" :options="optionPaytabs">
+        <VueRadioButton v-model="selectedButton" :options="optionsPay">
             <template #label="{ props }">
                 <img :src="props.icon" style="width: 85%"/>
             </template>
@@ -11,7 +11,7 @@
         <Credit v-show="selectedButton == 'creditcard'"/>
         <Tabby v-show="selectedButton == 'tabby'" :method="completeOrder"/>
         <MadaAndStc v-show="selectedButton == 'mada' || selectedButton == 'stcpay'" :method="completeOrder"/>
-        <Tamara/>
+        <Tamara v-show="selectedButton == 'tamara'"/>
     </div>
 </template>
 <script>
@@ -29,40 +29,35 @@ export default {
     data() {
         return {
             selectedButton: '',
-            options: [
-                {
-                    id: 1,
-                    icon: "/public/payments/credit.svg",
-                },
-                {
-                    id: 2,
-                    icon: "/public/payments/mada.svg",
-                },
-                {
-                    id: 3,
-                    icon: "/public/payments/stcpay.svg",
-                },
-                {
-                    id: 4,
-                    icon: "/public/payments/tabby.png",
-                },
-                // {
-                //     id: 5,
-                //     icon: "/public/payments/tamara.svg",
-                // },
-
-            ]
         }
     },
     computed: {
         paytabs() {
             return this.data && this.data.some(pay => pay.key_name == 'paytabs')
         },
-        optionPaytabs() {
-            let paytabs = []
+        optionsPay() {
+            let optionsPay = []
             if (this.paytabs)
-                paytabs = JSON.parse(this.data.find((payment) => payment.key_name == 'paytabs').additional_data).options
-            return paytabs
+                optionsPay = JSON.parse(this.data.find((payment) => payment.key_name == 'paytabs').additional_data).options
+
+            if (this.data.some(pay => pay.key_name == 'tamara' && pay.is_active))
+                optionsPay.push(
+                    {
+                        "key": "tamara",
+                        "active": true,
+                        "icon": "/public/payments/tamara.svg"
+                    }
+                );
+
+
+            return optionsPay
+
+        },
+        optionTamara() {
+            let tamara = []
+            if (this.paytabs)
+                tamara = JSON.parse(this.data.find((payment) => payment.key_name == 'paytabs').additional_data).options
+            return tamara
 
         }
     },

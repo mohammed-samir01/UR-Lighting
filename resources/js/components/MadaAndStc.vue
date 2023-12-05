@@ -1,7 +1,7 @@
 <template>
     <div class="mt-5 row" style="justify-content: center;">
                 <div>
-                    <button name="mada" @click="method">اكمال الطلب</button>
+                    <button name="mada" @click="method">اكمال الدفع</button>
                 </div>
     </div>
 </template>
