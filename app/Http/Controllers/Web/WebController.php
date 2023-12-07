@@ -454,6 +454,9 @@ class WebController extends Controller
             $physical_products[] = $physical_product;
         }
         unset($physical_products[0]);
+        if (is_null(\session()->get('address_id')))
+         return redirect()->route('checkout-details');
+
         $address = ShippingAddress::find(\session()->get('address_id'));
         $shippingMethodManual = ShippingMethod::whereJsonContains('info->states', (string)$address->state_id)->first();
         if ($shippingMethodManual) {

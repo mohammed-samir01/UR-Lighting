@@ -18900,7 +18900,6 @@ __webpack_require__.r(__webpack_exports__);
         'customer_id': this.$parent.customer_id,
         'is_guest': false
       }).then(function (res) {
-        console.log(res);
         axios.post(res.data.redirect_link, {
           'payment_request_from': 'app'
         }).then(function (res) {

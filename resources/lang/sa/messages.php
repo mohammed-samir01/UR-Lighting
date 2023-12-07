@@ -6250,4 +6250,7 @@
   'Payment_success' => 'Payment success',
   'No_country_to_deliver' => 'No country to deliver',
   'Category_updated_successfully' => 'Category updated successfully',
+  'generate_Sitemap' => 'Generate Sitemap',
+  'download_Generate_Sitemap' => 'Download Generate Sitemap',
+  'ex: 70' => 'Ex: 70',
 );

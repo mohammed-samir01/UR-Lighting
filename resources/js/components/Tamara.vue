@@ -111,7 +111,6 @@ export default {
                 'customer_id': this.$parent.customer_id,
                 'is_guest': false,
             }).then((res) => {
-                console.log(res)
                 axios.post(res.data.redirect_link, {
                     'payment_request_from': 'app',
                 }).then((res) => {

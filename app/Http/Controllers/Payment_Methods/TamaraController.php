@@ -10,62 +10,54 @@ use App\Models\User;
 use App\Traits\Processor;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
-class Paytabs
+class Tamara
 {
     use Processor;
 
     private $config_values;
+    private $base_url;
 
     public function __construct()
     {
-        $config = $this->payment_config('paytabs', 'payment_config');
+        $config = $this->payment_config('tamara', 'payment_config');
         if (!is_null($config) && $config->mode == 'live') {
             $this->config_values = json_decode($config->live_values);
+            $this->base_url = 'https://api.tamara.co/';
+
         } elseif (!is_null($config) && $config->mode == 'test') {
             $this->config_values = json_decode($config->test_values);
+            $this->base_url = 'https://api-sandbox.tamara.co/';
         }
     }
 
-    function send_api_request($request_url, $data, $request_method = null)
+    function send_api_request($request_url, $data)
     {
-        $data['profile_id'] = $this->config_values->profile_id;
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config_values->base_url . '/' . $request_url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_CUSTOMREQUEST => isset($request_method) ? $request_method : 'POST',
-            CURLOPT_POSTFIELDS => json_encode($data, true),
-            CURLOPT_HTTPHEADER => array(
-                'authorization:' . $this->config_values->server_key,
-                'Content-Type:application/json'
-            ),
-        ));
+        $url = $this->base_url . $request_url;
+        $response = Http::withHeaders([
+            'Accept'        => 'application/json',
+            'Content-Type'  => 'application/json',
+            'Authorization' => 'Bearer ' . $this->config_values->api_token
+        ])->post($url, $data);
+        return json_decode($response->getBody()->getContents(), true);
+    }
+    public function checkPaymentOptionsAvailability($order)
+    {
+        $url = "checkout/payment-options-pre-check";
 
-        $response = json_decode(curl_exec($curl), true);
-        curl_close($curl);
-        return $response;
+        $data = [
+            'country' => 'SA',
+            'phone_number' => $order['phone'],
+            'order_value' => [
+                'amount' => $order['total'],
+                'currency' => 'SAR'
+            ]
+        ];
+        return $this->send_api_request($url,$data);
     }
 
-    function is_valid_redirect($post_values)
-    {
-        $serverKey = $this->config_values->server_key;
-        $requestSignature = $post_values["signature"];
-        unset($post_values["signature"]);
-        $fields = array_filter($post_values);
-        ksort($fields);
-        $query = http_build_query($fields);
-        $signature = hash_hmac('sha256', $query, $serverKey);
-        if (hash_equals($signature, $requestSignature) === TRUE) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
 
 class TamaraController extends Controller
@@ -191,18 +183,15 @@ class TamaraController extends Controller
                 'notification' => route('tamara.callback', ['payment_id' => $payment_data->id]),
             ]
         ];
-        dd($data);
-
-        $plugin = new Paytabs();
-        $request_url = 'payment/request';
 
 
+        $plugin = new Tamara();
+        $request_url = 'checkout';
         $page = $plugin->send_api_request($request_url, $data);
 
-
-
         if (in_array($request->payment_request_from, ['app', 'react'])) {
-            return response()->json(['redirect_link' => $page['redirect_url']], 200);
+            return response()->json(['redirect_link' => $page], 200);
+//            return response()->json(['redirect_link' => $page['redirect_url']], 200);
         }
         header('Location:' . $page['redirect_url']); /* Redirect browser */
         exit();
@@ -210,31 +199,10 @@ class TamaraController extends Controller
 
     public function callback(Request $request)
     {
-
-        $plugin = new Paytabs();
-        $response_data = $_POST;
-        $transRef = filter_input(INPUT_POST, 'tranRef');
-
-        if (!$transRef) {
-            return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
-        }
-
-        $is_valid = $plugin->is_valid_redirect($response_data);
-        if (!$is_valid) {
-            return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
-        }
-
-        $request_url = 'payment/query';
-        $data = [
-            "tran_ref" => $transRef
-        ];
-        $verify_result = $plugin->send_api_request($request_url, $data);
-        $is_success = $verify_result['payment_result']['response_status'] === 'A';
-        if ($is_success) {
+        if ($request->paymentStatus == 'approved') {
             $this->payment::where(['id' => $request['payment_id']])->update([
-                'payment_method' => 'paytabs',
+                'payment_method' => 'tamara',
                 'is_paid' => 1,
-                'transaction_id' => $transRef,
             ]);
             $payment_data = $this->payment::where(['id' => $request['payment_id']])->first();
             if (isset($payment_data) && function_exists($payment_data->success_hook)) {
