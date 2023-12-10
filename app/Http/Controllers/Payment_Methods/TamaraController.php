@@ -58,6 +58,33 @@ class Tamara
         return $this->send_api_request($url,$data);
     }
 
+    public function getOrderDetails($orderId)
+    {
+        $url = $this->base_url . "merchants/orders/reference-id/" . $orderId;
+        $response = Http::withHeaders([
+            'Accept'        => 'application/json',
+            'Content-Type'  => 'application/json',
+            'Authorization' => 'Bearer ' . $this->config_values->api_token
+        ])->get($url);
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public function cancelOrder($order)
+    {
+        $orderId = $order['id'];
+        $url = "orders/$orderId/cancel";
+        $data      = [
+            'orderId'      => $order['id'],
+            'total_amount' => [
+                'amount'   => $order['amount'],
+                'currency' => 'SAR',
+            ]
+        ];
+        return $this->send_api_request($url,$data);
+
+    }
+
+
 }
 
 class TamaraController extends Controller

@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.7.14"
     },
     "dependencies": {
+        "vue-i18n": "^9.8.0",
         "vue-radio-button": "^1.0.0"
     }
 }

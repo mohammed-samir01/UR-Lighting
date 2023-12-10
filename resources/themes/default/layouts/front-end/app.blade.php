@@ -330,7 +330,9 @@
 
     <!-- Vendor scrits: js libraries and plugins-->
 </div>
-
+<script>
+    const app_lang = '{{\App\CPU\Helpers::default_lang()}}'
+</script>
 {{--<script src="{{asset('public/assets/front-end')}}/vendor/jquery/dist/jquery.slim.min.js"></script>--}}
 {{--<script src="{{asset('public/assets/front-end')}}/vendor/jquery/dist/jquery-2.2.4.min.js"></script>--}}
 @production
@@ -338,13 +340,7 @@
     @else
         <script src="{{ mix('js/app.js') }}"></script>
 @endproduction
-<script>
-    var tamaraWidgetConfig = {
-        lang: "ar", // Language. Default is Arabic. We support [ar|en]
-        country: "SA",
-        // publicKey: [''],
-    }
-</script>
+
 
 <script defer src="https://cdn.tamara.co/widget-v2/tamara-widget.js"></script>
 <script src="{{asset('public/assets/front-end')}}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

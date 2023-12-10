@@ -9,8 +9,8 @@
             </template>
         </VueRadioButton>
         <Credit v-show="selectedButton == 'creditcard'"/>
-        <Tabby v-show="selectedButton == 'tabby'" :method="completeOrder"/>
-        <MadaAndStc v-show="selectedButton == 'mada' || selectedButton == 'stcpay'" :method="completeOrder"/>
+        <Tabby v-show="selectedButton == 'tabby'" :method="completeOrder" :loading="loading"/>
+        <MadaAndStc v-show="selectedButton == 'mada' || selectedButton == 'stcpay'" :method="completeOrder" :loading="loading"/>
         <Tamara v-show="selectedButton == 'tamara'"/>
     </div>
 </template>
@@ -29,6 +29,7 @@ export default {
     data() {
         return {
             selectedButton: '',
+            loading: false
         }
     },
     computed: {
@@ -63,6 +64,7 @@ export default {
     },
     methods: {
         completeOrder() {
+            this.loading = true
             axios.post(`customer/web-payment-request`, {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
                 'payment_method': 'paytabs',
@@ -77,7 +79,12 @@ export default {
                 }).then((res) => {
                     if (res.data && res.data.redirect_link)
                         window.location.href = res.data.redirect_link;
+                    this.loading = false
+                }).catch((error) => {
+                    this.loading = false
                 })
+            }).catch((error) => {
+                this.loading = false
             })
         }
     }

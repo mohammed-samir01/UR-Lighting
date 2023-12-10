@@ -4,17 +4,21 @@
         </div>
         <div>
 
-        <button name="complete" @click="method">اكمال الطلب</button>
+        <button name="complete" @click="method" :disabled="loading">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="loading"></span>
+            {{ $t('completeOrder') }}
+        </button>
         </div>
     </div>
 </template>
 <script>
 export default {
     name: "Tabby",
-    props: ['method'],
+    props: ['method','loading'],
     data() {
         return {
-            scriptsAppended: false
+            scriptsAppended: false,
+
         }
     },
     mounted() {

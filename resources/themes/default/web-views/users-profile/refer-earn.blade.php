@@ -43,7 +43,7 @@
                                 <div class="d-flex justify-content-center align-items-center share-on-social">
 
                                     @php
-                                        $text = "Greetings,6Valley is the best e-commerce platform in the country.If you are new to this website dont forget to use " . $customer_detail->referral_code . " " ."as the referral code while sign up into 6valley.";
+                                        $text = "Greetings,lighting is the best e-commerce platform in the country.If you are new to this website dont forget to use " . $customer_detail->referral_code . " " ."as the referral code while sign up into lighting.";
                                         $link = url('/');
                                     @endphp
                                     <a href="https://api.whatsapp.com/send?text={{$text}}.{{$link}}" target="_blank">

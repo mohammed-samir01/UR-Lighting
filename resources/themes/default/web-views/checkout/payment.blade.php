@@ -7,7 +7,11 @@
 
 
 
-
+        .btn:hover {
+            color: inherit !important;
+            filter: none !important;
+            text-decoration: none!important;
+        }
 
 
         .stripe-button-el {

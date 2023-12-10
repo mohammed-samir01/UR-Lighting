@@ -1,14 +1,16 @@
 <template>
     <div class="mt-5 row" style="justify-content: center;">
-                <div>
-                    <button name="mada" @click="method">اكمال الدفع</button>
-                </div>
+
+        <button name="mada" @click="method" :disabled="loading">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="loading"></span>
+            {{ $t('completeOrder') }}
+        </button>
     </div>
 </template>
 <script>
 export default {
     name: "MadaAndStc",
-    props:['method']
+    props:['method','loading']
 }
 </script>
 

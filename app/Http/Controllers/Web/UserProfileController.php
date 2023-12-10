@@ -771,6 +771,7 @@ class UserProfileController extends Controller
         }
         $customer_detail = User::where('id', auth('customer')->id())->first();
 
+
         return view(VIEW_FILE_NAMES['refer_earn'], compact('customer_detail'));
     }
 
