@@ -6,15 +6,29 @@
     <meta property="og:image" content="{{asset('storage/app/public/company')}}/{{$web_config['web_logo']->value}}"/>
     <meta property="og:title" content="Welcome To {{$web_config['name']->value}} Home"/>
     <meta property="og:url" content="{{env('APP_URL')}}">
-    <meta property="og:description" content="{{ substr(strip_tags(str_replace('&nbsp;', ' ', $web_config['about']->value)),0,160) }}">
+    <meta property="og:description"
+          content="{{ substr(strip_tags(str_replace('&nbsp;', ' ', $web_config['about']->value)),0,160) }}">
 
     <meta property="twitter:card" content="{{asset('storage/app/public/company')}}/{{$web_config['web_logo']->value}}"/>
     <meta property="twitter:title" content="Welcome To {{$web_config['name']->value}} Home"/>
     <meta property="twitter:url" content="{{env('APP_URL')}}">
-    <meta property="twitter:description" content="{{ substr(strip_tags(str_replace('&nbsp;', ' ', $web_config['about']->value)),0,160) }}">
+    <meta property="twitter:description"
+          content="{{ substr(strip_tags(str_replace('&nbsp;', ' ', $web_config['about']->value)),0,160) }}">
 
     <link rel="stylesheet" href="{{asset('public/assets/front-end')}}/css/home.css"/>
+
     <style>
+
+        .for-stock-value {
+            position: absolute;
+            top: 0;
+            z-index: 3;
+            border-radius: 4px !important;
+            white-space: nowrap;
+            color: white;
+            font-size: small;
+            background: #f514149c;
+        }
         .cz-countdown-days {
             border: .5px solid{{$web_config['primary_color']}};
         }
@@ -68,30 +82,42 @@
             .categories-view-all {
             {{session('direction') === "rtl" ? 'margin-left: 10px;' : 'margin-right: 6px;'}}
 
+
+
             }
 
             .categories-title {
             {{Session::get('direction') === "rtl" ? 'margin-right: 0px;' : 'margin-left: 6px;'}}
+
+
 
             }
 
             .seller-list-title {
             {{Session::get('direction') === "rtl" ? 'margin-right: 0px;' : 'margin-left: 10px;'}}
 
+
+
             }
 
             .seller-list-view-all {
             {{Session::get('direction') === "rtl" ? 'margin-left: 20px;' : 'margin-right: 10px;'}}
+
+
 
             }
 
             .category-product-view-title {
             {{Session::get('direction') === "rtl" ? 'margin-right: 16px;' : 'margin-left: -8px;'}}
 
+
+
             }
 
             .category-product-view-all {
             {{Session::get('direction') === "rtl" ? 'margin-left: -7px;' : 'margin-right: 5px;'}}
+
+
 
             }
         }
@@ -100,35 +126,49 @@
             .categories-view-all {
             {{session('direction') === "rtl" ? 'margin-left: 30px;' : 'margin-right: 27px;'}}
 
+
+
             }
 
             .categories-title {
             {{Session::get('direction') === "rtl" ? 'margin-right: 25px;' : 'margin-left: 25px;'}}
+
+
 
             }
 
             .seller-list-title {
             {{Session::get('direction') === "rtl" ? 'margin-right: 6px;' : 'margin-left: 10px;'}}
 
+
+
             }
 
             .seller-list-view-all {
             {{Session::get('direction') === "rtl" ? 'margin-left: 12px;' : 'margin-right: 10px;'}}
+
+
 
             }
 
             .seller-card {
             {{Session::get('direction') === "rtl" ? 'padding-left:0px !important;' : 'padding-right:0px !important;'}}
 
+
+
             }
 
             .category-product-view-title {
             {{Session::get('direction') === "rtl" ? 'margin-right: 10px;' : 'margin-left: -12px;'}}
 
+
+
             }
 
             .category-product-view-all {
             {{Session::get('direction') === "rtl" ? 'margin-left: -20px;' : 'margin-right: 0px;'}}
+
+
 
             }
         }
@@ -146,7 +186,7 @@
             background: {{$web_config['primary_color']}};
         }
 
-        }
+
         .czi-arrow-left {
             color: {{$web_config['primary_color']}};
             background: {{$web_config['primary_color']}}10;
@@ -162,7 +202,7 @@
         }
 
         .view-all-text {
-            color: {{$web_config['secondary_color']}}  !important;
+            color: {{$web_config['secondary_color']}}    !important;
         }
 
         .feature-product .czi-arrow-left {
@@ -178,6 +218,8 @@
 
         /*  */
     </style>
+
+
 
     <link rel="stylesheet" href="{{asset('public/assets/front-end')}}/css/owl.carousel.min.css"/>
     <link rel="stylesheet" href="{{asset('public/assets/front-end')}}/css/owl.theme.default.min.css"/>
@@ -749,6 +791,15 @@
                                                     </span>
                                                 </div>
                                             @endif
+                                            @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
+                                                <div class="d-flex"
+                                                     style="top:0;position:absolute;{{Session::get('direction') === "ltr" ? 'right:0;' : 'left:0;'}}">
+                                                    <span class="for-stock-value p-1 pl-2 pr-2"
+                                                          style="{{Session::get('direction') === "ltr" ? 'border-radius:0px 5px' : 'border-radius:5px 0px'}};">
+                                                        {{translate('out_of_stock')}}
+                                                    </span>
+                                                </div>
+                                            @endif
                                             <div class="d-flex flex-wrap p-2">
                                                 <div class="best-selleing-image">
                                                     <img class="rounded"
@@ -828,6 +879,15 @@
                                                         @elseif($top->product->discount_type =='flat')
                                                             {{\App\CPU\Helpers::currency_converter($top->product->discount)}}
                                                         @endif {{translate('the_discount')}}
+                                                    </span>
+                                                </div>
+                                            @endif
+                                            @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
+                                                <div class="d-flex"
+                                                     style="top:0;position:absolute;{{Session::get('direction') === "ltr" ? 'right:0;' : 'left:0;'}}">
+                                                    <span class="for-stock-value p-1 pl-2 pr-2"
+                                                          style="{{Session::get('direction') === "ltr" ? 'border-radius:0px 5px' : 'border-radius:5px 0px'}};">
+                                                        {{translate('out_of_stock')}}
                                                     </span>
                                                 </div>
                                             @endif

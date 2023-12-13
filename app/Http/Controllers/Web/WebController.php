@@ -419,6 +419,13 @@ class WebController extends Controller
 
     public function checkout_payment(Request $request)
     {
+//        $data = [
+//            "method" => "post",
+//            "url" => "https://webhook.site/60d4802d-07e4-4505-8a67-0a38d51d8c01",
+//            "timestampFormat" => "yyyy-MM-dd HH:mm:ss",
+//            "webhookType" => "orderStatus"
+//        ];
+//        dd(Oto::createWebhook($data));
         $cart_group_ids = CartManager::get_cart_group_ids();
 
         $shippingMethod = Helpers::get_business_settings('shipping_method');
@@ -455,7 +462,7 @@ class WebController extends Controller
         }
         unset($physical_products[0]);
         if (is_null(\session()->get('address_id')))
-         return redirect()->route('checkout-details');
+            return redirect()->route('checkout-details');
 
         $address = ShippingAddress::find(\session()->get('address_id'));
         $shippingMethodManual = ShippingMethod::whereJsonContains('info->states', (string)$address->state_id)->first();

@@ -17,6 +17,16 @@
             @else
                 <span class="for-discoutn-value-null"></span>
             @endif
+                @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
+                    <div class="d-flex"
+                         style="top:0;position:absolute;{{Session::get('direction') === "ltr" ? 'right:0;' : 'left:0;'}}">
+                    <span class="for-stock-value p-1 pl-2 pr-2"
+                          style="{{Session::get('direction') === "ltr" ? 'border-radius:0px 5px' : 'border-radius:5px 0px'}};">
+                        {{translate('out_of_stock')}}
+                    </span>
+                    </div>
+                @endif
+
                 <a href="{{route('product',$product->slug)}}">
                     <img src="{{\App\CPU\ProductManager::product_image_path('thumbnail')}}/{{$product['thumbnail']}}"
                         onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'">

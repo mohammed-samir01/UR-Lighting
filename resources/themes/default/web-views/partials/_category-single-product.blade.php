@@ -1,15 +1,16 @@
 @php($overallRating = \App\CPU\ProductManager::get_overall_rating($product->reviews))
 
 
-<div class="product-single-hover" >
+<div class="product-single-hover">
     <div class="overflow-hidden position-relative">
         <div class=" inline_product clickable d-flex justify-content-center"
-                style="background:{{$web_config['primary_color']}}10;">
+             style="background:{{$web_config['primary_color']}}10;">
             @if($product->discount > 0)
                 <div class="d-flex">
                         <span class="for-discoutn-value p-1 pl-2 pr-2">
                         @if ($product->discount_type == 'percent')
-                                {{round($product->discount,(!empty($decimal_point_settings) ? $decimal_point_settings: 0))}}%
+                                {{round($product->discount,(!empty($decimal_point_settings) ? $decimal_point_settings: 0))}}
+                                %
                             @elseif($product->discount_type =='flat')
                                 {{\App\CPU\Helpers::currency_converter($product->discount)}}
                             @endif
@@ -17,14 +18,24 @@
                         </span>
                 </div>
             @else
+
                 <div class="d-flex justify-content-end for-dicount-div-null">
                     <span class="for-discoutn-value-null"></span>
+                </div>
+            @endif
+            @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
+                <div class="d-flex"
+                     style="top:0;position:absolute;{{Session::get('direction') === "ltr" ? 'right:0;' : 'left:0;'}}">
+                    <span class="for-stock-value p-1 pl-2 pr-2"
+                          style="{{Session::get('direction') === "ltr" ? 'border-radius:0px 5px' : 'border-radius:5px 0px'}};">
+                        {{translate('out_of_stock')}}
+                    </span>
                 </div>
             @endif
             <div class="d-flex d-block">
                 <a href="{{route('product',$product->slug)}}" class="d-block">
                     <img src="{{\App\CPU\ProductManager::product_image_path('thumbnail')}}/{{$product['thumbnail']}}"
-                        onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'">
+                         onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'">
                 </a>
             </div>
         </div>
@@ -65,7 +76,7 @@
             </div>
 
         </div>
-        <div class="text-center quick-view" >
+        <div class="text-center quick-view">
             @if(Request::is('product/*'))
                 <a class="btn btn--primary btn-sm" href="{{route('product',$product->slug)}}">
                     <i class="czi-forward align-middle {{Session::get('direction') === "rtl" ? 'ml-1' : 'mr-1'}}"></i>
@@ -73,8 +84,9 @@
                 </a>
             @else
                 <a class="btn btn--primary btn-sm"
-                style="margin-top:0px;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;" href="javascript:"
-                onclick="quickView('{{$product->id}}')">
+                   style="margin-top:0px;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;"
+                   href="javascript:"
+                   onclick="quickView('{{$product->id}}')">
                     <i class="czi-eye align-middle {{Session::get('direction') === "rtl" ? 'ml-1' : 'mr-1'}}"></i>
                     {{translate('quick_view')}}
                 </a>

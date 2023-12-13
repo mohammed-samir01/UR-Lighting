@@ -748,7 +748,6 @@ class BusinessSettingsController extends Controller
             'mode' => 'required|in:live,test',
         ]);
         $validation['status'] = $request->boolean('status');
-
         Setting::updateOrCreate(['key_name' => $request['gateway'], 'settings_type' => 'shipping'], [
             'key_name' => $request['gateway'],
             'live_values' => $validation,
@@ -757,6 +756,28 @@ class BusinessSettingsController extends Controller
             'mode' => $request['mode'],
             'is_active' => $request->boolean('status'),
         ]);
+
+        $webhooks = Oto::getWebhooks();
+        $status = false;
+        $url = \request()->getSchemeAndHttpHost() . '/webhook/order';
+        if (isset($webhooks['success']) && $webhooks['success'] && isset($webhooks['webhooks'])) {
+            foreach ($webhooks['webhooks'] as $web) {
+                if ($web['url'] == $url) {
+                    $status = true;
+                    break;
+                }
+            }
+        }
+        if (!$status) {
+            $data = [
+                "method" => "post",
+                "url" => $url,
+                "timestampFormat" => "yyyy-MM-dd HH:mm:ss",
+                "webhookType" => "orderStatus"
+            ];
+            Oto::createWebhook($data);
+        }
+
         Toastr::success(GATEWAYS_DEFAULT_UPDATE_200['message']);
         return back();
 

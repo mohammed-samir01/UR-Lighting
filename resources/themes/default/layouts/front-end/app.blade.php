@@ -85,7 +85,7 @@
         }
 
         .mega-nav .nav-item .nav-link {
-            color: {{$web_config['primary_color']}}                              !important;
+            color: {{$web_config['primary_color']}}                               !important;
         }
 
         .checkbox-alphanumeric label:hover {
@@ -93,7 +93,7 @@
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: {{$web_config['secondary_color']}}           !important;
+            background: {{$web_config['secondary_color']}}            !important;
         }
 
         [type="radio"] {
@@ -117,24 +117,24 @@
         }
 
         .navbar-tool .navbar-tool-label {
-            background-color: {{$web_config['secondary_color']}}   !important;
+            background-color: {{$web_config['secondary_color']}}    !important;
         }
 
         .btn--primary {
             color: #fff;
-            background-color: {{$web_config['primary_color']}}   !important;
-            border-color: {{$web_config['primary_color']}}   !important;
+            background-color: {{$web_config['primary_color']}}    !important;
+            border-color: {{$web_config['primary_color']}}    !important;
         }
 
         .btn--primary:hover {
             color: #fff;
-            background-color: {{$web_config['primary_color']}}   !important;
-            border-color: {{$web_config['primary_color']}}   !important;
+            background-color: {{$web_config['primary_color']}}    !important;
+            border-color: {{$web_config['primary_color']}}    !important;
         }
 
         .btn-secondary {
-            background-color: {{$web_config['secondary_color']}}   !important;
-            border-color: {{$web_config['secondary_color']}}   !important;
+            background-color: {{$web_config['secondary_color']}}    !important;
+            border-color: {{$web_config['secondary_color']}}    !important;
         }
 
         .btn-outline-accent:hover {
@@ -157,11 +157,12 @@
         }
 
         .active-menu {
-            color: {{$web_config['secondary_color']}}   !important;
+            color: {{$web_config['secondary_color']}}    !important;
         }
 
         .page-item.active > .page-link {
             box-shadow: 0 0.5rem 1.125rem -0.425rem{{$web_config['primary_color']}}
+
 
 
 
@@ -208,6 +209,7 @@
         .dropdown-menu {
             margin- {{Session::get('direction') === "rtl" ? 'right' : 'left'}}: -8px !important;
         }
+
         .swal2-popup {
             font-size: 12px !important;
 
@@ -265,6 +267,20 @@
         </noscript>
         <!-- End Facebook Pixel Code -->
     @endif
+    @if(Session::get('direction') == 'rtl')
+        <style>
+            .for-stock-value {
+                left: 0;
+            }
+        </style>
+    @else
+        <style>
+            .for-stock-value {
+                right: 0;
+            }
+        </style>
+    @endif
+
 </head>
 <!-- Body-->
 <body class="toolbar-enabled">
@@ -339,54 +355,55 @@
     <script src="{{ asset('public/js/app.js?56') }}"></script>
     @else
         <script src="{{ mix('js/app.js') }}"></script>
-@endproduction
+        @endproduction
 
 
-<script defer src="https://cdn.tamara.co/widget-v2/tamara-widget.js"></script>
-<script src="{{asset('public/assets/front-end')}}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script
-    src="{{asset('public/assets/front-end')}}/vendor/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
-<script src="{{asset('public/assets/front-end')}}/vendor/simplebar/dist/simplebar.min.js"></script>
-<script src="{{asset('public/assets/front-end')}}/vendor/tiny-slider/dist/min/tiny-slider.js"></script>
-<script src="{{asset('public/assets/front-end')}}/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+        <script defer src="https://cdn.tamara.co/widget-v2/tamara-widget.js"></script>
+        <script src="{{asset('public/assets/front-end')}}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script
+            src="{{asset('public/assets/front-end')}}/vendor/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+        <script src="{{asset('public/assets/front-end')}}/vendor/simplebar/dist/simplebar.min.js"></script>
+        <script src="{{asset('public/assets/front-end')}}/vendor/tiny-slider/dist/min/tiny-slider.js"></script>
+        <script
+            src="{{asset('public/assets/front-end')}}/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
 
-{{-- light box --}}
-<script src="{{asset('public/js/lightbox.min.js')}}"></script>
-<script src="{{asset('public/assets/front-end')}}/vendor/drift-zoom/dist/Drift.min.js"></script>
-<script src="{{asset('public/assets/front-end')}}/vendor/lightgallery.js/dist/js/lightgallery.min.js"></script>
-<script src="{{asset('public/assets/front-end')}}/vendor/lg-video.js/dist/lg-video.min.js"></script>
-{{--Toastr--}}
-<script src={{asset("public/assets/back-end/js/toastr.js")}}></script>
-<!-- Main theme script-->
-<script src="{{asset('public/assets/front-end')}}/js/theme.min.js"></script>
-<script src="{{asset('public/assets/front-end')}}/js/slick.min.js"></script>
-<script>
-    var AIZ = AIZ || {};
-    AIZ.local = {
-        nothing_selected: 'Nothing selected yes',
-        nothing_found: 'Nothing found',
-        choose_file: 'Choose File',
-        file_selected: 'File selected',
-        files_selected: 'Files selected',
-        add_more_files: 'Add more files',
-        adding_more_files: 'Adding more files',
-        drop_files_here_paste_or: 'Drop files here, paste or',
-        browse: 'Browse',
-        upload_complete: 'Upload complete',
-        upload_paused: 'Upload paused',
-        resume_upload: 'Resume upload',
-        pause_upload: 'Pause upload',
-        retry_upload: 'Retry upload',
-        cancel_upload: 'Cancel upload',
-        uploading: 'Uploading',
-        processing: 'Processing',
-        complete: 'Complete',
-        file: 'File',
-        files: 'Files',
-    }
-</script>
-<script src="{{asset('public/assets/front-end/js/aiz-core.js')}}"></script>
-<script src="{{asset('public/assets/front-end')}}/js/sweet_alert.js"></script>
+        {{-- light box --}}
+        <script src="{{asset('public/js/lightbox.min.js')}}"></script>
+        <script src="{{asset('public/assets/front-end')}}/vendor/drift-zoom/dist/Drift.min.js"></script>
+        <script src="{{asset('public/assets/front-end')}}/vendor/lightgallery.js/dist/js/lightgallery.min.js"></script>
+        <script src="{{asset('public/assets/front-end')}}/vendor/lg-video.js/dist/lg-video.min.js"></script>
+        {{--Toastr--}}
+        <script src={{asset("public/assets/back-end/js/toastr.js")}}></script>
+        <!-- Main theme script-->
+        <script src="{{asset('public/assets/front-end')}}/js/theme.min.js"></script>
+        <script src="{{asset('public/assets/front-end')}}/js/slick.min.js"></script>
+        <script>
+            var AIZ = AIZ || {};
+            AIZ.local = {
+                nothing_selected: 'Nothing selected yes',
+                nothing_found: 'Nothing found',
+                choose_file: 'Choose File',
+                file_selected: 'File selected',
+                files_selected: 'Files selected',
+                add_more_files: 'Add more files',
+                adding_more_files: 'Adding more files',
+                drop_files_here_paste_or: 'Drop files here, paste or',
+                browse: 'Browse',
+                upload_complete: 'Upload complete',
+                upload_paused: 'Upload paused',
+                resume_upload: 'Resume upload',
+                pause_upload: 'Pause upload',
+                retry_upload: 'Retry upload',
+                cancel_upload: 'Cancel upload',
+                uploading: 'Uploading',
+                processing: 'Processing',
+                complete: 'Complete',
+                file: 'File',
+                files: 'Files',
+            }
+        </script>
+        <script src="{{asset('public/assets/front-end/js/aiz-core.js')}}"></script>
+        <script src="{{asset('public/assets/front-end')}}/js/sweet_alert.js"></script>
 
 
         {{--Toastr--}}
@@ -434,7 +451,7 @@
                                 type: 'success',
                                 text: data.success,
                                 showConfirmButton: false,
-                                width:300,
+                                width: 300,
                                 timer: 1500,
                             });
                             $('.countWishlist').html(data.count);
@@ -909,7 +926,7 @@
 
             function route_alert(route, message) {
                 Swal.fire({
-                    title:  ' {{ translate("are_you_sure")}}',
+                    title: ' {{ translate("are_you_sure")}}',
                     text: message,
                     type: 'warning',
                     showCancelButton: true,

@@ -190,9 +190,7 @@ class Oto
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . config('oto.access_token')
         ])->post($url, $data);
-        return json_decode($response->getBody()->getContents(), true);
-
-
+//        return json_decode($response->getBody()->getContents(), true);
     }
 
     public static function createPickupLocation(array $data)
@@ -264,5 +262,46 @@ class Oto
         $responseResult = json_decode($response->getBody()->getContents(), true);
         return json_encode($responseResult);
 
+    }
+
+    public static function createWebhook($data)
+    {
+        Oto::refreshToken();
+
+        $url = config('oto.mode') == 'live' ? config('oto.live_urls')['create_webhook'] : config('oto.test_urls')['create_webhook'];
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . config('oto.access_token')
+        ])->post($url, $data);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public static function getWebhooks()
+    {
+        Oto::refreshToken();
+
+        $url = 'https://api.tryoto.com/rest/v2/webhook';
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . config('oto.access_token')
+        ])->get($url);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public static function delWebhooks($id)
+    {
+        Oto::refreshToken();
+        $url = 'https://api.tryoto.com/rest/v2/webhook?id=' . $id;
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . config('oto.access_token')
+        ])->delete($url);
+
+        return json_decode($response->getBody()->getContents(), true);
     }
 }

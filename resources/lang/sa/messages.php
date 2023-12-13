@@ -6256,4 +6256,9 @@
   'they_register' => 'They register',
   'with_special_offer' => 'With special offer',
   'successfully_copied' => 'Successfully copied',
+  'Want_to_Turn_ON_Flash_Deal_Status' => 'Want to Turn ON Flash Deal Status',
+  'Want_to_Turn_OFF_Flash_Deal_Status' => 'Want to Turn OFF Flash Deal Status',
+  'if_enabled_this_flash_sale_will_be_available_on_the_website_and_customer_app' => 'If enabled this flash sale will be available on the website and customer app',
+  'if_disabled_this_flash_sale_will_be_hidden_from_the_user_website_and_customer_app' => 'If disabled this flash sale will be hidden from the user website and customer app',
+  'you_can_not_delete_all_images' => 'You can not delete all images',
 );

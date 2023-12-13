@@ -53,3 +53,6 @@ ALTER TABLE `payment_requests` ADD `type_payment` VARCHAR(191) NULL AFTER `payme
 
 /** 5 12 **
 INSERT INTO `addon_settings` (`id`, `key_name`, `live_values`, `test_values`, `settings_type`, `mode`, `is_active`, `created_at`, `updated_at`, `additional_data`) VALUES ('2767d142-w6c1-17ed-962c-0c7a158e4469', 'tamara', '{\"gateway\":\"tamara\",\"mode\":\"live\",\"status\":0,\"api_token\":\"\",\"notification_token\":\"\",\"public_key\":\"\"}', '{\"gateway\":\"tamara\",\"mode\":\"live\",\"status\":0,\"api_token\":\"\",\"notification_token\":\"\",\"public_key\":\"\"}', 'payment_config', 'test', '0', NULL, '2023-08-22 09:30:55', '{\"gateway_title\":\"Tamara\",\"gateway_image\":null}');
+
+/** 11 12 **
+ALTER TABLE `orders` ADD `status_oto` VARCHAR(191) NULL AFTER `shipping_company`;
