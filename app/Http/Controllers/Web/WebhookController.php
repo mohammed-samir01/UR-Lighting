@@ -14,6 +14,8 @@ class WebhookController extends Controller
         Log::info('done candel sondos');
         $data = $request->all();
         $order_id = $data['orderId'];
+        Log::info($order_id);
+        Log::info($data['status']);
         $order = Order::find($order_id);
         $order->status_oto = $data['status'];
         $order->save();
