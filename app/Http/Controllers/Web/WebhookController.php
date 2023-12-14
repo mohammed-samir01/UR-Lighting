@@ -11,15 +11,17 @@ class WebhookController extends Controller
 {
     public function handle(Request $request)
     {
-        Log::info('done candel amer');
+        Log::info('done candel mohamed');
         $data = $request->all();
-        Log::info($data['orderId']);
-        Log::info(Order::find($data['orderId']));
-
         if (isset($data['orderId'])){
-            $order = Order::find($data['orderId']);
+            $order_id = $data['orderId'];
+            $order = Order::find($order_id);
             if ($order)
                 $order->update(['status_oto' => $data['status']]);
+            else
+                Log::info('no amer');
+        } else {
+            Log::info('no mohamed');
         }
 
     }
