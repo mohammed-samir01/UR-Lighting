@@ -15,8 +15,9 @@ class WebhookController extends Controller
         $data = $request->all();
         $order_id = $data['orderId'];
         $order = Order::find($order_id);
-        if ($order)
-            $order->update(['status_oto' => $data['status']]);
+        $order->status_oto = $data['status'];
+        $order->save();
+        Log::info('done candel end');
 
     }
 }
