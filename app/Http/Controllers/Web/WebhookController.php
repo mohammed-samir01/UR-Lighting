@@ -11,10 +11,11 @@ class WebhookController extends Controller
 {
     public function handle(Request $request)
     {
-        Log::info('done candel');
-        Log::info($request->all());
-
+        Log::info('done candel amer');
         $data = $request->all();
+        Log::info($data['orderId']);
+        Log::info(Order::find($data['orderId']));
+
         if (isset($data['orderId'])){
             $order = Order::find($data['orderId']);
             if ($order)
