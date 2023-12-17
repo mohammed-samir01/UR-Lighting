@@ -243,7 +243,6 @@ class OrderController extends Controller
 
     public function details($id)
     {
-
         //for edit  address
         $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');
         $zip_restrict_status = Helpers::get_business_settings('delivery_zip_code_area_restriction');
@@ -255,8 +254,11 @@ class OrderController extends Controller
 
         $order = $this->order->with('details.product_all_status', 'verification_images', 'shipping', 'seller.shop', 'offline_payments', 'delivery_man')->where(['id' => $id])->first();
         $orderStatus['success'] = false;
-        if (isset($order->shipping_company['type']) && $order->shipping_company['type'] == 'oto')
+        $order->oto = false;
+        if (isset($order->shipping_company['type']) && $order->shipping_company['type'] == 'oto') {
+            $order->oto = true;
             $orderStatus = Oto::orderStatus($order->id);
+        }
         $physical_product = false;
         foreach ($order->details as $product) {
             if (isset($product->product) && $product->product->product_type == 'physical') {
@@ -332,9 +334,25 @@ class OrderController extends Controller
 
     public function status(Request $request)
     {
-        $user_id = auth('admin')->id();
+       $this->validate($request,[
+          'order_status' => 'string'
+       ]);
 
         $order = Order::find($request->id);
+        $user_id = auth('admin')->id();
+
+
+        if (isset($order->shipping_company['type']) && $order->shipping_company['type'] == 'oto') {
+            if ($request->order_status == 'returned'){
+
+
+            }
+
+            if ($request->order_status == 'canceled'){
+
+            }
+        }
+
 
         if (!$order->is_guest && !isset($order->customer)) {
             return response()->json(['customer_status' => 0], 200);

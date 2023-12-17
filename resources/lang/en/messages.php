@@ -6427,4 +6427,7 @@
   'order_status_shipping' => 'Order status shipping',
   'name_shipping' => 'Name shipping',
   'order_shipment' => 'Order shipment',
+  'facebook_credentials_updated' => 'Facebook credentials updated',
+  'terms_and_Condition' => 'Terms and Condition',
+  'captcha_failed' => 'Captcha failed',
 );

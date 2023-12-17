@@ -52,6 +52,7 @@ class LoginController extends Controller
 
     public function login()
     {
+
         session()->put('keep_return_url', url()->previous());
 
         if(theme_root_path() == 'default'){

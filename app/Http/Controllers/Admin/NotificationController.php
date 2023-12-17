@@ -132,6 +132,7 @@ class NotificationController extends Controller
 
     public function push_notification()
     {
+
         return view('admin-views.notification.push-notification');
     }
 }

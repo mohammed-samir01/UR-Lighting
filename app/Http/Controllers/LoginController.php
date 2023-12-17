@@ -21,6 +21,7 @@ class LoginController extends Controller
 
     public function login($login_url)
     {
+
         $data = array_column(BusinessSetting::whereIn('type',['employee_login_url','admin_login_url'])->get(['type','value'])->toArray(), 'value', 'type');
 
         $loginTypes = [

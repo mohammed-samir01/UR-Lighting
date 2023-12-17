@@ -589,6 +589,7 @@ class BusinessSettingsController extends Controller
 
     public function update_fcm(Request $request)
     {
+
         DB::table('business_settings')->updateOrInsert(['type' => 'fcm_project_id'], [
             'value' => $request['fcm_project_id'],
         ]);

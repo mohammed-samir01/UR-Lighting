@@ -89,7 +89,7 @@
 
                                 @if ($web_config['ref_earning_status'])
                                 <div class="col-sm-12">
-                                    <div class="form-group">
+                                    <div class="form-group" style="direction: {{Session::get('direction')}}">
                                         <label class="form-label form--label text-capitalize" for="referral_code">{{ translate('refer_code') }} <small class="text-muted">({{ translate('optional') }})</small></label>
                                         <input type="text" id="referral_code" class="form-control"
                                         name="referral_code" placeholder="{{ translate('use_referral_code') }}">
@@ -98,7 +98,7 @@
                                 @endif
 
                             </div>
-                            <div class="form-group d-flex flex-wrap justify-content-between">
+                            <div class="form-group d-flex flex-wrap justify-content-between" style="direction: {{Session::get('direction')}}">
 
                                 <label class="form-group mb-1 d-flex align-items-center">
                                     <strong>
@@ -115,10 +115,10 @@
                             {{-- recaptcha --}}
                             @php($recaptcha = \App\CPU\Helpers::get_business_settings('recaptcha'))
                             @if(isset($recaptcha) && $recaptcha['status'] == 1)
-                                <div id="recaptcha_element" class="w-100" data-type="image"></div>
+                                <div id="recaptcha_element" class="w-100" data-type="image" style="direction: {{Session::get('direction')}}"></div>
                                 <br/>
                             @else
-                                <div class="row py-2">
+                                <div class="row py-2" style="direction: {{Session::get('direction')}}">
                                     <div class="col-6 pr-2">
                                         <input type="text" class="form-control border __h-40" name="default_recaptcha_value_customer_regi" value=""
                                                placeholder="{{ translate('enter_captcha_value')}}" autocomplete="off">

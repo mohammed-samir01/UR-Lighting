@@ -11,7 +11,6 @@ class WebhookController extends Controller
 {
     public function handle(Request $request)
     {
-        Log::info('done candel sondos');
         $data = $request->all();
         $order_id = $data['orderId'];
         Log::info($order_id);
@@ -19,7 +18,6 @@ class WebhookController extends Controller
         $order = Order::find($order_id);
         $order->status_oto = $data['status'];
         $order->save();
-        Log::info('done candel end');
 
     }
 }

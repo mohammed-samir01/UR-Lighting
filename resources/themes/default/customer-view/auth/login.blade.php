@@ -43,7 +43,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group d-flex flex-wrap justify-content-between">
+                        <div class="form-group d-flex flex-wrap justify-content-between" style="direction: {{Session::get('direction')}}">
 
                             <div class="form-group">
                                 <input type="checkbox"
@@ -53,7 +53,7 @@
                                 <label class="" for="remember">{{ translate('remember_me') }}</label>
                             </div>
                             <a class="font-size-sm" href="{{route('customer.auth.recover-password')}}">
-                                {{ translate('forgot_password') }}?
+                                {{ translate('forgot_password') }} {{Session::get('direction') === "rtl" ? ' ؟' : '?'}}
                             </a>
                         </div>
                         {{-- recaptcha --}}

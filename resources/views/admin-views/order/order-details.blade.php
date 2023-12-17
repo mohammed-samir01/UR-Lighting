@@ -418,23 +418,31 @@
                                 class="font-weight-bold title-color fz-14">{{translate('change_order_status')}}</label>
                             <select name="order_status" onchange="order_status(this.value)"
                                     class="status form-control" data-id="{{$order['id']}}">
+                                <option
+                                    value=""> -------
+                                </option>
+                                <option
+                                @if(!$order->oto)
+                                    <option
+                                        value="pending" {{$order->order_status == 'pending'?'selected':''}} > {{translate('pending')}}</option>
+                                    <option
+                                        value="confirmed" {{$order->order_status == 'confirmed'?'selected':''}} > {{translate('confirmed')}}</option>
+                                    <option
+                                        value="processing" {{$order->order_status == 'processing'?'selected':''}} >{{translate('packaging')}} </option>
+                                    <option class="text-capitalize"
+                                            value="out_for_delivery" {{$order->order_status == 'out_for_delivery'?'selected':''}} >{{translate('out_for_delivery')}} </option>
+                                    <option
+                                        value="delivered" {{$order->order_status == 'delivered'?'selected':''}} >{{translate('delivered')}} </option>
 
-                                <option
-                                    value="pending" {{$order->order_status == 'pending'?'selected':''}} > {{translate('pending')}}</option>
-                                <option
-                                    value="confirmed" {{$order->order_status == 'confirmed'?'selected':''}} > {{translate('confirmed')}}</option>
-                                <option
-                                    value="processing" {{$order->order_status == 'processing'?'selected':''}} >{{translate('packaging')}} </option>
-                                <option class="text-capitalize"
-                                        value="out_for_delivery" {{$order->order_status == 'out_for_delivery'?'selected':''}} >{{translate('out_for_delivery')}} </option>
-                                <option
-                                    value="delivered" {{$order->order_status == 'delivered'?'selected':''}} >{{translate('delivered')}} </option>
+                                    <option
+                                        value="failed" {{$order->order_status == 'failed'?'selected':''}} >{{translate('failed_to_Deliver')}} </option>
+
+                                @endif
                                 <option
                                     value="returned" {{$order->order_status == 'returned'?'selected':''}} > {{translate('returned')}}</option>
                                 <option
-                                    value="failed" {{$order->order_status == 'failed'?'selected':''}} >{{translate('failed_to_Deliver')}} </option>
-                                <option
                                     value="canceled" {{$order->order_status == 'canceled'?'selected':''}} >{{translate('canceled')}} </option>
+
                             </select>
                         </div>
 
@@ -1032,7 +1040,8 @@
                                             <div class="form-group">
                                                 <label for="city" class="title-color">{{translate('city')}}</label>
                                                 <input type="text" name="city" id="city"
-                                                       value="{{$billing ? $billing->city->name : ''}}" class="form-control"
+                                                       value="{{$billing ? $billing->city->name : ''}}"
+                                                       class="form-control"
                                                        placeholder="{{ translate('ex') }}:{{translate('dhaka')}}"
                                                        required>
                                             </div>
@@ -1222,51 +1231,51 @@
 
         function order_status(status) {
             @if($order['order_status']=='delivered')
-            Swal.fire({
-                title: '{{translate("Order_is_already_delivered_and_transaction_amount_has_been_disbursed_changing_status_can_be_the_reason_of_miscalculation")}}!',
-                text: "{{translate('think_before_you_proceed')}}.",
-                showCancelButton: true,
-                confirmButtonColor: '#377dff',
-                cancelButtonColor: 'secondary',
-                confirmButtonText: '{{translate("yes_change_it")}}!',
-                cancelButtonText: '{{ translate("cancel") }}',
-            }).then((result) => {
-                if (result.value) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        url: "{{route('admin.orders.status')}}",
-                        method: 'POST',
-                        data: {
-                            "id": '{{$order['id']}}',
-                            "order_status": status
-                        },
-                        success: function (data) {
+                Swal.fire({
+                    title: '{{translate("Order_is_already_delivered_and_transaction_amount_has_been_disbursed_changing_status_can_be_the_reason_of_miscalculation")}}!',
+                    text: "{{translate('think_before_you_proceed')}}.",
+                    showCancelButton: true,
+                    confirmButtonColor: '#377dff',
+                    cancelButtonColor: 'secondary',
+                    confirmButtonText: '{{translate("yes_change_it")}}!',
+                    cancelButtonText: '{{ translate("cancel") }}',
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                            }
+                        });
+                        $.ajax({
+                            url: "{{route('admin.orders.status')}}",
+                            method: 'POST',
+                            data: {
+                                "id": '{{$order['id']}}',
+                                "order_status": status
+                            },
+                            success: function (data) {
 
-                            if (data.success == 0) {
-                                toastr.success('{{translate("order_is_already_delivered_you_can_not_change_it")}} !!');
-                                location.reload();
-                            } else {
-
-                                if (data.payment_status == 0) {
-                                    toastr.warning('{{translate("before_delivered_you_need_to_make_payment_status_paid")}}!');
-                                    location.reload();
-                                } else if (data.customer_status == 0) {
-                                    toastr.warning('{{translate("account_has_been_deleted_you_can_not_change_the_status")}}!');
+                                if (data.success == 0) {
+                                    toastr.success('{{translate("order_is_already_delivered_you_can_not_change_it")}} !!');
                                     location.reload();
                                 } else {
-                                    toastr.success('{{translate("status_change_successfully")}}!');
-                                    location.reload();
-                                }
-                            }
 
-                        }
-                    });
-                }
-            })
+                                    if (data.payment_status == 0) {
+                                        toastr.warning('{{translate("before_delivered_you_need_to_make_payment_status_paid")}}!');
+                                        location.reload();
+                                    } else if (data.customer_status == 0) {
+                                        toastr.warning('{{translate("account_has_been_deleted_you_can_not_change_the_status")}}!');
+                                        location.reload();
+                                    } else {
+                                        toastr.success('{{translate("status_change_successfully")}}!');
+                                        location.reload();
+                                    }
+                                }
+
+                            }
+                        });
+                    }
+                })
             @else
             Swal.fire({
                 title: '{{translate("are_you_sure_change_this")}}?',
