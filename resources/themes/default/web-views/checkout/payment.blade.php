@@ -44,7 +44,7 @@
                     @include('web-views.partials._checkout-steps',['step'=>3])
                     <!-- Payment methods accordion-->
                     <h2 class="h6 pb-3 mb-2 mt-5">{{ translate('choose_payment')}}</h2>
-                    <payment-methods :data='@json($payment_gateways_list)' :customer_id='@json(auth('customer')->user()->id)'>
+                    <payment-methods :data='@json($payment_gateways_list)' :customer_id='@json(\App\CPU\Helpers::status_customer()['user_id'])' :guest='@json(\App\CPU\Helpers::status_customer()['guest'])'>
                         @if(!$cod_not_show && $cash_on_delivery['status'])
                             <div class="col-md-4" id="cod-for-cart">
                                 <div class="cursor-pointer">

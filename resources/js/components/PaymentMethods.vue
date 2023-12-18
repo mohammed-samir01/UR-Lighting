@@ -10,7 +10,8 @@
         </VueRadioButton>
         <Credit v-show="selectedButton == 'creditcard'"/>
         <Tabby v-show="selectedButton == 'tabby'" :method="completeOrder" :loading="loading"/>
-        <MadaAndStc v-show="selectedButton == 'mada' || selectedButton == 'stcpay'" :method="completeOrder" :loading="loading"/>
+        <MadaAndStc v-show="selectedButton == 'mada' || selectedButton == 'stcpay'" :method="completeOrder"
+                    :loading="loading"/>
         <Tamara v-show="selectedButton == 'tamara'"/>
     </div>
 </template>
@@ -24,7 +25,7 @@ import Tamara from "./Tamara.vue";
 
 export default {
     name: "PaymentMethods",
-    props: ['data', 'customer_id'],
+    props: ['data', 'customer_id', 'guest'],
     components: {Tamara, MadaAndStc, Credit, Tabby, PayTabs, VueRadioButton},
     data() {
         return {
@@ -71,7 +72,7 @@ export default {
                 'payment_platform': 'web',
                 'payment_request_from': 'app',
                 'customer_id': this.customer_id,
-                'is_guest': false,
+                'is_guest': this.guest,
                 'type_payment': this.selectedButton
             }).then((res) => {
                 axios.post(res.data.redirect_link, {

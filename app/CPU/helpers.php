@@ -112,6 +112,23 @@ class Helpers
         return $user;
     }
 
+    public static function status_customer()
+    {
+        $user_id = '';
+        $guest = '';
+        if (auth('customer')->check()) {
+            $user_id = auth('customer')->id();
+            $guest = false;
+        } else {
+            $user_id = session('guest_id');
+            $guest = true;
+        }
+        return [
+            'user_id' => $user_id,
+            'guest' => $guest,
+        ];
+    }
+
     public static function coupon_discount($request)
     {
         $discount = 0;

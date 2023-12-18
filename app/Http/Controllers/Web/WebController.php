@@ -419,13 +419,6 @@ class WebController extends Controller
 
     public function checkout_payment(Request $request)
     {
-//        $data = [
-//            "method" => "post",
-//            "url" => "https://webhook.site/60d4802d-07e4-4505-8a67-0a38d51d8c01",
-//            "timestampFormat" => "yyyy-MM-dd HH:mm:ss",
-//            "webhookType" => "orderStatus"
-//        ];
-//        dd(Oto::createWebhook($data));
         $cart_group_ids = CartManager::get_cart_group_ids();
 
         $shippingMethod = Helpers::get_business_settings('shipping_method');
@@ -554,6 +547,7 @@ class WebController extends Controller
         $offline_payment_methods = OfflinePaymentMethod::where('status', 1)->get();
         $payment_published_status = config('get_payment_publish_status');
         $payment_gateway_published_status = isset($payment_published_status[0]['is_published']) ? $payment_published_status[0]['is_published'] : 0;
+
 
         if (session()->has('address_id') && count($cart_group_ids) > 0) {
             return view(

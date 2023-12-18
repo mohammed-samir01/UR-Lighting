@@ -221,7 +221,7 @@ export default {
                 'payment_platform': 'web',
                 'payment_request_from': 'app',
                 'customer_id': this.$parent.customer_id,
-                'is_guest': false,
+                'is_guest': this.$parent.guest,
             }).then((res) => {
                 axios.post(res.data.redirect_link, {
                     'payment_request_from': 'app',
