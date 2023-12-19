@@ -85,7 +85,7 @@
         }
 
         .mega-nav .nav-item .nav-link {
-            color: {{$web_config['primary_color']}}                               !important;
+            color: {{$web_config['primary_color']}}                                !important;
         }
 
         .checkbox-alphanumeric label:hover {
@@ -93,7 +93,7 @@
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: {{$web_config['secondary_color']}}            !important;
+            background: {{$web_config['secondary_color']}}             !important;
         }
 
         [type="radio"] {
@@ -117,24 +117,24 @@
         }
 
         .navbar-tool .navbar-tool-label {
-            background-color: {{$web_config['secondary_color']}}    !important;
+            background-color: {{$web_config['secondary_color']}}     !important;
         }
 
         .btn--primary {
             color: #fff;
-            background-color: {{$web_config['primary_color']}}    !important;
-            border-color: {{$web_config['primary_color']}}    !important;
+            background-color: {{$web_config['primary_color']}}     !important;
+            border-color: {{$web_config['primary_color']}}     !important;
         }
 
         .btn--primary:hover {
             color: #fff;
-            background-color: {{$web_config['primary_color']}}    !important;
-            border-color: {{$web_config['primary_color']}}    !important;
+            background-color: {{$web_config['primary_color']}}     !important;
+            border-color: {{$web_config['primary_color']}}     !important;
         }
 
         .btn-secondary {
-            background-color: {{$web_config['secondary_color']}}    !important;
-            border-color: {{$web_config['secondary_color']}}    !important;
+            background-color: {{$web_config['secondary_color']}}     !important;
+            border-color: {{$web_config['secondary_color']}}     !important;
         }
 
         .btn-outline-accent:hover {
@@ -157,11 +157,12 @@
         }
 
         .active-menu {
-            color: {{$web_config['secondary_color']}}    !important;
+            color: {{$web_config['secondary_color']}}     !important;
         }
 
         .page-item.active > .page-link {
             box-shadow: 0 0.5rem 1.125rem -0.425rem{{$web_config['primary_color']}}
+
 
 
 
@@ -213,6 +214,19 @@
         .swal2-popup {
             font-size: 12px !important;
 
+        }
+
+        .__search-sidebar .form-control-sm {
+            border: 1px solid {{$web_config['secondary_color']}} !important;
+        }
+        .__search-sidebar .custom-select {
+            border: 1px solid {{$web_config['secondary_color']}} !important;
+        }
+        .__search-sidebar .__number-filter-btn a {
+            background: {{$web_config['secondary_color']}} !important;
+        }
+        .__inline-44 {
+            border: 1px solid {{$web_config['secondary_color']}} !important;
         }
     </style>
 

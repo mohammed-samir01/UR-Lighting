@@ -29,9 +29,9 @@
                 </div>
 
                 <!-- Content -->
-                <div class="navbar-vertical-content">
+                <div class="navbar-vertical-content " style="background:{{$web_config['secondary_color']}} !important;">
                     <!-- Search Form -->
-                    <div class="sidebar--search-form pb-3 pt-4">
+                    <div class="sidebar--search-form pb-3 pt-4" style="background:{{$web_config['secondary_color']}} !important;">
                         <div class="search--form-group">
                             <button type="button" class="btn"><i class="tio-search"></i></button>
                             <input type="text" class="js-form-search form-control form--control" id="search-bar-input"
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <!-- End Search Form -->
-                    <ul class="navbar-nav navbar-nav-lg nav-tabs">
+                    <ul class="navbar-nav navbar-nav-lg nav-tabs" >
                         <!-- Dashboards -->
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/dashboard')?'active':''}}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"

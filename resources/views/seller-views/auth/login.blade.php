@@ -134,7 +134,7 @@
                                 </div>
                             @endif
 
-                            <button type="submit" class="btn btn-lg btn-block btn--primary">{{translate('sign_in')}}</button>
+                            <button type="submit" class="btn btn-lg btn-block btn--primary" style="background-color:{{$web_config['secondary_color']}} !important;">{{translate('sign_in')}}</button>
                         </form>
                         <!-- End Form -->
                     </div>

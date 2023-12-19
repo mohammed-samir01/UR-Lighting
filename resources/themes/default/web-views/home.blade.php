@@ -467,7 +467,7 @@
                                                     {{\App\CPU\Helpers::currency_converter($deal_of_the_day->product->unit_price)}}
                                                 </strike>
                                             @endif
-                                            <span class="text-accent __text-22px __m-10px">
+                                            <span class="text-accent __text-22px __m-10px" >
                                             {{\App\CPU\Helpers::currency_converter(
                                                 $deal_of_the_day->product->unit_price-(\App\CPU\Helpers::get_product_discount($deal_of_the_day->product,$deal_of_the_day->product->unit_price))
                                             )}}
@@ -524,7 +524,7 @@
                                                         {{\App\CPU\Helpers::currency_converter($product->unit_price)}}
                                                     </strike>
                                                 @endif
-                                                <span class="text-accent __text-22px __m-10px">
+                                                <span class="text-accent __text-22px __m-10px" style="font-size: 16 px !important;">
                                                 {{\App\CPU\Helpers::currency_converter(
                                                     $product->unit_price-(\App\CPU\Helpers::get_product_discount($product,$product->unit_price))
                                                 )}}

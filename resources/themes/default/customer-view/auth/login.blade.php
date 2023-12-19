@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                         @endif
-                        <button class="btn btn--primary btn-block btn-shadow"
+                        <button class="btn btn--primary btn-block btn-shadow" style="background-color:{{$web_config['secondary_color']}} !important;"
                                 type="submit">{{ translate('sign_in') }}</button>
                     </form>
                 </div>
