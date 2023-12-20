@@ -104,7 +104,7 @@
                         @foreach(json_decode($language['value'],true) as $key =>$data)
                             @if($data['status']==1)
                                 <li>
-                                    <a class="dropdown-item pb-1" href="{{route('lang',[$data['code']])}}">
+                                    <a class="dropdown-item pb-1 lang" href="{{route('lang',[$data['code']])}}">
                                         <img class="{{Session::get('direction') === "rtl" ? 'mr-2' : 'mr-2'}}"
                                              width="20"
                                              src="{{asset('public/assets/front-end')}}/img/flags/{{$data['code']}}.png"

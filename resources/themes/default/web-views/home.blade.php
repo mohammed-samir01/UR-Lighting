@@ -463,11 +463,11 @@
                                         <div class="">
 
                                             @if($deal_of_the_day->product->discount > 0)
-                                                <strike class="__text-12px __color-E96A6A __pl-2">
+                                                <strike class="__text-12px __color-E96A6A __pl-2" style="padding: 5px;!important;">
                                                     {{\App\CPU\Helpers::currency_converter($deal_of_the_day->product->unit_price)}}
                                                 </strike>
                                             @endif
-                                            <span class="text-accent __text-22px __m-10px" >
+                                            <span class="text-accent __text-22px __m-10px" style="font-size: 17px;!important;">
                                             {{\App\CPU\Helpers::currency_converter(
                                                 $deal_of_the_day->product->unit_price-(\App\CPU\Helpers::get_product_discount($deal_of_the_day->product,$deal_of_the_day->product->unit_price))
                                             )}}
@@ -520,11 +520,11 @@
                                             <div class="float-right">
 
                                                 @if($product->discount > 0)
-                                                    <strike class="__text-12px __color-E96A6A">
+                                                    <strike class="__text-12px __color-E96A6A" style="padding: 5px;!important;">
                                                         {{\App\CPU\Helpers::currency_converter($product->unit_price)}}
                                                     </strike>
                                                 @endif
-                                                <span class="text-accent __text-22px __m-10px" style="font-size: 16 px !important;">
+                                                <span class="text-accent __text-22px __m-10px" style="font-size: 17px;!important;">
                                                 {{\App\CPU\Helpers::currency_converter(
                                                     $product->unit_price-(\App\CPU\Helpers::get_product_discount($product,$product->unit_price))
                                                 )}}

@@ -228,6 +228,9 @@
         .__inline-44 {
             border: 1px solid {{$web_config['secondary_color']}} !important;
         }
+        .dropdown-item.pb-1.lang:hover {
+            background-color: #dfdfdf;
+        }
     </style>
 
     @php($google_tag_manager_id = \App\CPU\Helpers::get_business_settings('google_tag_manager_id'))
@@ -394,7 +397,7 @@
         <script>
             var AIZ = AIZ || {};
             AIZ.local = {
-                nothing_selected: 'Nothing selected yes',
+                nothing_selected: '{{translate("Nothing selected")}}',
                 nothing_found: 'Nothing found',
                 choose_file: 'Choose File',
                 file_selected: 'File selected',
