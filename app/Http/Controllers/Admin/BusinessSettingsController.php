@@ -202,18 +202,24 @@ class BusinessSettingsController extends Controller
 
     public function privacy_policy()
     {
-        $privacy_policy = BusinessSetting::where('type', 'privacy_policy')->first();
-        return view('admin-views.business-settings.privacy-policy', compact('privacy_policy'));
+        $privacy_policy_ar = BusinessSetting::where('type', 'privacy_policy_ar')->first();
+        $privacy_policy_en = BusinessSetting::where('type', 'privacy_policy_en')->first();
+        $data = [
+            'ar' => $privacy_policy_ar?->value,
+            'en' => $privacy_policy_en?->value
+        ];
+        return view('admin-views.business-settings.privacy-policy', compact('data'));
     }
 
-    public function privacy_policy_update(Request $data)
+    public function privacy_policy_update(Request $request)
     {
-        $validatedData = $data->validate([
-            'value' => 'required',
-        ]);
-        BusinessSetting::where('type', 'privacy_policy')->update(['value' => $data->value]);
-        Toastr::success(translate('Privacy_policy_Updated_successfully'));
-        return redirect()->back();
+        BusinessSetting::updateOrInsert([
+            'type' => 'privacy_policy_ar'
+        ], ['value' => $request->ar_content]);
+        BusinessSetting::updateOrInsert([
+            'type' => 'privacy_policy_en'
+        ], ['value' => $request->en_content]);
+        return response()->json('success');
     }
 
     public static function business_setting()

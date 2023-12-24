@@ -20886,7 +20886,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <button type=\"button\" id=\"placeOrderButton\" @click.prevent=\"pay\">Place order</button>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <button @click=\"pay\">pay</button>")]);
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" amer hi "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <button type=\"button\" id=\"placeOrderButton\" @click.prevent=\"pay\">Place order</button>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <button @click=\"pay\">pay</button>")]);
 }
 
 /***/ }),
@@ -63143,7 +63143,7 @@ if ((true)) ;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"completeOrder":"Place Order"}');
+module.exports = JSON.parse('{"completeOrder":"Place Order","save":"Save"}');
 
 /***/ }),
 
@@ -63154,7 +63154,7 @@ module.exports = JSON.parse('{"completeOrder":"Place Order"}');
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"completeOrder":"اكمال الدفع"}');
+module.exports = JSON.parse('{"completeOrder":"اكمال الدفع","save":"حفظ"}');
 
 /***/ })
 

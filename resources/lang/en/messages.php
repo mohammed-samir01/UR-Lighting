@@ -6430,4 +6430,7 @@
   'facebook_credentials_updated' => 'Facebook credentials updated',
   'terms_and_Condition' => 'Terms and Condition',
   'captcha_failed' => 'Captcha failed',
+  'Nothing selected' => 'Nothing selected',
+  'Privacy_policy_Updated_successfully' => 'Privacy policy Updated successfully',
+  'Terms_and_Condition_Updated_successfully' => 'Terms and Condition Updated successfully',
 );

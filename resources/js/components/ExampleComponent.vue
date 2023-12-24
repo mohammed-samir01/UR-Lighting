@@ -1,5 +1,6 @@
 <template>
     <div>
+        amer hi
 
 <!--        <button type="button" id="placeOrderButton" @click.prevent="pay">Place order</button>-->
 

@@ -81,7 +81,9 @@
 
 <main id="content" role="main" class="main pointer-event">
     <!-- Content -->
+    <div id="admin">
     @yield('content')
+    </div>
     <!-- End Content -->
 
     <!-- Footer -->
@@ -96,7 +98,14 @@
 <!-- ========== END MAIN CONTENT ========== -->
 
 <span class="please_fill_out_this_field" data-text="{{ translate('please_fill_out_this_field') }}"></span>
-
+<script>
+    const app_lang = '{{\App\CPU\Helpers::default_lang()}}'
+</script>
+@production
+    <script src="{{ asset('public/js/admin.js?56') }}"></script>
+    @else
+        <script src="{{ mix('js/admin.js') }}"></script>
+@endproduction
 <!-- ========== END SECONDARY CONTENTS ========== -->
 <script src="{{asset('public/assets/back-end')}}/js/custom.js"></script>
 <!-- JS Implementing Plugins -->

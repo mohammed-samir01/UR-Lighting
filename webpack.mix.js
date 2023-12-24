@@ -14,6 +14,7 @@ const fs = require("fs");
  */
 
 mix.js('resources/js/app.js', 'public/js').version().vue();
+mix.js('resources/js/admin.js', 'public/js').version().vue();
 mix.sass('resources/sass/app.scss', 'public/css').version();
 // mix.then(() => {
 //     const mixManifest = require(path.resolve(__dirname, 'public/mix-manifest.json'));

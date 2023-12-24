@@ -28,17 +28,17 @@
                         <h5 class="mb-0">{{translate('privacy_policy')}}</h5>
                     </div>
 
-                    <form action="{{route('admin.business-settings.privacy-policy')}}" method="post">
-                        @csrf
+{{--                    <form action="{{route('admin.business-settings.privacy-policy')}}" method="post">--}}
+{{--                        @csrf--}}
                         <div class="card-body">
-                            <div class="form-group">
-                                <textarea class="form-control" id="editor" name="value">{{$privacy_policy->value}}</textarea>
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control btn--primary" type="submit" value="{{translate('submit')}}" name="btn">
-                            </div>
+                            <text-editor :url='@json(route("admin.business-settings.privacy-policy"))' :data='@json($data)'></text-editor>
+
+{{--                            <div class="form-group">--}}
+{{--                                <input class="form-control btn--primary" type="submit" value="{{translate('submit')}}" name="btn">--}}
+{{--                            </div>--}}
+
                         </div>
-                    </form>
+{{--                    </form>--}}
                 </div>
             </div>
         </div>
@@ -47,13 +47,16 @@
 
 @push('script')
     {{--ck editor--}}
-    <script src="{{asset('/')}}vendor/ckeditor/ckeditor/ckeditor.js"></script>
-    <script src="{{asset('/')}}vendor/ckeditor/ckeditor/adapters/jquery.js"></script>
-    <script>
-        $('#editor').ckeditor({
-            contentsLangDirection : '{{Session::get('direction')}}',
-        });
-    </script>
+{{--    <script src="{{asset('/')}}vendor/ckeditor/ckeditor/ckeditor.js"></script>--}}
+{{--    <script src="https://6valley.6amtech.com/vendor/ckeditor/ckeditor/ckeditor.js"></script>--}}
+{{--    <script src="{{asset('/')}}vendor/ckeditor/ckeditor/adapters/jquery.js"></script>--}}
+{{--    <script>--}}
+{{--        $('#editor').ckeditor({--}}
+{{--            contentsLangDirection : 'ltr',--}}
+{{--            licenseKey: 'eDhsWWtZZkJyRElaZmpLL1FWalBwTU9FalhqbjFQc1ppcElhWkhkNmFobHZGdE1hK2ZkS2hGRklGa3F1LU1qQXlOREF4TWpJPQ==',--}}
+{{--        });--}}
+
+{{--    </script>--}}
     {{--ck editor--}}
 @endpush
 
