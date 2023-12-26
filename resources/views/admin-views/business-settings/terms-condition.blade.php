@@ -38,12 +38,12 @@
 
 @push('script')
     {{--ck editor--}}
-    <script src="{{asset('/')}}vendor/ckeditor/ckeditor/ckeditor.js"></script>
-    <script src="{{asset('/')}}vendor/ckeditor/ckeditor/adapters/jquery.js"></script>
-    <script>
-        $('#editor').ckeditor({
-            contentsLangDirection : '{{Session::get('direction')}}',
-        });
-    </script>
+{{--    <script src="{{asset('/')}}vendor/ckeditor/ckeditor/ckeditor.js"></script>--}}
+{{--    <script src="{{asset('/')}}vendor/ckeditor/ckeditor/adapters/jquery.js"></script>--}}
+{{--    <script>--}}
+{{--        $('#editor').ckeditor({--}}
+{{--            contentsLangDirection : '{{Session::get('direction')}}',--}}
+{{--        });--}}
+{{--    </script>--}}
     {{--ck editor--}}
 @endpush
