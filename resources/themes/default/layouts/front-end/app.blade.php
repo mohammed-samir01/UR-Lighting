@@ -374,7 +374,6 @@
         <script src="{{ mix('js/app.js') }}"></script>
         @endproduction
 
-
         <script defer src="https://cdn.tamara.co/widget-v2/tamara-widget.js"></script>
         <script src="{{asset('public/assets/front-end')}}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script

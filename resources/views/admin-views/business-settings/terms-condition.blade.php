@@ -27,19 +27,9 @@
                     <div class="card-header">
                         <h5 class="mb-0">{{translate('terms_and_condition')}}</h5>
                     </div>
-
-                    <form action="{{route('admin.business-settings.update-terms')}}" method="post">
-                        @csrf
-                        <div class="card-body">
-                            <div class="form-group">
-                                <textarea class="form-control" id="editor"
-                                    name="value">{{$terms_condition->value}}</textarea>
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control btn--primary" type="submit" value="{{translate('submit')}}" name="btn">
-                            </div>
-                        </div>
-                    </form>
+                    <div class="card-body">
+                        <text-editor :url='@json(route("admin.business-settings.update-terms"))' :data='@json($data)'></text-editor>
+                    </div>
                 </div>
             </div>
         </div>

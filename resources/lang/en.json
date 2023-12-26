@@ -1,4 +1,11 @@
 {
     "completeOrder": "Place Order",
-    "save": "Save"
+    "save": "Save",
+    "english" : "English",
+    "arabic" : "Arabic",
+    "successfullySave" : "Successfully Save",
+
+
+
+    "**********": "#######"
 }

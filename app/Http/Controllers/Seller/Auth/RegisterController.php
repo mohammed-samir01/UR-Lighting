@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seller\Auth;
 use App\CPU\ImageManager;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Shipping\Oto;
+use App\Model\Country;
 use App\Model\Seller;
 use App\Model\Shop;
 use Brian2694\Toastr\Facades\Toastr;
@@ -24,7 +25,8 @@ class RegisterController extends Controller
             Toastr::warning(translate('access_denied!!'));
             return redirect('/');
         }
-        return view(VIEW_FILE_NAMES['seller_registration']);
+        $countries = Country::where('status',1)->get();
+        return view(VIEW_FILE_NAMES['seller_registration'],compact('countries'));
     }
 
     public function store(Request $request)
@@ -41,6 +43,9 @@ class RegisterController extends Controller
             'l_name' => 'required',
             'shop_name' => 'required',
             'phone' => 'required',
+            'country_id' => 'required',
+            'state_id' => 'required',
+            'city_id' => 'required',
             'password' => 'required|min:8',
         ],
             [

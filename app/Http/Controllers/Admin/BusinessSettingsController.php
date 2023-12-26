@@ -186,18 +186,25 @@ class BusinessSettingsController extends Controller
 
     public function terms_condition()
     {
-        $terms_condition = BusinessSetting::where('type', 'terms_condition')->first();
-        return view('admin-views.business-settings.terms-condition', compact('terms_condition'));
+        $terms_condition_ar = BusinessSetting::where('type', 'terms_condition_ar')->first();
+        $terms_condition_en = BusinessSetting::where('type', 'terms_condition_en')->first();
+        $data = [
+            'ar' => $terms_condition_ar?->value,
+            'en' => $terms_condition_en?->value
+        ];
+
+        return view('admin-views.business-settings.terms-condition', compact('data'));
     }
 
-    public function updateTermsCondition(Request $data)
+    public function updateTermsCondition(Request $request)
     {
-        $validatedData = $data->validate([
-            'value' => 'required',
-        ]);
-        BusinessSetting::where('type', 'terms_condition')->update(['value' => $data->value]);
-        Toastr::success(translate('Terms_and_Condition_Updated_successfully'));
-        return redirect()->back();
+        BusinessSetting::updateOrInsert([
+            'type' => 'terms_condition_ar'
+        ], ['value' => $request->ar_content]);
+        BusinessSetting::updateOrInsert([
+            'type' => 'terms_condition_en'
+        ], ['value' => $request->en_content]);
+        return response()->json('success');
     }
 
     public function privacy_policy()

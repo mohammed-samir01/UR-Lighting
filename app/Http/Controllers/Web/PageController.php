@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\CPU\Helpers;
 use App\Http\Controllers\Controller;
 use App\Model\BusinessSetting;
 use App\Model\HelpTopic;
@@ -39,15 +40,17 @@ class PageController extends Controller
 
     public function termsand_condition()
     {
+        $lang = (Helpers::app_lang());
         $page_title_banner = $this->business_settings->where('type', 'banner_terms_conditions')->whereJsonContains('value', ['status' => '1'])->first('value');
-        $terms_condition = BusinessSetting::where('type', 'terms_condition')->first();
+        $terms_condition = BusinessSetting::where('type', 'terms_condition_' . $lang)->first();
         return view(VIEW_FILE_NAMES['terms_conditions_page'], compact('terms_condition','page_title_banner'));
     }
 
     public function privacy_policy()
     {
+        $lang = (Helpers::app_lang());
         $page_title_banner = $this->business_settings->where('type', 'banner_privacy_policy')->whereJsonContains('value', ['status' => '1'])->first('value');
-        $privacy_policy = BusinessSetting::where('type', 'privacy_policy')->first();
+        $privacy_policy = BusinessSetting::where('type', 'privacy_policy_' . $lang)->first();
         return view(VIEW_FILE_NAMES['privacy_policy_page'], compact('privacy_policy','page_title_banner'));
     }
 

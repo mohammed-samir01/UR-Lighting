@@ -101,11 +101,16 @@
 <script>
     const app_lang = '{{\App\CPU\Helpers::default_lang()}}'
 </script>
+
 @production
     <script src="{{ asset('public/js/admin.js?56') }}"></script>
     @else
         <script src="{{ mix('js/admin.js') }}"></script>
 @endproduction
+        <script src="{{asset('public/assets/back-end')}}/js/toastr.js"></script>
+        <script>
+            window.toastr = toastr
+        </script>
 <!-- ========== END SECONDARY CONTENTS ========== -->
 <script src="{{asset('public/assets/back-end')}}/js/custom.js"></script>
 <!-- JS Implementing Plugins -->
@@ -116,7 +121,7 @@
 <script src="{{asset('public/assets/back-end')}}/js/vendor.min.js"></script>
 <script src="{{asset('public/assets/back-end')}}/js/theme.min.js"></script>
 <script src="{{asset('public/assets/back-end')}}/js/sweet_alert.js"></script>
-<script src="{{asset('public/assets/back-end')}}/js/toastr.js"></script>
+
 {!! Toastr::message() !!}
 
 <script>

@@ -63143,7 +63143,7 @@ if ((true)) ;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"completeOrder":"Place Order","save":"Save"}');
+module.exports = JSON.parse('{"completeOrder":"Place Order","save":"Save","english":"English","arabic":"Arabic","successfullySave":"Successfully Save","**********":"#######"}');
 
 /***/ }),
 
@@ -63154,7 +63154,7 @@ module.exports = JSON.parse('{"completeOrder":"Place Order","save":"Save"}');
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"completeOrder":"اكمال الدفع","save":"حفظ"}');
+module.exports = JSON.parse('{"completeOrder":"اكمال الدفع","save":"حفظ","english":"انجليزى","arabic":"عربى","successfullySave":"تم الحغظ بنجاح","**********":"#######"}');
 
 /***/ })
 

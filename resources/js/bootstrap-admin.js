@@ -8,6 +8,7 @@ window._ = require('lodash');
 
 try {
     window.Popper = require('popper.js').default;
+    window.$ = window.jQuery = require('jquery');
 
 
     // require('bootstrap');
@@ -21,7 +22,7 @@ try {
 
 window.axios = require('axios');
 // axios.defaults.baseURL = window.location.origin +'/';
-
+window.$ = window.jQuery = require('jquery')
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 let csrfTokenMeta = document.querySelector('meta[name="_token"]');

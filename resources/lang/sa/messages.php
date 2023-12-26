@@ -6290,4 +6290,6 @@
   'want_to_Turn_OFF_This_FAQ' => 'Want to Turn OFF This FAQ',
   'if_you_enable_this_FAQ_will_be_shown_in_the_user_app_and_website' => 'If you enable this FAQ will be shown in the user app and website',
   'if_you_disable_this_FAQ_will_not_be_shown_in_the_user_app_and_website' => 'If you disable this FAQ will not be shown in the user app and website',
+  'approve' => 'Approve',
+  'Seller_has_been_approved_successfully' => 'Seller has been approved successfully',
 );
