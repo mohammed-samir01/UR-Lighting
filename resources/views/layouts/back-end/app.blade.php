@@ -102,11 +102,11 @@
     const app_lang = '{{\App\CPU\Helpers::default_lang()}}'
 </script>
 
+@production
     <script src="{{ asset('public/js/admin.js?56') }}"></script>
-{{--@production--}}
-{{--    @else--}}
-{{--        <script src="{{ mix('js/admin.js?6565') }}"></script>--}}
-{{--@endproduction--}}
+    @else
+        <script src="{{ mix('js/admin.js') }}"></script>
+@endproduction
         <script src="{{asset('public/assets/back-end')}}/js/toastr.js"></script>
         <script>
             window.toastr = toastr
