@@ -460,14 +460,14 @@
                                                 class="badge-style">( {{$deal_of_the_day->product->reviews_count}} )</label>
                                         </span>
                                         </div>
-                                        <div class="">
+                                        <div class="" style="display: flex; flex-direction: column; align-items: center;">
 
                                             @if($deal_of_the_day->product->discount > 0)
                                                 <strike class="__text-12px __color-E96A6A __pl-2" style="padding: 5px;!important;">
                                                     {{\App\CPU\Helpers::currency_converter($deal_of_the_day->product->unit_price)}}
                                                 </strike>
                                             @endif
-                                            <span class="text-accent __text-22px __m-10px" style="font-size: 17px;!important;">
+                                            <span class="text-accent __text-22px __m-10px" style="font-size: 19px;!important;">
                                             {{\App\CPU\Helpers::currency_converter(
                                                 $deal_of_the_day->product->unit_price-(\App\CPU\Helpers::get_product_discount($deal_of_the_day->product,$deal_of_the_day->product->unit_price))
                                             )}}
@@ -517,14 +517,14 @@
                                                 <label class="badge-style">( {{$product->reviews_count}} )</label>
                                             </span>
                                             </div>
-                                            <div class="float-right">
+                                            <div style="display: flex; flex-direction: column; align-items: center;">
 
                                                 @if($product->discount > 0)
                                                     <strike class="__text-12px __color-E96A6A" style="padding: 5px;!important;">
                                                         {{\App\CPU\Helpers::currency_converter($product->unit_price)}}
                                                     </strike>
                                                 @endif
-                                                <span class="text-accent __text-22px __m-10px" style="font-size: 17px;!important;">
+                                                <span class="text-accent __text-22px __m-10px" style="font-size: 19px;!important;">
                                                 {{\App\CPU\Helpers::currency_converter(
                                                     $product->unit_price-(\App\CPU\Helpers::get_product_discount($product,$product->unit_price))
                                                 )}}

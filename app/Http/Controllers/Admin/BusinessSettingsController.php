@@ -31,21 +31,25 @@ class BusinessSettingsController extends Controller
 
     public function about_us()
     {
-        $about_us = BusinessSetting::where('type', 'about_us')->first();
-        return view('admin-views.business-settings.about-us', [
-            'about_us' => $about_us,
-        ]);
+        $about_us_ar = BusinessSetting::where('type', 'about_us_ar')->first();
+        $about_us_en = BusinessSetting::where('type', 'about_us_en')->first();
+        $data = [
+            'ar' => $about_us_ar?->value,
+            'en' => $about_us_en?->value
+        ];
+        return view('admin-views.business-settings.about-us', compact('data'));
 
     }
 
-    public function about_usUpdate(Request $data)
+    public function about_usUpdate(Request $request)
     {
-        $validatedData = $data->validate([
-            'about_us' => 'required',
-        ]);
-        BusinessSetting::where('type', 'about_us')->update(['value' => $data->about_us]);
-        Toastr::success(translate('about_us_updated_successfully'));
-        return back();
+        BusinessSetting::updateOrInsert([
+            'type' => 'about_us_ar'
+        ], ['value' => $request->ar_content]);
+        BusinessSetting::updateOrInsert([
+            'type' => 'about_us_en'
+        ], ['value' => $request->en_content]);
+        return response()->json('ok');
     }
 
     // Social Media
@@ -143,6 +147,7 @@ class BusinessSettingsController extends Controller
 
     public function page($page)
     {
+
         $pages = array(
             'refund-policy',
             'return-policy',
@@ -150,7 +155,16 @@ class BusinessSettingsController extends Controller
         );
 
         if (in_array($page, $pages)) {
-            $data = BusinessSetting::where('type', $page)->first();
+
+            $page_data_ar = BusinessSetting::where('type', $page . '_ar')->first();
+            $page_data_en = BusinessSetting::where('type', $page . '_en')->first();
+
+            $data = [
+                'ar' => $page_data_ar ? json_decode($page_data_ar->value)?->content : '',
+                'en' => $page_data_en ? json_decode($page_data_en->value)?->content : '',
+                'status' => $page_data_ar ? json_decode($page_data_ar->value)?->status : false
+            ];
+
             return view('admin-views.business-settings.page', compact('page', 'data'));
         }
 
@@ -160,28 +174,31 @@ class BusinessSettingsController extends Controller
 
     public function page_update(Request $request, $page)
     {
-        $request->validate([
-            'value' => 'required',
-        ]);
-
         $pages = array(
             'refund-policy',
             'return-policy',
             'cancellation-policy',
         );
-
         if (in_array($page, $pages)) {
-            BusinessSetting::where('type', $page)->update([
-                'value' => json_encode([
-                    'status' => is_null($request->status) ? 0 : 1,
-                    'content' => $request->value
-                ])
-            ]);
-            Toastr::success(translate('updated_successfully'));
+
+            BusinessSetting::updateOrInsert([
+                'type' => $page . '_ar'
+            ], ['value' => json_encode([
+                'status' => $request->status,
+                'content' => $request->ar_content
+            ])]);
+
+            BusinessSetting::updateOrInsert([
+                'type' => $page . '_en'
+            ], ['value' => json_encode([
+                'status' => $request->status,
+                'content' => $request->en_content
+            ])]);
+            return response()->json('ok');
         } else {
             Toastr::error(translate('invalid_page'));
         }
-        return redirect()->back();
+
     }
 
     public function terms_condition()

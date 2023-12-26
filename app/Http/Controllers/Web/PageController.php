@@ -30,7 +30,8 @@ class PageController extends Controller
 
     public function about_us()
     {
-        $about_us = BusinessSetting::where('type', 'about_us')->first();
+        $lang = (Helpers::app_lang());
+        $about_us = BusinessSetting::where('type', 'about_us_' . $lang)->first();
         $page_title_banner = $this->business_settings->where('type', 'banner_about_us')->whereJsonContains('value', ['status' => '1'])->first('value');
         return view(VIEW_FILE_NAMES['about_us'], [
             'about_us' => $about_us,
@@ -56,7 +57,13 @@ class PageController extends Controller
 
     public function refund_policy()
     {
-        $refund_policy = json_decode(BusinessSetting::where('type', 'refund-policy')->first()->value);
+        $lang = (Helpers::app_lang());
+        $re = BusinessSetting::where('type', 'refund-policy_'.$lang)->first();
+        if (!$re){
+            $re = (object)['value' => json_encode(['status' => true,'content' => ''])];
+        }
+        $refund_policy = json_decode($re->value);
+
         if(!$refund_policy->status){
             return back();
         }
@@ -67,7 +74,12 @@ class PageController extends Controller
 
     public function return_policy()
     {
-        $return_policy = json_decode(BusinessSetting::where('type', 'return-policy')->first()->value);
+        $lang = (Helpers::app_lang());
+        $policy = BusinessSetting::where('type', 'return-policy_'.$lang)->first();
+        if (!$policy){
+            $policy = (object)['value' => json_encode(['status' => true,'content' => ''])];
+        }
+        $return_policy = json_decode($policy->value);
         if(!$return_policy->status){
             return back();
         }
@@ -78,7 +90,12 @@ class PageController extends Controller
 
     public function cancellation_policy()
     {
-        $cancellation_policy = json_decode(BusinessSetting::where('type', 'cancellation-policy')->first()->value);
+        $lang = (Helpers::app_lang());
+        $ca = BusinessSetting::where('type', 'cancellation-policy_'.$lang)->first();
+        if (!$ca){
+            $ca = (object)['value' => json_encode(['status' => true,'content' => ''])];
+        }
+        $cancellation_policy = json_decode($ca->value);
         if(!$cancellation_policy->status){
             return back();
         }

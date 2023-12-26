@@ -67,11 +67,13 @@ export default {
     },
     methods: {
         save() {
+
            this.loading = true
             axios.post(this.url, {
                 '_token': csrf,
                 'ar_content': this.ar_content,
                 'en_content': this.en_content,
+                'status': $('#seller_pos') ? $('#seller_pos').is(':checked') :''
             }).then((res) => {
                 this.loading = false
                 toastr.success(this.$t('successfullySave'))

@@ -20859,7 +20859,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(this.url, {
         '_token': csrf,
         'ar_content': this.ar_content,
-        'en_content': this.en_content
+        'en_content': this.en_content,
+        'status': $('#seller_pos') ? $('#seller_pos').is(':checked') : ''
       }).then(function (res) {
         _this.loading = false;
         toastr.success(_this.$t('successfullySave'));

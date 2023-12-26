@@ -1,7 +1,7 @@
 <div id="sidebarMain" class="d-none">
     <aside style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
-        class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered  ">
-        <div class="navbar-vertical-container">
+        class=" js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered  ">
+        <div class="navbar-vertical-container" >
             <div class="navbar-vertical-footer-offset pb-0">
                 <div class="navbar-brand-wrapper justify-content-between side-logo">
                     <!-- Logo -->
@@ -31,9 +31,9 @@
                 </div>
 
                 <!-- Content -->
-                <div class="navbar-vertical-content">
+                <div class="navbar-vertical-content" style="background-color: {{ $web_config['secondary_color'] }} !important;">
                     <!-- Search Form -->
-                    <div class="sidebar--search-form pb-3 pt-4">
+                    <div class="sidebar--search-form pb-3 pt-4" style="background-color: {{ $web_config['secondary_color'] }} !important;">
                         <div class="search--form-group">
                             <button type="button" class="btn"><i class="tio-search"></i></button>
                             <input type="text" class="js-form-search form-control form--control" id="search-bar-input"

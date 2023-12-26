@@ -21,6 +21,7 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
+
         $top_sell = OrderDetail::with(['product'])
             ->whereHas('product', function ($query){
                 $query->where(['added_by'=>'seller']);
