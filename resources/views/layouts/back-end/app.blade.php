@@ -105,7 +105,7 @@
 @production
     <script src="{{ asset('public/js/admin.js?56') }}"></script>
     @else
-        <script src="{{ mix('js/admin.js') }}"></script>
+        <script src="{{ mix('js/admin.js?6565') }}"></script>
 @endproduction
         <script src="{{asset('public/assets/back-end')}}/js/toastr.js"></script>
         <script>
