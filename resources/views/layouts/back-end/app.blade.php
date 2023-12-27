@@ -33,6 +33,11 @@
     {{-- light box --}}
     <link rel="stylesheet" href="{{asset('public/css/lightbox.css')}}">
     @stack('css_or_js')
+    <style>
+        .navbar-vertical-aside-show-xl.navbar-vertical-aside-mini-mode .navbar-vertical-content > .navbar-nav > .navbar-vertical-aside-has-menu > .nav {
+            background-color: {{$web_config['secondary_color']}};
+        }
+    </style>
     <!-- <style>
         :root {
             --theameColor: #045cff;

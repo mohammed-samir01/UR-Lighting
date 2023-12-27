@@ -59,10 +59,10 @@
                         {{-- recaptcha --}}
                         @php($recaptcha = \App\CPU\Helpers::get_business_settings('recaptcha'))
                         @if(isset($recaptcha) && $recaptcha['status'] == 1)
-                            <div id="recaptcha_element" class="w-100" data-type="image"></div>
+                            <div id="recaptcha_element" class="w-100" data-type="image" style="direction: {{Session::get('direction')}}"></div>
                             <br/>
                         @else
-                            <div class="row py-2">
+                            <div class="row py-2 " style="direction: {{Session::get('direction')}}">
                                 <div class="col-6 pr-2">
                                     <input type="text" class="form-control border __h-40" name="default_recaptcha_id_customer_login" value=""
                                         placeholder="{{ translate('enter_captcha_value') }}" autocomplete="off">

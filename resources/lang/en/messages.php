@@ -6437,4 +6437,5 @@
   'want_to_Turn_OFF' => 'Want to Turn OFF',
   'if_you_enable_this_option_return_policy_page_will_be_shown_in_the_user_app_and_website' => 'If you enable this option return policy page will be shown in the user app and website',
   'if_you_disable_this_option_return_policy_page_will_not_be_shown_in_the_user_app_and_website' => 'If you disable this option return policy page will not be shown in the user app and website',
+  'Credentials does not match.' => 'Credentials does not match.',
 );

@@ -29,7 +29,7 @@
                 </div>
 
                 <!-- Content -->
-                <div class="navbar-vertical-content " style="background:{{$web_config['secondary_color']}} !important;">
+                <div class="navbar-vertical-content" style="background:{{$web_config['secondary_color']}} !important;">
                     <!-- Search Form -->
                     <div class="sidebar--search-form pb-3 pt-4" style="background:{{$web_config['secondary_color']}} !important;">
                         <div class="search--form-group">
@@ -455,7 +455,7 @@
                                        title="{{translate('coupon')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span
-                                            class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('coupon')}}</span>
+                                            class=" text-truncate">{{translate('coupon')}}</span>
                                     </a>
                                 </li>
                                 <li class="navbar-vertical-aside-has-menu {{(Request::is('admin/deal/flash') || (Request::is('admin/deal/update*')))?'active':''}}">
@@ -464,7 +464,7 @@
                                        title="{{translate('flash_Deals')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span
-                                            class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('flash_Deals')}}</span>
+                                            class="text-truncate">{{translate('flash_Deals')}}</span>
                                     </a>
                                 </li>
                                 <li class="navbar-vertical-aside-has-menu {{(Request::is('admin/deal/day') || (Request::is('admin/deal/day-update*')))?'active':''}}">
@@ -472,7 +472,7 @@
                                        href="{{route('admin.deal.day')}}"
                                        title="{{translate('deal_of_the_day')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class=" text-truncate">
                                             {{translate('deal_of_the_day')}}
                                         </span>
                                     </a>
@@ -482,7 +482,7 @@
                                        href="{{route('admin.deal.feature')}}"
                                        title="{{translate('featured_Deal')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class=" text-truncate">
                                             {{translate('featured_Deal')}}
                                         </span>
                                     </a>
@@ -494,7 +494,7 @@
                                href="javascript:" title="{{translate('notifications')}}">
                                 <i class="tio-users-switch nav-icon"></i>
                                 <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('notifications')}}</span>
+                                    class=" text-truncate">{{translate('notifications')}}</span>
                             </a>
                             <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
                                 style="display: {{(Request::is('admin/notification*') || Request::is('admin/business-settings/fcm-index')) ? 'block':'none'}}">
@@ -503,7 +503,7 @@
                                        href="{{route('admin.notification.add-new')}}"
                                        title="{{translate('send_notification')}}">
                                         <img src="{{ asset('public/assets/back-end/img/icons/send-notification.svg') }}" alt="Send Notification.svg" width="15" class="mr-2">
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class=" text-truncate">
                                             {{translate('Send_Notification')}}
                                         </span>
                                     </a>
@@ -513,7 +513,7 @@
                                     href="{{route('admin.notification.push')}}"
                                     title="{{translate('Push_Notification')}}">
                                         <img src="{{ asset('public/assets/back-end/img/icons/push-notification.svg') }}" alt="Push Notification.svg" width="15" class="mr-2">
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class=" text-truncate">
                                             {{translate('Push_Notification')}}
                                         </span>
                                     </a>
@@ -638,7 +638,7 @@
                                        href="{{route('admin.report.admin-earning')}}"
                                        title="{{translate('Earning_Reports')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class=" text-truncate">
                                        {{translate('Earning_Reports')}}
                                     </span>
                                     </a>
@@ -666,7 +666,7 @@
                                        href="{{route('admin.transaction.order-transaction-list')}}"
                                        title="{{translate('transaction_Report')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class="text-truncate">
                                      {{translate('transaction_Report')}}
                                     </span>
                                     </a>
@@ -727,7 +727,7 @@
                                        href="{{route('admin.reviews.list')}}"
                                        title="{{translate('customer_Reviews')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class="text-truncate">
                                     {{translate('customer_Reviews')}}
                                 </span>
                                     </a>
@@ -871,7 +871,7 @@
                                        href="{{route('admin.custom-role.create')}}"
                                        title="{{translate('employee_Role_Setup')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class="text-truncate">
                                     {{translate('employee_Role_Setup')}}</span>
                                     </a>
                                 </li>
@@ -955,7 +955,7 @@
                                        href="{{route('admin.business-settings.social-media')}}"
                                        title="{{translate('social_Media_Links')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class=" text-truncate">
                                     {{translate('social_Media_Links')}}
                                 </span>
                                     </a>
@@ -966,7 +966,7 @@
                                        href="{{route('admin.file-manager.index')}}"
                                        title="{{translate('gallery')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class=" text-truncate">
                                         {{translate('gallery')}}
                                     </span>
                                     </a>
@@ -979,7 +979,7 @@
                                title="{{translate('system_Setup')}}"
                                href="{{route('admin.business-settings.web-config.environment-setup')}}">
                                 <i class="tio-labels nav-icon"></i>
-                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                <span class=" text-truncate">
                                 {{translate('system_Setup')}}
                             </span>
                             </a>

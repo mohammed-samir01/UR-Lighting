@@ -444,7 +444,7 @@
                                     <div class="text-left __p-20px">
 
                                         @php($overallRating = \App\CPU\ProductManager::get_overall_rating($deal_of_the_day->product['reviews']))
-                                        <div class="rating-show">
+                                        <div class="rating-show" style="display: flex;flex-direction: column;align-items: center;">
                                             <h5 class="font-semibold" style="color: {{$web_config['primary_color']}}">
                                                 {{\Illuminate\Support\Str::limit($deal_of_the_day->product['name'],30)}}
                                             </h5>
@@ -501,7 +501,7 @@
                                         <div class="text-left __p-20px">
 
                                             @php($overallRating = \App\CPU\ProductManager::get_overall_rating($product['reviews']))
-                                            <div class="rating-show">
+                                            <div class="rating-show" style="display: flex;flex-direction: column;align-items: center;">
                                                 <h5 class="font-semibold"
                                                     style="color: {{$web_config['primary_color']}}">
                                                     {{\Illuminate\Support\Str::limit($product['name'],40)}}

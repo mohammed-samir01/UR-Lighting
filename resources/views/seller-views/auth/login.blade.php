@@ -20,6 +20,25 @@
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/css/toastr.css">
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/css/theme.minc619.css?v=1.0">
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/css/style.css">
+    <style>
+        @if(\Illuminate\Support\Facades\Session::get('direction') == 'rtl')
+            .input-group-append-new{
+            position: absolute;
+            z-index: 4;
+            top: 9px;
+            bottom: 0;
+            left: 0;
+        }
+        @else
+             .input-group-append-new{
+            position: absolute;
+            z-index: 4;
+            top: 9px;
+            bottom: 0;
+            right: 0;
+        }
+        @endif
+    </style>
 </head>
 
 <body>
@@ -48,7 +67,7 @@
             <div class="col-md-7 col-lg-5">
                 <!-- Card -->
                 <div class="card card-lg mb-5">
-                    <div class="card-body">
+                    <div class="card-body" style="direction: {{Session::get('direction')}}">
                         <!-- Form -->
                         <form id="form-id"  action="{{route('seller.auth.login')}}" method="post">
                             @csrf
@@ -64,7 +83,7 @@
 
                             <!-- Form Group -->
                             <div class="js-form-message form-group">
-                                <label class="input-label" for="signinSrEmail">{{translate('your_email')}}</label>
+                                <label class="input-label" for="signinSrEmail" style="text-align: {{Session::get('direction') == 'rtl' ?'right' :'left'}}">{{translate('your_email')}}</label>
 
                                 <input type="email" class="form-control form-control-lg" name="email" id="signinSrEmail"
                                        tabindex="1" placeholder="email@address.com" aria-label="email@address.com"
@@ -83,7 +102,7 @@
                                     </span>
                                 </label>
 
-                                <div class="input-group input-group-merge">
+                                <div class="input-group input-group-merge" style="left: 0 !important;">
                                     <input type="password" class="js-toggle-password form-control form-control-lg"
                                            name="password" id="signupSrPassword" placeholder="8+ characters required"
                                            aria-label="8+ characters required" required
@@ -94,7 +113,7 @@
                                             "showClass": "tio-visible-outlined",
                                             "classChangeTarget": "#changePassIcon"
                                             }'>
-                                    <div id="changePassTarget" class="input-group-append">
+                                    <div id="changePassTarget" class="input-group-append-new">
                                         <a class="input-group-text" href="javascript:">
                                             <i id="changePassIcon" class="tio-visible-outlined"></i>
                                         </a>
@@ -104,14 +123,10 @@
                             <!-- End Form Group -->
 
                             <!-- Checkbox -->
-                            <div class="form-group">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="termsCheckbox"
-                                           name="remember">
-                                    <label class="custom-control-label text-muted" for="termsCheckbox">
-                                      {{translate('remember_me')}}
-                                    </label>
-                                </div>
+                            <div class="form-group" style="text-align: {{Session::get('direction') == 'rtl' ?'right' :'left'}}">
+                                <input type="checkbox" class="ml-1" name="remember" id="termsCheckbox">
+                                    <label class="" for="termsCheckbox">{{translate('remember_me')}}</label>
+
                             </div>
                             <!-- End Checkbox -->
                             {{-- recaptcha --}}

@@ -147,7 +147,7 @@ class LoginController extends Controller
             ]);
         }else{
             return redirect()->back()->withInput($request->only('email', 'remember'))
-            ->withErrors(['Credentials does not match.']);
+            ->withErrors([translate('Credentials does not match.')]);
         }
     }
 

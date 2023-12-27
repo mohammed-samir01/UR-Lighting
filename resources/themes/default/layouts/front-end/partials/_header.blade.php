@@ -535,9 +535,9 @@
                                         </button>
                                         <div class="dropdown-menu __dropdown-menu-3 __min-w-165px" aria-labelledby="dropdownMenuButton"
                                             style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
-                                            <a class="dropdown-item" href="{{route('shop.apply')}}">
-                                                {{ translate('become_a_seller')}}
-                                            </a>
+{{--                                            <a class="dropdown-item" href="{{route('shop.apply')}}">--}}
+{{--                                                {{ translate('become_a_seller')}}--}}
+{{--                                            </a>--}}
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="{{route('seller.auth.login')}}">
                                                 {{ translate('seller_login')}}
