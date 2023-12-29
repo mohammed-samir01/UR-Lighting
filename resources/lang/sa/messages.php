@@ -5203,6 +5203,7 @@
   'personal_details' => 'تفاصيل شخصية',
   'phone (OTP)' => 'الهاتف (OTP)',
   'phone_number_already_has_been_taken' => 'تم أخذ رقم الهاتف بالفعل',
+  'phone_regex' => 'يرجى ادخال رقم الهاتف بشكل صحيح',
   'pinterest' => 'بينتيريست',
   'place_Holder' => 'حامل مكان',
   'placeholder' => 'عنصر نائب',
@@ -6300,4 +6301,5 @@
   'check_in_“Accept_the_reCAPTCHA_Terms_of_Service”' => 'Check in “Accept the reCAPTCHA Terms of Service”',
   'search menu' => 'Search menu',
   'Seller_has_been_suspended_successfully' => 'Seller has been suspended successfully',
+  'please_provide_verification_token_sent_in_your_email' => 'Please provide verification token sent in your email',
 );

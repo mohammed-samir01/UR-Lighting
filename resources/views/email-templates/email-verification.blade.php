@@ -24,91 +24,60 @@
                 src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format('woff');
             }
         }
-
-        /**
-         * Avoid browser level font resizing.
-         * 1. Windows Mobile
-         * 2. iOS / OSX
-         */
-        body,
-        table,
-        td,
-        a {
-            -ms-text-size-adjust: 100%; /* 1 */
-            -webkit-text-size-adjust: 100%; /* 2 */
-        }
-
-        /**
-         * Remove extra space added to tables and cells in Outlook.
-         */
-        table,
-        td {
-            mso-table-rspace: 0pt;
-            mso-table-lspace: 0pt;
-        }
-
-        /**
-         * Better fluid images in Internet Explorer.
-         */
-        img {
-            -ms-interpolation-mode: bicubic;
-        }
-
-        /**
-         * Remove blue links for iOS devices.
-         */
-        a[x-apple-data-detectors] {
-            font-family: inherit !important;
-            font-size: inherit !important;
-            font-weight: inherit !important;
-            line-height: inherit !important;
-            color: inherit !important;
-            text-decoration: none !important;
-        }
-
-        /**
-         * Fix centering issues in Android 4.4.
-         */
-        div[style*="margin: 16px 0;"] {
-            margin: 0 !important;
-        }
-
         body {
-            width: 100% !important;
-            height: 100% !important;
-            padding: 0 !important;
-            margin: 0 !important;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
         }
 
-        /**
-         * Collapse table borders to avoid space between cells.
-         */
-        table {
-            border-collapse: collapse !important;
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        a {
-            color: #1a82e2;
+        h1 {
+            color: #333;
         }
 
-        img {
-            height: auto;
-            line-height: 100%;
-            text-decoration: none;
-            border: 0;
-            outline: none;
+        p {
+            color: #666;
         }
+
+        .verification-code {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #999;
+        }
+
+
     </style>
 </head>
 <body style="background-color: #e9ecef;">
-<!-- end preheader -->
-<div class="card">
-    <div class="card-header">
-        {{\App\CPU\translate('Verify your email')}}.
-    </div>
-    <div class="card-body">
-        {{\App\CPU\translate('Token')}} : {{$token}}
-    </div>
+
+<div class="container">
+    <h1>{{\App\CPU\translate('Verify your email')}}</h1>
+    <p>Dear Customer,</p>
+    <p>Thank you for choosing {{config('app.name')}} platform. To complete your registration, please use the following verification code:</p>
+    <div class="verification-code">{{\App\CPU\translate('Token')}} : {{$token}}</div>
+    <p>Enter this code on our website to verify your email address and access your account.</p>
+    <p class="footer">If you did not register on our platform, please ignore this email.</p>
 </div>
 
 </body>

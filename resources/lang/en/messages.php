@@ -2922,6 +2922,7 @@
   '50% Off On Black Friday For All Stores  Valid Until 31 January  2023' => '50% Off On Black Friday For All Stores  Valid Until 31 January  2023',
   'Offers' => 'Offers',
   'flash_deals_update' => 'Flash deals update',
+    'phone_regex' => 'Please enter a valid phone number',
   'Error   Something went wrong' => 'Error   Something went wrong',
   'Flash_Deal' => 'Flash Deal',
   'stores' => 'Stores',

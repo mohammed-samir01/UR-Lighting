@@ -60,7 +60,7 @@
                                             @endif
                                         @endforeach
                                     </a>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu" style="direction: ltr">
                                         @foreach(json_decode($lang['value'],true) as $key =>$data)
                                             @if($data['status']==1)
                                                 <li>

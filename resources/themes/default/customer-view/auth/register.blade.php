@@ -12,7 +12,7 @@
                         <h2 class="h4 mb-1">{{ translate('sign_up')}}</h2>
                         <p class="font-size-sm text-muted mb-4">{{ translate('no_Account')}} ? {{ translate('register_control_your_order.')}}</p>
                         <form class="needs-validation_" id="form-id" action="{{route('customer.auth.sign-up')}}"
-                              method="post" id="sign-up-form">
+                              method="post" id="sign-up-form" style="direction: {{ Session::get('direction') }}">
                             @csrf
                             <div class="row">
                                 <div class="col-sm-6">
