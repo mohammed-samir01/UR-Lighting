@@ -36,11 +36,12 @@ class RefundController extends Controller
             $query_param = ['search' => $request['search']];
         }
         $refund_list = $refund_list->where('status',$status)->latest()->paginate(Helpers::pagination_limit());
-        
+
         return view('seller-views.refund.list',compact('refund_list','search'));
     }
     public function details($id)
     {
+
         $refund = RefundRequest::whereHas('order', function ($query) {
             $query->where('seller_is', 'seller')->where('seller_id',auth('seller')->id());
         })->find($id);
@@ -54,7 +55,7 @@ class RefundController extends Controller
                 })->find($request->id);
 
         $user = User::find($refund->customer_id);
-        
+
         if(!isset($user))
         {
             Toastr::warning(translate('This account has been deleted, you can not modify the status!!'));
@@ -63,11 +64,11 @@ class RefundController extends Controller
 
         $wallet_status = Helpers::get_business_settings('wallet_status');
         $loyalty_point_status = Helpers::get_business_settings('loyalty_point_status');
-        
+
         if($loyalty_point_status == 1)
         {
             $loyalty_point = CustomerManager::count_loyalty_point_for_amount($refund->order_details_id);
-    
+
             if($user->loyalty_point < $loyalty_point && $request->refund_status == 'approved')
             {
                 Toastr::warning(translate('Customer has not sufficient loyalty point to take refund for this order!!'));
@@ -113,7 +114,7 @@ class RefundController extends Controller
                 $order_details->refund_request = 4;
             }
             $order_details->save();
-            
+
             $refund->status = $request->refund_status;
             $refund->change_by = 'seller';
             $refund->save();
@@ -124,7 +125,7 @@ class RefundController extends Controller
         }else{
             Toastr::warning(translate('refunded status can not be changed!!'));
             return back();
-        }   
-        
+        }
+
     }
 }

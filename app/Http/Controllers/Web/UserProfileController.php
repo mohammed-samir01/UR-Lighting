@@ -84,9 +84,11 @@ class UserProfileController extends Controller
         $request->validate([
             'f_name' => 'required',
             'l_name' => 'required',
+            'phone' => ['regex:/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/'],
         ], [
             'f_name.required' => 'First name is required',
             'l_name.required' => 'Last name is required',
+            'phone.regex' => translate('phone_regex'),
         ]);
         if ($request->password) {
             $request->validate([
@@ -182,12 +184,14 @@ class UserProfileController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'phone' => 'required',
+            'phone' => ['required','regex:/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/'],
             'zip' => 'required',
             'country_id' => 'required',
             'state_id' => 'required',
             'city_id' => 'required',
             'address' => 'required',
+        ],[
+            'phone.regex' => translate('phone_regex'),
         ]);
 
         $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');

@@ -243,6 +243,7 @@ class OrderController extends Controller
 
     public function details($id)
     {
+
         //for edit  address
         $country_restrict_status = Helpers::get_business_settings('delivery_country_restriction');
         $zip_restrict_status = Helpers::get_business_settings('delivery_zip_code_area_restriction');
@@ -285,6 +286,7 @@ class OrderController extends Controller
         $shipping_address = $order['shipping_address_data'];
 
         if ($order->order_type == 'default_type') {
+
             return view('admin-views.order.order-details', compact('shipping_address', 'order', 'linked_orders',
                 'delivery_men', 'total_delivered', 'company_name', 'company_web_logo', 'physical_product',
                 'country_restrict_status', 'zip_restrict_status', 'countries', 'zip_codes', 'orderStatus'));

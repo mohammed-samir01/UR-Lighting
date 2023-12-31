@@ -97,6 +97,12 @@ class SystemController extends Controller
 
         parse_str($request->shipping, $shipping);
         parse_str($request->billing, $billing);
+
+        if (!preg_match('/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/', $shipping['phone']))
+            return response()->json([
+                'errors' => translate('phone_regex')
+            ], 403);
+
         $is_guest = !auth('customer')->check();
 
         if (isset($shipping['save_address']) && $shipping['save_address'] == 'on') {
@@ -197,6 +203,10 @@ class SystemController extends Controller
 
         if ($request->billing_addresss_same_shipping == 'false') {
             if (isset($billing['save_address_billing']) && $billing['save_address_billing'] == 'on') {
+                if (!preg_match('/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/', $billing['phone']))
+                    return response()->json([
+                        'errors' => translate('phone_regex')
+                    ], 403);
 
                 if ($billing['billing_contact_person_name'] == null || $billing['billing_address'] == null || $billing['billing_city_id'] == null || $billing['billing_zip'] == null || $billing['billing_country_id'] == null || $billing['billing_state_id'] == null || ($is_guest && $billing['billing_contact_email'] == null)) {
                     return response()->json([

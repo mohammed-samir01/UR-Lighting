@@ -25,8 +25,8 @@ class RegisterController extends Controller
             Toastr::warning(translate('access_denied!!'));
             return redirect('/');
         }
-        $countries = Country::where('status',1)->get();
-        return view(VIEW_FILE_NAMES['seller_registration'],compact('countries'));
+        $countries = Country::where('status', 1)->get();
+        return view(VIEW_FILE_NAMES['seller_registration'], compact('countries'));
     }
 
     public function store(Request $request)
@@ -42,7 +42,7 @@ class RegisterController extends Controller
             'f_name' => 'required',
             'l_name' => 'required',
             'shop_name' => 'required',
-            'phone' => 'required',
+            'phone' => ['required', 'regex:/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/'],
             'country_id' => 'required',
             'state_id' => 'required',
             'city_id' => 'required',
@@ -55,6 +55,7 @@ class RegisterController extends Controller
                 'banner.required' => translate('banner_name_is_required') . '!',
                 'bottom_banner.required' => translate('bottom_banner_name_is_required') . '!',
                 'shop_address.required' => translate('shop_address_is_required') . '!',
+                'phone.regex' => translate('phone_regex'),
             ]
         );
 

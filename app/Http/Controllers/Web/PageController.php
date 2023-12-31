@@ -32,6 +32,8 @@ class PageController extends Controller
     {
         $lang = (Helpers::app_lang());
         $about_us = BusinessSetting::where('type', 'about_us_' . $lang)->first();
+        if (!$about_us)
+            return back();
         $page_title_banner = $this->business_settings->where('type', 'banner_about_us')->whereJsonContains('value', ['status' => '1'])->first('value');
         return view(VIEW_FILE_NAMES['about_us'], [
             'about_us' => $about_us,
@@ -44,6 +46,8 @@ class PageController extends Controller
         $lang = (Helpers::app_lang());
         $page_title_banner = $this->business_settings->where('type', 'banner_terms_conditions')->whereJsonContains('value', ['status' => '1'])->first('value');
         $terms_condition = BusinessSetting::where('type', 'terms_condition_' . $lang)->first();
+        if (!$terms_condition)
+            return  back();
         return view(VIEW_FILE_NAMES['terms_conditions_page'], compact('terms_condition','page_title_banner'));
     }
 
@@ -52,6 +56,8 @@ class PageController extends Controller
         $lang = (Helpers::app_lang());
         $page_title_banner = $this->business_settings->where('type', 'banner_privacy_policy')->whereJsonContains('value', ['status' => '1'])->first('value');
         $privacy_policy = BusinessSetting::where('type', 'privacy_policy_' . $lang)->first();
+        if (!$privacy_policy)
+            return  back();
         return view(VIEW_FILE_NAMES['privacy_policy_page'], compact('privacy_policy','page_title_banner'));
     }
 

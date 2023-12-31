@@ -418,10 +418,7 @@
                                 class="font-weight-bold title-color fz-14">{{translate('change_order_status')}}</label>
                             <select name="order_status" onchange="order_status(this.value)"
                                     class="status form-control" data-id="{{$order['id']}}">
-                                <option
-                                    value=""> -------
-                                </option>
-                                <option
+                                <option value=""> -------</option>
                                 @if(!$order->oto)
                                     <option
                                         value="pending" {{$order->order_status == 'pending'?'selected':''}} > {{translate('pending')}}</option>
@@ -1231,51 +1228,51 @@
 
         function order_status(status) {
             @if($order['order_status']=='delivered')
-                Swal.fire({
-                    title: '{{translate("Order_is_already_delivered_and_transaction_amount_has_been_disbursed_changing_status_can_be_the_reason_of_miscalculation")}}!',
-                    text: "{{translate('think_before_you_proceed')}}.",
-                    showCancelButton: true,
-                    confirmButtonColor: '#377dff',
-                    cancelButtonColor: 'secondary',
-                    confirmButtonText: '{{translate("yes_change_it")}}!',
-                    cancelButtonText: '{{ translate("cancel") }}',
-                }).then((result) => {
-                    if (result.value) {
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                            }
-                        });
-                        $.ajax({
-                            url: "{{route('admin.orders.status')}}",
-                            method: 'POST',
-                            data: {
-                                "id": '{{$order['id']}}',
-                                "order_status": status
-                            },
-                            success: function (data) {
+            Swal.fire({
+                title: '{{translate("Order_is_already_delivered_and_transaction_amount_has_been_disbursed_changing_status_can_be_the_reason_of_miscalculation")}}!',
+                text: "{{translate('think_before_you_proceed')}}.",
+                showCancelButton: true,
+                confirmButtonColor: '#377dff',
+                cancelButtonColor: 'secondary',
+                confirmButtonText: '{{translate("yes_change_it")}}!',
+                cancelButtonText: '{{ translate("cancel") }}',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: "{{route('admin.orders.status')}}",
+                        method: 'POST',
+                        data: {
+                            "id": '{{$order['id']}}',
+                            "order_status": status
+                        },
+                        success: function (data) {
 
-                                if (data.success == 0) {
-                                    toastr.success('{{translate("order_is_already_delivered_you_can_not_change_it")}} !!');
+                            if (data.success == 0) {
+                                toastr.success('{{translate("order_is_already_delivered_you_can_not_change_it")}} !!');
+                                location.reload();
+                            } else {
+
+                                if (data.payment_status == 0) {
+                                    toastr.warning('{{translate("before_delivered_you_need_to_make_payment_status_paid")}}!');
+                                    location.reload();
+                                } else if (data.customer_status == 0) {
+                                    toastr.warning('{{translate("account_has_been_deleted_you_can_not_change_the_status")}}!');
                                     location.reload();
                                 } else {
-
-                                    if (data.payment_status == 0) {
-                                        toastr.warning('{{translate("before_delivered_you_need_to_make_payment_status_paid")}}!');
-                                        location.reload();
-                                    } else if (data.customer_status == 0) {
-                                        toastr.warning('{{translate("account_has_been_deleted_you_can_not_change_the_status")}}!');
-                                        location.reload();
-                                    } else {
-                                        toastr.success('{{translate("status_change_successfully")}}!');
-                                        location.reload();
-                                    }
+                                    toastr.success('{{translate("status_change_successfully")}}!');
+                                    location.reload();
                                 }
-
                             }
-                        });
-                    }
-                })
+
+                        }
+                    });
+                }
+            })
             @else
             Swal.fire({
                 title: '{{translate("are_you_sure_change_this")}}?',
@@ -1464,6 +1461,7 @@
         src="https://maps.googleapis.com/maps/api/js?key={{\App\CPU\Helpers::get_business_settings('map_api_key')}}&callback=map_callback_fucntion&libraries=places&v=3.49"
         defer></script>
     <script>
+
         /* shipping address  map */
         function initAutocomplete() {
             var myLatLng = {

@@ -207,6 +207,7 @@ class OrderController extends Controller
 
     public function details($id)
     {
+
         /*
         *   for edit  address
         */
@@ -249,6 +250,7 @@ class OrderController extends Controller
         $shipping_address = ShippingAddress::find($order->shipping_address);
 
         if($order->order_type == 'default_type') {
+
             return view('seller-views.order.order-details', compact('shipping_address', 'order', 'delivery_men','linked_orders',
              'shipping_method', 'total_delivered', 'physical_product',
              'country_restrict_status','zip_restrict_status','countries','zip_codes'));

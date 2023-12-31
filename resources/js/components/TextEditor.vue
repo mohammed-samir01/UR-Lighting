@@ -15,11 +15,11 @@
 
         <div class="tab-content">
             <div class="tab-pane fade show " :class="{'active': lang === 'sa'}" id="tab1">
-                <quill-editor theme="snow" ref="quill1" toolbar="full" v-model:content="ar_content"
+                <quill-editor :modules="modules" theme="snow" ref="quill1" toolbar="full" v-model:content="ar_content"
                               content-type="html"></quill-editor>
             </div>
             <div class="tab-pane fade show" id="tab2" :class="{'active': lang === 'en'}">
-                <quill-editor theme="snow" ref="quill2" toolbar="full" v-model:content="en_content"
+                <quill-editor :modules="modules" theme="snow" ref="quill2" toolbar="full" v-model:content="en_content"
                               content-type="html"></quill-editor>
             </div>
             <div class="form-group">
@@ -38,9 +38,15 @@
 
 <script>
 
+import Quill from 'quill';
 
-import {QuillEditor, Quill} from '@vueup/vue-quill'
+import {QuillEditor} from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import * as Emoji from "quill-emoji";
+import Form from "quill-form"
+import "quill-emoji/dist/quill-emoji.css";
+
+import BlotFormatter from 'quill-blot-formatter'
 
 
 export default {
@@ -53,10 +59,43 @@ export default {
         return {
             ar_content: '',
             en_content: '',
-            loading: false
+            loading: false,
+
+            modules:
+                [
+                    {
+                        name: 'blotFormatter',
+                        module: BlotFormatter,
+
+                    },
+                    {
+                        name: 'form',
+                        module: Form,
+
+                    },
+                    // {
+                    //     name: 'emoji',
+                    //     module: Emoji,
+                    //     options:{
+                    //         "emoji-toolbar": true,
+                    //         "emoji-textarea": true,
+                    //         "emoji-shortname": true,
+                    //     }
+                    // },
+                ]
+
+
         }
     },
     mounted() {
+
+        // if (Quill) {
+        //     Quill.register(this.$refs.quill1,'modules/emoji', Emoji);
+        // } else {
+        //     console.error('Quill is not defined. Make sure it is imported correctly.');
+        // }
+
+
         this.$refs.quill1.setContents(this.data?.ar)
         this.$refs.quill2.setContents(this.data?.en)
     },
@@ -68,16 +107,16 @@ export default {
     methods: {
         save() {
 
-           this.loading = true
+            this.loading = true
             axios.post(this.url, {
                 '_token': csrf,
                 'ar_content': this.ar_content,
                 'en_content': this.en_content,
-                'status': $('#seller_pos') ? $('#seller_pos').is(':checked') :''
+                'status': $('#seller_pos') ? $('#seller_pos').is(':checked') : ''
             }).then((res) => {
                 this.loading = false
                 toastr.success(this.$t('successfullySave'))
-            }).catch(()=>{
+            }).catch(() => {
                 this.loading = false
                 toastr.error('error')
             })
