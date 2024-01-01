@@ -98,14 +98,16 @@ class SystemController extends Controller
         parse_str($request->shipping, $shipping);
         parse_str($request->billing, $billing);
 
-        if (!preg_match('/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/', $shipping['phone']))
-            return response()->json([
-                'errors' => translate('phone_regex')
-            ], 403);
+
 
         $is_guest = !auth('customer')->check();
 
         if (isset($shipping['save_address']) && $shipping['save_address'] == 'on') {
+
+            if (!preg_match('/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/', $shipping['phone']))
+                return response()->json([
+                    'errors' => translate('phone_regex')
+                ], 403);
 
             if ($shipping['contact_person_name'] == null || $shipping['address'] == null || $shipping['city_id'] == null || $shipping['zip'] == null || $shipping['country_id'] == null || $shipping['state_id'] == null || ($is_guest && $shipping['email'] == null)) {
                 return response()->json([
@@ -144,6 +146,11 @@ class SystemController extends Controller
 
         } else if (isset($shipping['shipping_method_id']) && $shipping['shipping_method_id'] == 0) {
 
+            if (!preg_match('/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/', $shipping['phone']))
+                return response()->json([
+                    'errors' => translate('phone_regex')
+                ], 403);
+
             if ($shipping['contact_person_name'] == null || $shipping['address'] == null || $shipping['city_id'] == null || $shipping['zip'] == null || $shipping['country_id'] == null || $shipping['state_id'] == null || ($is_guest && $shipping['email'] == null)) {
                 return response()->json([
                     'errors' => translate('Fill_all_required_fields_of_shipping/billing_address')
@@ -179,8 +186,13 @@ class SystemController extends Controller
                 'updated_at' => now(),
             ]);
         } else {
+
             if (isset($shipping['shipping_method_id'])) {
                 $address = ShippingAddress::find($shipping['shipping_method_id']);
+                if (!preg_match('/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/', $address->phone))
+                    return response()->json([
+                        'errors' => translate('phone_regex')
+                    ], 403);
                 if (!$address->country || !$address->zip) {
                     return response()->json([
                         'errors' => translate('Please_update_country_and_zip_for_this_shipping_address')

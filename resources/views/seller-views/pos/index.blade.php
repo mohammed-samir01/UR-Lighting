@@ -442,7 +442,7 @@
 
     function form_submit(){
         Swal.fire({
-            title: '{{translate("are_you_sure")}}?',
+            title: '{{translate("are_you_sure")}}',
             type: 'warning',
             showCancelButton: true,
             showConfirmButton: true,

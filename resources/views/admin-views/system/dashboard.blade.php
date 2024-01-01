@@ -14,7 +14,7 @@
                 <div class="flex-between align-items-center">
                     <div>
                         <h1 class="page-header-title" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">{{translate('dashboard')}}</h1>
-                        <p>{{ translate('welcome_message')}}.</p>
+                        <p>{{translate('HI')}}, {{ auth('admin')->user()->name}}</p>
                     </div>
                 </div>
             </div>

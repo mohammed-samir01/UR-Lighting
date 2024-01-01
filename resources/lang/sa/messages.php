@@ -2669,7 +2669,7 @@
   'exclude' => 'استبعاد',
   'tags' => 'العلامات',
   'search_tags' => 'البحث في العلامات',
-  'discounted' => 'مخفض',
+  'discounted' => 'مخفضة',
   'all_status' => 'جميع الحالات',
   'shipping_charge' => 'رسوم الشحن',
   'seller_information' => 'معلومات البائع',

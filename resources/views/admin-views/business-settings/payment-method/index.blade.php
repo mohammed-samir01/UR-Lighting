@@ -280,7 +280,7 @@
                                         @endforeach
                                     </div>
                                 @endif
-                                <div class="text-right" style="margin-top: 20px">
+                                <div class="text-right" style="margin-top: {{$payment->key_name == 'senang_pay' ? '163px' :'20px' }} !important;">
                                     <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
                                 </div>
                             </div>

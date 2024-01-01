@@ -152,6 +152,7 @@ class DashboardController extends Controller
         $data['pending_amount'] = $admin_wallet!=null?$admin_wallet->pending_amount:0;
         $data['total_tax_collected'] = $admin_wallet!=null?$admin_wallet->total_tax_collected:0;
 
+//        return (\App\CPU\BackEndHelper::set_symbol('10'));
         return view('admin-views.system.dashboard', compact('data', 'inhouse_data', 'seller_data', 'commission_data'));
     }
 

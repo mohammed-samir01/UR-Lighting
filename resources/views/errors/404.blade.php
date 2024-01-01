@@ -26,7 +26,7 @@
         }
     </style>
     <div class="container">
-        <div class="row justify-content-center align-items-center">
+        <div class="row justify-content-center align-items-center am">
             <div class="col-12">
                 <img style="" src="{{asset("public/assets/back-end/img/404-logo.svg")}}" alt="">
                 <h2 class="page-not-found">{{translate('page_Not_found')}}</h2>

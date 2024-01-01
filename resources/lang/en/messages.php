@@ -2922,7 +2922,7 @@
   '50% Off On Black Friday For All Stores  Valid Until 31 January  2023' => '50% Off On Black Friday For All Stores  Valid Until 31 January  2023',
   'Offers' => 'Offers',
   'flash_deals_update' => 'Flash deals update',
-    'phone_regex' => 'Please enter a valid phone number',
+  'phone_regex' => 'Please enter a valid phone number',
   'Error   Something went wrong' => 'Error   Something went wrong',
   'Flash_Deal' => 'Flash Deal',
   'stores' => 'Stores',
@@ -6439,4 +6439,5 @@
   'if_you_enable_this_option_return_policy_page_will_be_shown_in_the_user_app_and_website' => 'If you enable this option return policy page will be shown in the user app and website',
   'if_you_disable_this_option_return_policy_page_will_not_be_shown_in_the_user_app_and_website' => 'If you disable this option return policy page will not be shown in the user app and website',
   'Credentials does not match.' => 'Credentials does not match.',
+  'search_by_name_or_sku' => 'Search by name or sku',
 );

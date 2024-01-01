@@ -907,7 +907,7 @@ if (!function_exists('currency_symbol')) {
         if (\session()->has('currency_symbol')) {
             $symbol = \session('currency_symbol');
             if (session('direction') == 'rtl' && $symbol == 'SAR')
-                $symbol = 'ريال';
+            $symbol = 'ر.س';
         } else {
             $system_default_currency_info = \session('system_default_currency_info');
             $symbol = $system_default_currency_info->symbol;

@@ -75,7 +75,7 @@
     <div class="d-flex w-100 justify-content-center align-items-center mb-3 __min-h-70px __inline-35" style="background:{{$web_config['primary_color']}}10;">
 
         <div class="text-capitalize container text-center">
-            <span class="__text-18px font-semibold">{{translate(str_replace('_',' ',$data['data_from']))}} {{translate('products')}} {{ isset($data['brand_name']) ? '('.$data['brand_name'].')' : ''}}</span>
+            <span class="__text-18px font-semibold">{{translate('products')}} {{translate(str_replace('_',' ',$data['data_from']))}}  {{ isset($data['brand_name']) ? '('.$data['brand_name'].')' : ''}}</span>
         </div>
 
     </div>
@@ -272,17 +272,17 @@
                     <h1 class="max-sm-order-1">
                         <label id="price-filter-count"> {{$products->total()}} {{translate('items_found')}} </label>
                     </h1>
-                    <div class="d-flex align-items-center ml-auto">
+                    <div class="d-flex align-items-center {{Session::get('direction') === "rtl" ? 'mr-auto' :'ml-auto'}}" >
 
                         <div class="w-100">
                             <form id="search-form" action="{{ route('products') }}" method="GET">
                                 <input hidden name="data_from" value="{{$data['data_from']}}">
                                 <div class=" {{Session::get('direction') === "rtl" ? 'float-left' : 'float-right'}}">
-                                    <label class="for-shoting" for="sorting">
+                                    <label class="for-shoting px-2" for="sorting">
                                         <span>{{translate('sort_by')}}</span>
                                     </label>
                                     <select class="__inline-44"
-                                                onchange="filter(this.value)">
+                                            onchange="filter(this.value)">
                                         <option value="latest">{{translate('latest')}}</option>
                                         <option
                                             value="low-high">{{translate('low_to_High_Price')}} </option>
@@ -297,6 +297,8 @@
                             </form>
                         </div>
                     </div>
+
+
                 </div>
                 @if (count($products) > 0)
                     <div class="row mt-3" id="ajax-products">

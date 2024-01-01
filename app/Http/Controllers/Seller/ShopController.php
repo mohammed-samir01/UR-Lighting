@@ -138,6 +138,7 @@ class ShopController extends Controller
 
     public function zatca()
     {
+
         $business_setting = [];
         $res = (object)[];
         if (\auth('seller')->check()) {

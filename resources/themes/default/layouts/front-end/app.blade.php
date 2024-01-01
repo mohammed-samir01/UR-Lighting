@@ -32,7 +32,10 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Titillium+Web:wght@400;600;700&display=swap"
         rel="stylesheet">
-    {{-- light box --}}
+{{--     light box --}}
+{{--    <style>--}}
+{{--        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300&display=swap');--}}
+{{--    </style>--}}
     <link rel="stylesheet" href="{{asset('public/css/lightbox.css')}}">
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/vendor/icon-set/style.css">
     @stack('css_or_js')
@@ -394,6 +397,7 @@
         <script src="{{asset('public/assets/front-end')}}/js/theme.min.js"></script>
         <script src="{{asset('public/assets/front-end')}}/js/slick.min.js"></script>
         <script>
+
             var AIZ = AIZ || {};
             AIZ.local = {
                 nothing_selected: '{{translate("Nothing selected")}}',
