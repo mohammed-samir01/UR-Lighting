@@ -6278,4 +6278,5 @@
   'language_Translate' => 'Language Translate',
   'cart_empty_warning' => 'تحذير: السلة فارغة',
   'need_Sufficient_Amount_Balance' => 'يجب وجود رصيد كافٍ',
+  'order_verification_images' => 'Order verification images',
 );

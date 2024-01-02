@@ -323,6 +323,7 @@ class OrderController extends Controller
 
     public function generate_invoice($id)
     {
+
         $company_phone =BusinessSetting::where('type', 'company_phone')->first()->value;
         $company_email =BusinessSetting::where('type', 'company_email')->first()->value;
         $company_name =BusinessSetting::where('type', 'company_name')->first()->value;

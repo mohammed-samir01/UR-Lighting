@@ -335,7 +335,7 @@
                                        title="{{translate('coupon')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span
-                                            class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('coupon')}}</span>
+                                            class=" text-truncate">{{translate('coupon')}}</span>
                                     </a>
                                 </li>
                             </ul>
@@ -394,7 +394,7 @@
                                        href="{{route('seller.transaction.order-list')}}"
                                        title="{{translate('transaction_Report')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        <span class="text-truncate">
                                      {{translate('transaction_Report')}}
                                     </span>
                                     </a>
