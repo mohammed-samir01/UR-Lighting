@@ -365,6 +365,7 @@
     }
 </script>
 <script>
+
     @if(\App\CPU\Helpers::module_permission_check('order_management') && env('APP_MODE')!='dev')
     setInterval(function () {
         $.get({
@@ -380,7 +381,19 @@
         });
     }, 10000);
     @endif
-
+    setInterval(function () {
+        $.get({
+            url: '{{route('admin.get-order-data')}}',
+            dataType: 'json',
+            success: function (response) {
+                let data = response.data;
+                if (data.new_order > 0) {
+                    playAudio();
+                    $('#popup-modal').appendTo("body").modal('show');
+                }
+            },
+        });
+    }, 10000);
     function check_order() {
         location.href = '{{route('admin.orders.list',['status'=>'all'])}}';
     }
