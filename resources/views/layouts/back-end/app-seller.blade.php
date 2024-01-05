@@ -51,6 +51,12 @@
         src="{{ asset('public/assets/back-end') }}/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js">
     </script>
     <link rel="stylesheet" href="{{ asset('public/assets/back-end') }}/css/toastr.css">
+
+    <style>
+        .navbar-vertical-aside-show-xl.navbar-vertical-aside-mini-mode .navbar-vertical-content > .navbar-nav > .navbar-vertical-aside-has-menu > .nav {
+            background-color: {{$web_config['secondary_color']}};
+        }
+    </style>
 </head>
 
 <body class="footer-offset">

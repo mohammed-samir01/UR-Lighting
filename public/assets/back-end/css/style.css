@@ -1,3 +1,5 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300&display=swap');
 :root {
     --c1: #0177cd;
     --c1-rgb: 1, 119, 205;
@@ -5,7 +7,7 @@
     --title-color: #334257;
     --text-color: #5b6777;
     --border-color: rgba(180, 208, 224, 0.5);
-    --font: "Inter", sans-serif;
+    --font: 'Cairo', "Inter", sans-serif;
 }
 
 body {

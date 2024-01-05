@@ -84,7 +84,7 @@ class UserProfileController extends Controller
         $request->validate([
             'f_name' => 'required',
             'l_name' => 'required',
-            'phone' => ['regex:/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/'],
+            'phone' => ['required','regex:/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/'],
         ], [
             'f_name.required' => 'First name is required',
             'l_name.required' => 'Last name is required',
