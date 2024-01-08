@@ -99,7 +99,6 @@ class SystemController extends Controller
         parse_str($request->billing, $billing);
 
 
-
         $is_guest = !auth('customer')->check();
 
         if (isset($shipping['save_address']) && $shipping['save_address'] == 'on') {
@@ -214,8 +213,10 @@ class SystemController extends Controller
         }
 
         if ($request->billing_addresss_same_shipping == 'false') {
+
             if (isset($billing['save_address_billing']) && $billing['save_address_billing'] == 'on') {
-                if (!preg_match('/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/', $billing['phone']))
+
+                if (!preg_match('/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/', $billing['billing_phone']))
                     return response()->json([
                         'errors' => translate('phone_regex')
                     ], 403);
@@ -258,6 +259,10 @@ class SystemController extends Controller
 
             } elseif ($billing['billing_method_id'] == 0) {
 
+                if (!preg_match('/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/', $billing['billing_phone']))
+                    return response()->json([
+                        'errors' => translate('phone_regex')
+                    ], 403);
                 if ($billing['billing_contact_person_name'] == null || $billing['billing_address'] == null || $billing['billing_city_id'] == null || $billing['billing_zip'] == null || $billing['billing_country_id'] == null || $billing['billing_state_id'] == null || ($is_guest && $billing['billing_contact_email'] == null)) {
                     return response()->json([
                         'errors' => translate('Fill_all_required_fields_of_billing_address')
@@ -294,6 +299,11 @@ class SystemController extends Controller
                 ]);
             } else {
                 $address = ShippingAddress::find($billing['billing_method_id']);
+                if (!preg_match('/^(05)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/', $address->phone))
+                    return response()->json([
+                        'errors' => translate('phone_regex')
+                    ], 403);
+
                 if ($physical_product == 'yes') {
                     if (!$address->country || !$address->zip) {
                         return response()->json([
