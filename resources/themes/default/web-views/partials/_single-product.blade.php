@@ -23,11 +23,6 @@
             @endif
 
             <div class="d-flex d-block">
-                @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
-                    <span class="for-stock-value p-1 pl-2 pr-2">
-                        {{translate('out_of_stock')}}
-                    </span>
-                @endif
                 <a href="{{route('product',$product->slug)}}">
                     <img src="{{\App\CPU\ProductManager::product_image_path('thumbnail')}}/{{$product['thumbnail']}}"
                          onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'">
@@ -64,6 +59,9 @@
                             $product->unit_price-(\App\CPU\Helpers::get_product_discount($product,$product->unit_price))
                         )}}
                     </span>
+                    @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
+                        <span class="d-block" style="color: red">{{translate('out_of_stock')}}</span>
+                    @endif
                 </div>
             </div>
 

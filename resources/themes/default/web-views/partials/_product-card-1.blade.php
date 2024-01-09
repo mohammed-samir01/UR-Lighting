@@ -10,11 +10,7 @@
                 @endif {{translate('the_discount')}}
         </span>
         @endif
-        @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
-            <span class="for-stock-value p-1 pl-2 pr-2">
-                        {{translate('out_of_stock')}}
-                    </span>
-        @endif
+
         <div class=" d-flex">
             <div class="d-flex align-items-center justify-content-center"
                  style="padding-{{Session::get('direction') === "rtl" ?'right:12px':'left:12px'}};padding-top:12px;">
@@ -55,6 +51,9 @@
                         {{\App\CPU\Helpers::currency_converter($product->unit_price-\App\CPU\Helpers::get_product_discount($product,$product->unit_price))}}
 
                     </div>
+                    @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
+                        <span class="d-block" style="color: red">{{translate('out_of_stock')}}</span>
+                    @endif
 
                 </div>
             </div>

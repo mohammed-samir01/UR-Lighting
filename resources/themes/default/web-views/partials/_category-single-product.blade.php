@@ -23,15 +23,7 @@
                     <span class="for-discoutn-value-null"></span>
                 </div>
             @endif
-            @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
-                <div class="d-flex"
-                     style="top:0;position:absolute;{{Session::get('direction') === "ltr" ? 'right:0;' : 'left:0;'}}">
-                    <span class="for-stock-value p-1 pl-2 pr-2"
-                          style="{{Session::get('direction') === "ltr" ? 'border-radius:0px 5px' : 'border-radius:5px 0px'}};">
-                        {{translate('out_of_stock')}}
-                    </span>
-                </div>
-            @endif
+
             <div class="d-flex d-block">
                 <a href="{{route('product',$product->slug)}}" class="d-block">
                     <img src="{{\App\CPU\ProductManager::product_image_path('thumbnail')}}/{{$product['thumbnail']}}"
@@ -60,8 +52,7 @@
                 </span>
             </div>
             <div class="justify-content-between text-center">
-                <div class="product-price text-center" style="font-weight: 400;
-                font-size: 12px;">
+                <div class="product-price text-center" >
                     @if($product->discount > 0)
                         <strike style="font-size: 12px!important;color: #E96A6A!important;">
                             {{\App\CPU\Helpers::currency_converter($product->unit_price)}}
@@ -72,6 +63,9 @@
                             $product->unit_price-(\App\CPU\Helpers::get_product_discount($product,$product->unit_price))
                         )}}
                     </span>
+                    @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
+                        <span class="d-block" style="color: red">{{translate('out_of_stock')}}</span>
+                    @endif
                 </div>
             </div>
 

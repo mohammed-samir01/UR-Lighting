@@ -791,15 +791,7 @@
                                                     </span>
                                                 </div>
                                             @endif
-                                            @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
-                                                <div class="d-flex"
-                                                     style="top:0;position:absolute;{{Session::get('direction') === "ltr" ? 'right:0;' : 'left:0;'}}">
-                                                    <span class="for-stock-value p-1 pl-2 pr-2"
-                                                          style="{{Session::get('direction') === "ltr" ? 'border-radius:0px 5px' : 'border-radius:5px 0px'}};">
-                                                        {{translate('out_of_stock')}}
-                                                    </span>
-                                                </div>
-                                            @endif
+
                                             <div class="d-flex flex-wrap p-2">
                                                 <div class="best-selleing-image">
                                                     <img class="rounded"
@@ -839,6 +831,9 @@
                                                         $bestSell->product->unit_price-(\App\CPU\Helpers::get_product_discount($bestSell->product,$bestSell->product->unit_price))
                                                         )}}
                                                     </span>
+                                                        @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
+                                                            <span class="d-block" style="color: red">{{translate('out_of_stock')}}</span>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -882,15 +877,7 @@
                                                     </span>
                                                 </div>
                                             @endif
-                                            @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
-                                                <div class="d-flex"
-                                                     style="top:0;position:absolute;{{Session::get('direction') === "ltr" ? 'right:0;' : 'left:0;'}}">
-                                                    <span class="for-stock-value p-1 pl-2 pr-2"
-                                                          style="{{Session::get('direction') === "ltr" ? 'border-radius:0px 5px' : 'border-radius:5px 0px'}};">
-                                                        {{translate('out_of_stock')}}
-                                                    </span>
-                                                </div>
-                                            @endif
+
                                             <div class="d-flex flex-wrap p-2">
                                                 <div class="top-rated-image">
                                                     <img class="rounded"
@@ -931,6 +918,10 @@
                                                         $top->product->unit_price-(\App\CPU\Helpers::get_product_discount($top->product,$top->product->unit_price))
                                                         )}}
                                                     </span>
+                                                        @if(($product['product_type'] == 'physical') && ($product['current_stock']<=0))
+                                                            <span class="d-block" style="color: red">{{translate('out_of_stock')}}</span>
+                                                        @endif
+
                                                     </div>
                                                 </div>
                                             </div>
