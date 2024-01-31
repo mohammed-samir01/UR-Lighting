@@ -27,12 +27,20 @@ class ApiZatcaController extends Controller
         $this->zatca = new Zatca();
     }
 
-    public function reporting_invoice(GenerateXmlFile $xmlFile)
+    public function reporting_invoice($order_id)
     {
+        $xmlFile =   new GenerateXmlFile();
         $order = $this->handleOrder();
         $data = $xmlFile->loadXmlFile($order);
-        return $this->zatca->reporting_invoice($data);
+
+        dd();
+        $res = $this->zatca->reporting_invoice($data);
+        if ($res->successful()){
+            $invoice_hash = $data['invoiceHash'];
+        }
+
     }
+
 
     public function compliance_invoice()
     {
@@ -75,7 +83,7 @@ class ApiZatcaController extends Controller
 
     public function handleOrder()
     {
-        $order = Order::with('details', 'customer')->find(request('order_id'));
+        $order = Order::with('details', 'customer')->findOrFail(request('id'));
         if ($order->seller_is == 'admin') {
             $order->seller = (object)BusinessSettingsController::business_setting();
             $order->seller->state_name = State::find($order->seller->state_id)->name_en;

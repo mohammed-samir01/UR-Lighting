@@ -295,6 +295,15 @@
                                                 href="{{route('admin.orders.generate-invoice',[$order['id']])}}">
                                                 <i class="tio-download-to"></i>
                                             </a>
+                                            @if(!$order['status_zatca'])
+
+                                                <form method="POST" action="{{ route('admin.zatca.reporting_invoice', [$order['id']]) }}">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-outline-success square-btn btn-sm mr-1" target="_blank" title="{{ translate('invoice_reporting') }}">
+                                                        <i class="tio-users-switch nav-icon"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

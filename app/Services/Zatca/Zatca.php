@@ -19,7 +19,7 @@ class Zatca extends AbstractRequestZatca
             'Authorization' => 'Basic ' . $auth
         ]);
         $this->setData($invoice);
-        $res = $this->buildRequest();
+        return $res = $this->buildRequest();
         return $res->json();
     }
 

@@ -56,3 +56,6 @@ INSERT INTO `addon_settings` (`id`, `key_name`, `live_values`, `test_values`, `s
 
 /** 11 12 **
 ALTER TABLE `orders` ADD `status_oto` VARCHAR(191) NULL AFTER `shipping_company`;
+
+/** 31 jan24 ** /
+ALTER TABLE `orders` ADD `status_zatca` TINYINT NOT NULL DEFAULT '0' AFTER `status_oto`, ADD `invoice_hash` VARCHAR(191) NULL AFTER `status_zatca`, ADD `qr` VARCHAR(191) NULL AFTER `invoice_hash`;
