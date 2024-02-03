@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'shipping_address_data',
+        'shipping_address_data', 'status_zatca', 'invoice_hash', 'qr',
     ];
     protected $casts = [
         'order_amount' => 'float',

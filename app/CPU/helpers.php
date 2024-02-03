@@ -18,6 +18,8 @@ use App\Model\ShippingMethod;
 use App\Model\Shop;
 use App\User;
 use Carbon\Carbon;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +27,12 @@ use Illuminate\Support\Str;
 
 class Helpers
 {
+    public static function render_to_image($data, $option = null)
+    {
+        $options = new QROptions($option);
+        return (new QRCode($options))->render($data);
+    }
+
     public static function status($id)
     {
         if ($id == 1) {
@@ -907,7 +915,7 @@ if (!function_exists('currency_symbol')) {
         if (\session()->has('currency_symbol')) {
             $symbol = \session('currency_symbol');
             if (session('direction') == 'rtl' && $symbol == 'SAR')
-            $symbol = 'ر.س';
+                $symbol = 'ر.س';
         } else {
             $system_default_currency_info = \session('system_default_currency_info');
             $symbol = $system_default_currency_info->symbol;

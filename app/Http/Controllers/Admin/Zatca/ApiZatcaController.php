@@ -17,6 +17,7 @@ use App\Services\Zatca\Zatca;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use function App\CPU\translate;
 
 class ApiZatcaController extends Controller
 {
@@ -29,15 +30,23 @@ class ApiZatcaController extends Controller
 
     public function reporting_invoice($order_id)
     {
-        $xmlFile =   new GenerateXmlFile();
-        $order = $this->handleOrder();
+        $xmlFile = new GenerateXmlFile();
+        $order = $this->handleOrder($order_id);
         $data = $xmlFile->loadXmlFile($order);
 
-        dd();
         $res = $this->zatca->reporting_invoice($data);
-        if ($res->successful()){
+        $dom = new \DOMDocument();
+        $dom->loadXML(base64_decode($data['invoice']));
+        if ($res->successful()) {
             $invoice_hash = $data['invoiceHash'];
+            $qr = $dom->getElementsByTagName('EmbeddedDocumentBinaryObject')->item(1)->textContent;
+            $or = Order::find($order_id);
+            $or->update(['status_zatca' => 1, 'invoice_hash' => $invoice_hash, 'qr' => $qr]);
+            Toastr::success('تم الاعتماد بنجاح');
+            return back();
         }
+        Toastr::warning('لم يتم الاعتماد بعد');
+        return back();
 
     }
 
@@ -81,9 +90,9 @@ class ApiZatcaController extends Controller
         return back();
     }
 
-    public function handleOrder()
+    public function handleOrder($order_id = false)
     {
-        $order = Order::with('details', 'customer')->findOrFail(request('id'));
+        $order = Order::with('details', 'customer')->findOrFail($order_id);
         if ($order->seller_is == 'admin') {
             $order->seller = (object)BusinessSettingsController::business_setting();
             $order->seller->state_name = State::find($order->seller->state_id)->name_en;
@@ -158,7 +167,7 @@ class ApiZatcaController extends Controller
         $body = $response->json();
         $data = [];
         if (auth('admin')->check()) {
-           ResponseZatca::where('seller', 'admin')->delete();
+            ResponseZatca::where('seller', 'admin')->delete();
             $data['seller'] = 'admin';
         }
         if (auth('seller')->check()) {

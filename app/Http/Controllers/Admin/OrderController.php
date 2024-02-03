@@ -336,21 +336,21 @@ class OrderController extends Controller
 
     public function status(Request $request)
     {
-       $this->validate($request,[
-          'order_status' => 'string'
-       ]);
+        $this->validate($request, [
+            'order_status' => 'string'
+        ]);
 
         $order = Order::find($request->id);
         $user_id = auth('admin')->id();
 
 
         if (isset($order->shipping_company['type']) && $order->shipping_company['type'] == 'oto') {
-            if ($request->order_status == 'returned'){
+            if ($request->order_status == 'returned') {
 
 
             }
 
-            if ($request->order_status == 'canceled'){
+            if ($request->order_status == 'canceled') {
 
             }
         }
@@ -551,6 +551,8 @@ class OrderController extends Controller
         $company_web_logo = BusinessSetting::where('type', 'company_web_logo')->first()->value;
 
         $order = Order::with('seller')->with('shipping')->with('details')->where('id', $id)->first();
+        if ($order->qr)
+             $order->new_qr = Helpers::render_to_image($order->qr);
         $seller = Seller::find($order->details->first()->seller_id);
         $data["email"] = $order->customer != null ? $order->customer["email"] : json_decode($order->billing_address_data)->contact_person_name ?? translate('email_not_found');
         $data["client_name"] = $order->customer != null ? $order->customer["f_name"] . ' ' . $order->customer["l_name"] : json_decode($order->billing_address_data)->email ?? translate('customer_not_found');

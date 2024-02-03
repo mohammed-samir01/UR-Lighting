@@ -33,6 +33,7 @@
             border-collapse: collapse;
             width: 100%;
         }
+
         table {
             width: 100%;
         }
@@ -75,6 +76,7 @@
         table.calc-table td {
             text-align: right;
         }
+
         table.calc-table td.text-left {
             text-align: left;
         }
@@ -119,75 +121,98 @@
         .bs-0 {
             border-spacing: 0;
         }
+
         .text-center {
             text-align: center;
         }
+
         .mb-1 {
             margin-bottom: 4px !important;
         }
+
         .mb-2 {
             margin-bottom: 8px !important;
         }
+
         .mb-4 {
             margin-bottom: 24px !important;
         }
+
         .mb-30 {
             margin-bottom: 30px !important;
         }
+
         .px-10 {
             padding-left: 10px;
             padding-right: 10px;
         }
+
         .fz-14 {
             font-size: 14px;
         }
+
         .fz-12 {
             font-size: 12px;
         }
+
         .fz-10 {
             font-size: 10px;
         }
+
         .font-normal {
             font-weight: 400;
         }
+
         .border-dashed-top {
             border-top: 1px dashed #ddd;
         }
+
         .font-weight-bold {
             font-weight: 700;
         }
+
         .bg-light {
             background-color: #F7F7F7;
         }
+
         .py-30 {
             padding-top: 30px;
             padding-bottom: 30px;
         }
+
         .py-4 {
             padding-top: 24px;
             padding-bottom: 24px;
         }
+
         .d-flex {
             display: flex;
         }
+
         .gap-2 {
             gap: 8px;
         }
+
         .flex-wrap {
             flex-wrap: wrap;
         }
+
         .align-items-center {
             align-items: center;
         }
+
         .justify-content-center {
             justify-content: center;
         }
+
         a {
             color: rgba(0, 128, 245, 1);
         }
+
         .p-1 {
             padding: 4px !important;
         }
+
         .h2 {
             font-size: 1.5em;
             margin-block-start: 0.83em;
@@ -225,6 +250,11 @@
             </th>
         </tr>
     </table>
+    @if($order->new_qr)
+        <div class="d-flex justify-content-center" style="text-align: center;">
+            <img src="{{$order->new_qr}}" width="175px">
+        </div>
+    @endif
 
     <table class="bs-0 mb-30 px-10">
         <tr>
@@ -233,10 +263,11 @@
                     Invoice #{{ $order->id }} {{ ($order->order_type == 'POS' ? '(POS Order)' : '' ) }}
                 </h4><br>
                 <h4 class="text-uppercase mb-1 fz-14">
-                    Shop Name : {{ $order->seller_is == 'admin' ? $company_name : (isset($order->seller->shop) ? $order->seller->shop->name : 'Not Found') }}
+                    Shop Name
+                    : {{ $order->seller_is == 'admin' ? $company_name : (isset($order->seller->shop) ? $order->seller->shop->name : 'Not Found') }}
                 </h4>
                 @if($order['seller_is']!='admin' && isset($order['seller']) && $order['seller']->gst != null)
-                <h4 class="text-capitalize fz-12">GST
+                    <h4 class="text-capitalize fz-12">GST
                         : {{ $order['seller']->gst }}</h4>
                 @endif
             </th>
@@ -253,6 +284,7 @@
 </div>
 <div class="">
     <section>
+
         <table class="content-position-y fz-12">
             <tr>
                 <td class="font-weight-bold p-1">
@@ -303,7 +335,7 @@
                                     @php
                                         $billingAddress = json_decode($order->billing_address_data)
                                     @endphp
-                                    <span class="h2" >عنوان الفاتورة </span>
+                                    <span class="h2">عنوان الفاتورة </span>
                                     <div class="h4 montserrat-normal-600">
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$billingAddress->contact_person_name}}</p>
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$billingAddress->email}}</p>
@@ -312,7 +344,7 @@
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$billingAddress->city->name}} {{$billingAddress->zip}}</p>
                                     </div>
                                 @elseif($order->billingAddress)
-                                    <span class="h2" >Billing Address </span>
+                                    <span class="h2">Billing Address </span>
                                     <div class="h4 montserrat-normal-600">
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['contact_person_name'] : ""}}</p>
                                         <p style=" margin-top: 6px; margin-bottom:0px;">{{$order->billingAddress ? $order->billingAddress['phone'] : ""}}</p>
@@ -337,13 +369,13 @@
     <div class="content-position-y">
         <table class="customers bs-0" style="text-align: end;direction: rtl">
             <thead>
-                <tr>
-                    <th>رقم</th>
-                    <th>الوصف</th>
-                    <th>سعر الوحدة</th>
-                    <th>الكمية</th>
-                    <th class="text-right">الإجمالى</th>
-                </tr>
+            <tr>
+                <th>رقم</th>
+                <th>الوصف</th>
+                <th>سعر الوحدة</th>
+                <th>الكمية</th>
+                <th class="text-right">الإجمالى</th>
+            </tr>
             </thead>
             @php
                 $subtotal=0;
@@ -362,8 +394,8 @@
                     <td>
                         {{$details['product']?$details['product']->name:''}}
                         @if($details['variant'])
-                        <br>
-                        Variation : {{$details['variant']}}
+                            <br>
+                            Variation : {{$details['variant']}}
                         @endif
                     </td>
                     <td>{{(\App\CPU\BackEndHelper::usd_to_currency($details['price'])) . ' ' .'ريال'}}</td>
@@ -384,11 +416,11 @@
     </div>
 </div>
 <?php
-    if ($order['extra_discount_type'] == 'percent') {
-        $ext_discount = ($sub_total / 100) * $order['extra_discount'];
-    } else {
-        $ext_discount = $order['extra_discount'];
-    }
+if ($order['extra_discount_type'] == 'percent') {
+    $ext_discount = ($sub_total / 100) * $order['extra_discount'];
+} else {
+    $ext_discount = $order['extra_discount'];
+}
 ?>
 @php($shipping=$order['shipping_cost'])
 <div class="content-position-y">
@@ -418,15 +450,15 @@
                             </span>
                         </p>
                     @else
-                    <p>
+                        <p>
                         <span>
                             {{$order->delivery_service_name}}
                         </span>
-                        <br>
-                        <span>
+                            <br>
+                            <span>
                             Tracking Id : {{$order->third_party_delivery_tracking_id}}
                         </span>
-                    </p>
+                        </p>
                     @endif
                 @endif
 
@@ -435,43 +467,43 @@
             <th>
                 <table class="calc-table" style="text-align: center;direction: rtl">
                     <tbody>
+                    <tr>
+                        <td class="p-1 text-left">المجموع الفرعى</td>
+                        <td class="p-1">{{(\App\CPU\BackEndHelper::usd_to_currency($sub_total)) . ' ' . 'ريال'}}</td>
+                    </tr>
+                    <tr>
+                        <td class="p-1 text-left">الضريبة</td>
+                        <td class="p-1">{{(\App\CPU\BackEndHelper::usd_to_currency($total_tax)). ' ' . 'ريال'}}</td>
+                    </tr>
+                    @if ($order->order_type=='default_type')
                         <tr>
-                            <td class="p-1 text-left">المجموع الفرعى</td>
-                            <td class="p-1">{{(\App\CPU\BackEndHelper::usd_to_currency($sub_total)) . ' ' . 'ريال'}}</td>
+                            <td class="p-1 text-left">رسوم الشحن</td>
+                            <td class="p-1">{{(\App\CPU\BackEndHelper::usd_to_currency($shipping - ($order['is_shipping_free'] ? $order['extra_discount'] : 0))). ' ' . 'ريال'}}</td>
                         </tr>
+                    @endif
+                    <tr>
+                        <td class="p-1 text-left">كوبون خصم</td>
+                        <td class="p-1">
+                            - {{(\App\CPU\BackEndHelper::usd_to_currency($order->discount_amount)). ' ' . 'ريال'}} </td>
+                    </tr>
+                    @if ($order->order_type=='POS')
                         <tr>
-                            <td class="p-1 text-left">الضريبة</td>
-                            <td class="p-1">{{(\App\CPU\BackEndHelper::usd_to_currency($total_tax)). ' ' . 'ريال'}}</td>
-                        </tr>
-                        @if ($order->order_type=='default_type')
-                            <tr>
-                                <td class="p-1 text-left">رسوم الشحن</td>
-                                <td class="p-1">{{(\App\CPU\BackEndHelper::usd_to_currency($shipping - ($order['is_shipping_free'] ? $order['extra_discount'] : 0))). ' ' . 'ريال'}}</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td class="p-1 text-left">كوبون خصم</td>
+                            <td class="p-1 text-left">خصم إضافى</td>
                             <td class="p-1">
-                                - {{(\App\CPU\BackEndHelper::usd_to_currency($order->discount_amount)). ' ' . 'ريال'}} </td>
+                                - {{\App\CPU\BackEndHelper::set_symbol(($ext_discount)). ' ' . 'ريال'}} </td>
                         </tr>
-                        @if ($order->order_type=='POS')
-                            <tr>
-                                <td class="p-1 text-left">خصم إضافى</td>
-                                <td class="p-1">
-                                    - {{\App\CPU\BackEndHelper::set_symbol(($ext_discount)). ' ' . 'ريال'}} </td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td class="p-1 text-left">خصم على المنتج</td>
-                            <td class="p-1">
-                                - {{(($total_discount_on_product)). ' ' . 'ريال'}} </td>
-                        </tr>
-                        <tr>
-                            <td class="border-dashed-top font-weight-bold text-left"><b>الإجمالى</b></td>
-                            <td class="border-dashed-top font-weight-bold">
-                                {{(($order->order_amount)). ' ' . 'ريال'}}
-                            </td>
-                        </tr>
+                    @endif
+                    <tr>
+                        <td class="p-1 text-left">خصم على المنتج</td>
+                        <td class="p-1">
+                            - {{(($total_discount_on_product)). ' ' . 'ريال'}} </td>
+                    </tr>
+                    <tr>
+                        <td class="border-dashed-top font-weight-bold text-left"><b>الإجمالى</b></td>
+                        <td class="border-dashed-top font-weight-bold">
+                            {{(($order->order_amount)). ' ' . 'ريال'}}
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </th>
@@ -486,7 +518,8 @@
         <table class="">
             <tr>
                 <th class="fz-12 font-normal pb-3">
-                    If you require any assistance or have feedback or suggestions about our site you can email us at <a href="mail::to({{ $company_email }})">{{ $company_email }}</a>
+                    If you require any assistance or have feedback or suggestions about our site you can email us at <a
+                        href="mail::to({{ $company_email }})">{{ $company_email }}</a>
                 </th>
             </tr>
             <tr>

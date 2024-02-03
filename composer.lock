@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "606b15f621a5a50de08f45eb7967241c",
+    "content-hash": "3b7120a1fce9fcf61e56b04278737ee7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -482,31 +482,34 @@
         },
         {
             "name": "chillerlan/php-qrcode",
-            "version": "4.3.4",
+            "version": "4.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chillerlan/php-qrcode.git",
-                "reference": "2ca4bf5ae048af1981d1023ee42a0a2a9d51e51d"
+                "reference": "f5e243f3b61a60934780579430a951460f40888d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/2ca4bf5ae048af1981d1023ee42a0a2a9d51e51d",
-                "reference": "2ca4bf5ae048af1981d1023ee42a0a2a9d51e51d",
+                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/f5e243f3b61a60934780579430a951460f40888d",
+                "reference": "f5e243f3b61a60934780579430a951460f40888d",
                 "shasum": ""
             },
             "require": {
-                "chillerlan/php-settings-container": "^2.1.4",
+                "chillerlan/php-settings-container": "^2.1.4 || ^3.1",
                 "ext-mbstring": "*",
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "phan/phan": "^5.3",
-                "phpunit/phpunit": "^9.5",
-                "setasign/fpdf": "^1.8.2"
+                "phan/phan": "^5.4",
+                "phpmd/phpmd": "^2.15",
+                "phpunit/phpunit": "^9.6",
+                "setasign/fpdf": "^1.8.2",
+                "squizlabs/php_codesniffer": "^3.8"
             },
             "suggest": {
                 "chillerlan/php-authenticator": "Yet another Google authenticator! Also creates URIs for mobile apps.",
-                "setasign/fpdf": "Required to use the QR FPDF output."
+                "setasign/fpdf": "Required to use the QR FPDF output.",
+                "simple-icons/simple-icons": "SVG icons that you can use to embed as logos in the QR Code"
             },
             "type": "library",
             "autoload": {
@@ -533,7 +536,7 @@
                     "homepage": "https://github.com/chillerlan/php-qrcode/graphs/contributors"
                 }
             ],
-            "description": "A QR code generator. PHP 7.4+",
+            "description": "A QR code generator with a user friendly API. PHP 7.4+",
             "homepage": "https://github.com/chillerlan/php-qrcode",
             "keywords": [
                 "phpqrcode",
@@ -544,7 +547,7 @@
             ],
             "support": {
                 "issues": "https://github.com/chillerlan/php-qrcode/issues",
-                "source": "https://github.com/chillerlan/php-qrcode/tree/4.3.4"
+                "source": "https://github.com/chillerlan/php-qrcode/tree/4.4.1"
             },
             "funding": [
                 {
@@ -556,7 +559,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2022-07-25T09:12:45+00:00"
+            "time": "2024-01-06T16:56:58+00:00"
         },
         {
             "name": "chillerlan/php-settings-container",
@@ -13384,6 +13387,7 @@
     "platform": {
         "php": "8.0|^8.1",
         "ext-curl": "*",
+        "ext-dom": "*",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-mysqli": "*",
