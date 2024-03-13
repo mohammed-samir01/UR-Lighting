@@ -418,8 +418,6 @@
                                 class="font-weight-bold title-color fz-14">{{translate('change_order_status')}}</label>
                             <select name="order_status" onchange="order_status(this.value)"
                                     class="status form-control" data-id="{{$order['id']}}">
-                                <option value=""> -------</option>
-                                @if(!$order->oto)
                                     <option
                                         value="pending" {{$order->order_status == 'pending'?'selected':''}} > {{translate('pending')}}</option>
                                     <option
@@ -434,7 +432,7 @@
                                     <option
                                         value="failed" {{$order->order_status == 'failed'?'selected':''}} >{{translate('failed_to_Deliver')}} </option>
 
-                                @endif
+
                                 <option
                                     value="returned" {{$order->order_status == 'returned'?'selected':''}} > {{translate('returned')}}</option>
                                 <option

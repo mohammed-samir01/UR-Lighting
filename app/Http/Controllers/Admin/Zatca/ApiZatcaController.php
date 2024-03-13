@@ -166,15 +166,16 @@ class ApiZatcaController extends Controller
         $status_code = $response->status();
         $body = $response->json();
         $data = [];
-        if (auth('admin')->check()) {
-            ResponseZatca::where('seller', 'admin')->delete();
-            $data['seller'] = 'admin';
-        }
         if (auth('seller')->check()) {
             $adm = ResponseZatca::where(['seller' => 'seller', 'seller_id' => auth('seller')->user()->id])->delete();
             $data['seller'] = 'seller';
             $data['seller_id'] = auth('seller')->id();
         }
+        if (auth('admin')->check()) {
+            ResponseZatca::where('seller', 'admin')->delete();
+            $data['seller'] = 'admin';
+        }
+
         if ($status_code == 200) {
             $data_encode = json_encode($body);
             Storage::disk('zatca')->put(Helpers::path_zatca() . "/csr.json", $data_encode);

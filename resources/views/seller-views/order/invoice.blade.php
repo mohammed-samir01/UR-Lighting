@@ -230,6 +230,11 @@
             </th>
         </tr>
     </table>
+    @if($order->new_qr)
+        <div class="d-flex justify-content-center" style="text-align: center;">
+            <img src="{{$order->new_qr}}" width="175px">
+        </div>
+    @endif
 
     <table class="bs-0 mb-30 px-10">
         <tr>

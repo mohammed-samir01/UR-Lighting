@@ -338,6 +338,9 @@ class OrderController extends Controller
             ->with('seller')
             ->where('id', $id)->first();
 
+        if ($order->qr)
+            $order->new_qr = Helpers::render_to_image($order->qr);
+
         $data["email"] = $order->customer !=null?$order->customer["email"]:json_decode($order->billing_address_data)->contact_person_name ?? translate('email_not_found');
         $data["client_name"] = $order->customer !=null ? $order->customer["f_name"] . ' ' . $order->customer["l_name"]: json_decode($order->billing_address_data)->email ?? translate('customer_not_found');
         $data["order"] = $order;

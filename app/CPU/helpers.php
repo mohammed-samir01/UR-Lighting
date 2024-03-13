@@ -76,10 +76,10 @@ class Helpers
 
     public static function path_zatca()
     {
-        if (auth('admin')->check())
-            return 'admin';
         if (auth('seller')->check())
             return "seller-" . auth('seller')->user()->id;
+        if (auth('admin')->check())
+            return 'admin';
     }
 
     public static function csrOrCert($type, $all = false)
