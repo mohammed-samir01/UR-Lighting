@@ -77,7 +77,6 @@ class ProductDetailsController extends Controller
             $inhouse_temporary_close = $product->added_by == 'admin' ? $temporary_close['status'] : false;
 
 
-
             return view(VIEW_FILE_NAMES['products_details'], compact('product', 'countWishlist', 'countOrder', 'relatedProducts',
                 'deal_of_the_day', 'current_date', 'seller_vacation_start_date', 'seller_vacation_end_date', 'seller_temporary_close',
                 'inhouse_vacation_start_date', 'inhouse_vacation_end_date', 'inhouse_vacation_status', 'inhouse_temporary_close','overallRating',
