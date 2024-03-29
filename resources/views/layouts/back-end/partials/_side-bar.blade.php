@@ -29,9 +29,9 @@
                 </div>
 
                 <!-- Content -->
-                <div class="navbar-vertical-content" style="background:{{$web_config['secondary_color']}} !important;">
+                <div class="navbar-vertical-content" style="background:{{$web_config['dashboard_color']}} !important;">
                     <!-- Search Form -->
-                    <div class="sidebar--search-form pb-3 pt-4" style="background:{{$web_config['secondary_color']}} !important;">
+                    <div class="sidebar--search-form pb-3 pt-4" style="background:{{$web_config['dashboard_color']}} !important;">
                         <div class="search--form-group">
                             <button type="button" class="btn"><i class="tio-search"></i></button>
                             <input type="text" class="js-form-search form-control form--control" id="search-bar-input"

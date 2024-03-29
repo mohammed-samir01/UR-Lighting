@@ -255,6 +255,7 @@ class BusinessSettingsController extends Controller
         return [
             'primary_color' => $data['primary'] ?? '',
             'secondary_color' => $data['secondary'] ?? '',
+            'dashboard_color' => $data['dashboard'] ?? '',
             'primary_color_light' => isset($data['primary_light']) ? $data['primary_light'] : '',
             'company_name' => Helpers::get_settings($web, 'company_name')->value ?? '',
             'country_id' => Helpers::get_settings($web, 'country_id')->value ?? '',
@@ -438,6 +439,7 @@ class BusinessSettingsController extends Controller
             'value' => json_encode([
                 'primary' => $request['primary'],
                 'secondary' => $request['secondary'],
+                'dashboard' => $request['dashboard'],
                 'primary_light' => $request['primary_light'] ?? '#CFDFFB',
             ]),
         ]);

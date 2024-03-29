@@ -73,6 +73,7 @@ class AppServiceProvider extends ServiceProvider
             $web_config = [
                 'primary_color' => $data['primary'],
                 'secondary_color' => $data['secondary'],
+                'dashboard_color' => $data['dashboard'],
                 'primary_color_light' => isset($data['primary_light']) ? $data['primary_light'] : '',
                 'name' => Helpers::get_settings($web, 'company_name'),
                 'phone' => Helpers::get_settings($web, 'company_phone'),

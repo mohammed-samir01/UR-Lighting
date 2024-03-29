@@ -902,11 +902,13 @@
                                             [
                                                 'primary'=>null,
                                                 'secondary'=>null,
+                                                'dashboard'=>null,
                                             ])
                                     ]))
                                 @php($colors=\App\Model\BusinessSetting::where(['type'=>'colors'])->first())
                                 @php($data=json_decode($colors['value']))
                             @endif
+{{--primary_color--}}
                             <div class="form-group">
                                 <input type="color" name="primary" value="{{ $business_setting['primary_color'] }}"
                                        class="form-control form-control_color">
@@ -916,6 +918,7 @@
                                     <label class="title-color text-capitalize">{{translate('primary_Color')}}</label>
                                 </div>
                             </div>
+{{--secondary_color--}}
                             <div class="form-group">
                                 <input type="color" name="secondary" value="{{ $business_setting['secondary_color'] }}"
                                        class="form-control form-control_color">
@@ -927,6 +930,19 @@
                                     </label>
                                 </div>
                             </div>
+
+{{--dashboard_color--}}
+                            <div class="form-group">
+                                <input type="color" name="dashboard" value="{{ $business_setting['dashboard_color'] }}"
+                                       class="form-control form-control_color">
+                                <div class="text-center">
+                                    <div
+                                            class="title-color mb-4 mt-3">{{ strtoupper($business_setting['dashboard_color']) }}</div>
+                                    <label class="title-color text-capitalize">
+                                        {{translate('dashboard_color')}}</label>
+                                </div>
+                            </div>
+
 
                             @if(theme_root_path() == 'theme_aster')
                                 <div class="form-group">
