@@ -131,88 +131,91 @@
                         @if(json_decode($product->colors) && $product->color_image)
                             @foreach (json_decode($product->color_image) as $key => $photo)
                                 @if($photo->color != null)
-                                    <div class="cz-preview-item d-flex align-items-center justify-content-center  {{$key==0?'active':''}}"
+                                    <div
+                                        class="cz-preview-item d-flex align-items-center justify-content-center  {{$key==0?'active':''}}"
                                         id="image{{$photo->color}}">
                                         <img class="cz-image-zoom img-responsive" style="max-height: 500px!important;"
                                              onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
                                              src="{{asset("storage/app/public/product/$photo->image_name")}}"
                                              data-zoom="{{asset("storage/app/public/product/$photo->image_name")}}"
                                              alt="Product image" width="">
-                                             <div class="cz-image-zoom-pane"></div>
+                                        <div class="cz-image-zoom-pane"></div>
                                     </div>
                                 @else
-                                    <div class="cz-preview-item d-flex align-items-center justify-content-center  {{$key==0?'active':''}}"
+                                    <div
+                                        class="cz-preview-item d-flex align-items-center justify-content-center  {{$key==0?'active':''}}"
                                         id="image{{$key}}">
                                         <img class="cz-image-zoom img-responsive" style="max-height: 500px!important;"
                                              onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
                                              src="{{asset("storage/app/public/product/$photo->image_name")}}"
                                              data-zoom="{{asset("storage/app/public/product/$photo->image_name")}}"
                                              alt="Product image" width="">
-                                             <div class="cz-image-zoom-pane"></div>
+                                        <div class="cz-image-zoom-pane"></div>
                                     </div>
                                 @endif
                             @endforeach
                         @else
                             @foreach (json_decode($product->images) as $key => $photo)
-                                <div class="cz-preview-item d-flex align-items-center justify-content-center  {{$key==0?'active':''}}"
+                                <div
+                                    class="cz-preview-item d-flex align-items-center justify-content-center  {{$key==0?'active':''}}"
                                     id="image{{$key}}">
                                     <img class="cz-image-zoom img-responsive" style="max-height: 500px!important;"
                                          onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
                                          src="{{asset("storage/app/public/product/$photo")}}"
                                          data-zoom="{{asset("storage/app/public/product/$photo")}}"
                                          alt="Product image" width="">
-                                         <div class="cz-image-zoom-pane"></div>
+                                    <div class="cz-image-zoom-pane"></div>
                                 </div>
                             @endforeach
                         @endif
                     @endif
                 </div>
                 <div class="cz">
-                <div class="table-responsive" style="max-height: 515px;">
-                    <div class="d-flex">
-                        @if($product->images!=null && json_decode($product->images)>0)
-                            @if(json_decode($product->colors) && $product->color_image)
-                                @foreach (json_decode($product->color_image) as $key => $photo)
-                                    @if($photo->color != null)
+                    <div class="table-responsive" style="max-height: 515px;">
+                        <div class="d-flex">
+                            @if($product->images!=null && json_decode($product->images)>0)
+                                @if(json_decode($product->colors) && $product->color_image)
+                                    @foreach (json_decode($product->color_image) as $key => $photo)
+                                        @if($photo->color != null)
+                                            <div class="cz-thumblist">
+                                                <a class=" cz-thumblist-item {{$key==0?'active':''}} d-flex align-items-center justify-content-center"
+                                                   id="preview-img{{$photo->color}}" href="#image{{$photo->color}}">
+                                                    <img class="click-img"
+                                                         src="{{asset("storage/app/public/product/$photo->image_name")}}"
+                                                         onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
+                                                         alt="Product thumb">
+                                                </a>
+                                            </div>
+                                        @else
+                                            <div class="cz-thumblist">
+                                                <a class="cz-thumblist-item {{$key==0?'active':''}} d-flex align-items-center justify-content-center"
+                                                   id="preview-img{{$key}}" href="#image{{$key}}">
+                                                    <img class="click-img"
+                                                         src="{{asset("storage/app/public/product/$photo->image_name")}}"
+                                                         onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
+                                                         alt="Product thumb">
+                                                </a>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    @foreach (json_decode($product->images) as $key => $photo)
                                         <div class="cz-thumblist">
-                                            <a  class=" cz-thumblist-item {{$key==0?'active':''}} d-flex align-items-center justify-content-center"
-                                            id="preview-img{{$photo->color}}" href="#image{{$photo->color}}">
+                                            <a class=" cz-thumblist-item {{$key==0?'active':''}} d-flex align-items-center justify-content-center"
+                                               id="preview-img{{$key}}" href="#image{{$key}}">
                                                 <img class="click-img"
-                                                     src="{{asset("storage/app/public/product/$photo->image_name")}}"
+                                                     src="{{asset("storage/app/public/product/$photo")}}"
                                                      onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
                                                      alt="Product thumb">
                                             </a>
                                         </div>
-                                    @else
-                                        <div class="cz-thumblist">
-                                            <a class="cz-thumblist-item {{$key==0?'active':''}} d-flex align-items-center justify-content-center"
-                                            id="preview-img{{$key}}" href="#image{{$key}}">
-                                                <img class="click-img"
-                                                     src="{{asset("storage/app/public/product/$photo->image_name")}}"
-                                                     onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
-                                                     alt="Product thumb">
-                                            </a>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            @else
-                                @foreach (json_decode($product->images) as $key => $photo)
-                                    <div class="cz-thumblist">
-                                        <a class=" cz-thumblist-item {{$key==0?'active':''}} d-flex align-items-center justify-content-center"
-                                        id="preview-img{{$key}}" href="#image{{$key}}">
-                                            <img class="click-img"
-                                                 src="{{asset("storage/app/public/product/$photo")}}"
-                                                 onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
-                                                 alt="Product thumb">
-                                        </a>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                @endif
                             @endif
-                        @endif
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
         <!-- Product details-->
         <div class="col-lg-6 col-md-6">
@@ -422,11 +425,15 @@
             var srcimg = $(this).attr('src');
             $(".show-imag").attr('src', srcimg);
         });
+
+
     });
 
     function quick_view_preview_image_by_color(key) {
-        let id = $('#preview-img' + key);
-        $(id).click();
+        $('a[href="#image'+key+'"]')[0].click();
+
     }
+
+
 </script>
 <script src="{{asset('public/assets/front-end')}}/js/theme.min.js"></script>
