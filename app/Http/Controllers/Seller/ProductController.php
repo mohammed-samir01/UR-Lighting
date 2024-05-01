@@ -383,18 +383,23 @@ class ProductController extends Controller
             $products = Product::where(['added_by' => 'seller', 'user_id' => \auth('seller')->id()])
                 ->where(function ($q) use ($key) {
                     $product_ids = Translation::where('translationable_type', 'App\Model\Product')
-                                    ->where('key', 'name')
-                                    ->where(function ($q) use ($key) {
-                                        foreach ($key as $value) {
-                                            $q->orWhere('value', 'like', "%{$value}%");
-                                        }
-                                    })->pluck('translationable_id');
+                        ->where('key', 'name')
+                        ->where(function ($q) use ($key) {
+                            foreach ($key as $value) {
+                                $q->orWhere('value', 'like', "%{$value}%");
+                            }
+                        })->pluck('translationable_id');
 
                     foreach ($key as $value) {
-                        $q->Where('name', 'like', "%{$value}%")->orWhereIn('id', $product_ids);
+                        $q->Where('name', 'like', "%{$value}%")
+                            ->orWhere('code', 'like', "%{$value}%")
+                            ->orWhere('variation', 'like', "%{$value}%")
+                            ->orWhereIn('id', $product_ids);
                     }
                 });
             $query_param = ['search' => $request['search']];
+
+
         } else {
             $products = Product::where(['added_by' => 'seller', 'user_id' => \auth('seller')->id()]);
         }
