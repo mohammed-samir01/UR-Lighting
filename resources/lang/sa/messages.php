@@ -6316,4 +6316,6 @@
   'after_uploading_products_you_need_to_edit_them_and_set_products_images_and_choices.' => 'After uploading products you need to edit them and set products images and choices.',
   'choose_Status' => 'Choose Status',
   'Search by Product Name or SKU' => 'Search by Product Name or SKU',
+  'configure_your_mail_setup_first' => 'Configure your mail setup first',
+  'no_delivery_man_found' => 'No delivery man found',
 );

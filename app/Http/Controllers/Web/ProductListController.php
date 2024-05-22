@@ -35,6 +35,7 @@ class ProductListController extends Controller
     }
 
     public function default_theme($request){
+
         $request['sort_by'] == null ? $request['sort_by'] == 'latest' : $request['sort_by'];
 
         $porduct_data = Product::active()->with(['reviews']);
@@ -112,6 +113,7 @@ class ProductListController extends Controller
             $product_ids = Product::where(function ($q) use ($key) {
                 foreach ($key as $value) {
                     $q->orWhere('name', 'like', "%{$value}%")
+                        ->orWhere('variation', 'like', "%{$value}%")
                         ->orWhereHas('tags',function($query)use($value){
                             $query->where('tag', 'like', "%{$value}%");
                         });

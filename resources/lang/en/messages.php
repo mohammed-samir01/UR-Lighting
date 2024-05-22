@@ -6491,4 +6491,6 @@
   'Search by Product Name or SKU' => 'Search by Product Name or SKU',
   'import_Products_File' => 'Import Products File',
   'No_data_found_for_export' => 'No data found for export',
+  'if_you_come_across_any_image_size_issues_kindly_resize_and_upload_them_to_ensure_a_refreshed_look_for_your_shop.' => 'If you come across any image size issues kindly resize and upload them to ensure a refreshed look for your shop.',
+  'please_take_a_moment_to_review_the_changes_in_your_shop.' => 'Please take a moment to review the changes in your shop.',
 );
